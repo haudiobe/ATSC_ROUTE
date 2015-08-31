@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!--
+Copyright 2013 Eric Bidelman
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: Eric Bidelman (ebidel@)
+Updated: Waqar Zia
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<title>MediaSource API Test</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<style>
+::selection {
+  color: #fff;
+  background: pink;
+}
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+body {
+  margin: 0;
+}
+body {
+  color: #222;
+  font-family: 'Open Sans', arial, sans-serif;
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+  -webkit-flex-direction: column;
+  display: -ms-flex;
+  -ms-align-items: center;
+  -ms-justify-content: center;
+  -ms-flex-direction: column;
+  display: -moz-flex;
+  -moz-align-items: center;
+  -moz-justify-content: center;
+  -moz-flex-direction: column;
+  display: -o-flex;
+  -o-align-items: center;
+  -o-justify-content: center;
+  -o-flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+details {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  margin: 1em 0;
+  cursor: pointer;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 5px;
+  max-width: 600px;
+  font-size: 10pt;
+  z-index: 100;
+}
+details > div {
+  margin: 10px 0;
+}
+details blockquote {
+  font-style: italic;
+}
+pre:not(#log) {
+  background: #eee;
+  border-radius: 5px;
+  padding: 3px 17px 20px 17px;
+  border: 1px solid #ccc;
+  color: navy;
+}
+#log {
+  margin: 0 1em;
+}
+code {
+  font-weight: bold;
+}
+section {
+  display: -webkit-flex;
+  display: flex;
+}
+</style>
+</head>
+<body>
+
+<h3>Appending DASHed MP4 video chunks using the Media Source API</h3>
+
+<section>
+  <video controls autoplay width="800" height="600"></video>
+</section>
+<section>
+  <pre id="log"></pre>
+</section>
+
+
+<script>
+var FILE = 'ToS_1sec_video_8M_Merge.mp4';
+var FILE_Audio = 'ToS_audio_1_0.mp4';
+var PTO = 197; //Presentation time offset (approx) of these tracks
+var NUM_CHUNKS = 4000;
+var video = document.querySelector('video');
+
+window.MediaSource = window.MediaSource || window.WebKitMediaSource;
+if (!!!window.MediaSource) {
+  alert('MediaSource API is not available');
+}
+
+var mediaSource = new MediaSource();
+
+video.src = window.URL.createObjectURL(mediaSource);
+var logString;
+
+function callback(e) {
+  var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
+  var audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+
+  logString = 'mediaSource readyState: ' + this.readyState + "\n";
+
+  logger.log(logString);
+
+  GET(FILE, FILE_Audio, function(uInt8Array1,uInt8Array2) {
+    var filevideo = new Blob([uInt8Array1], {type: 'video/mp4'});
+    var fileaudio = new Blob([uInt8Array2], {type: 'audio/mp4'});
+    var chunkSizeVideo = Math.ceil(filevideo.size / NUM_CHUNKS);
+    var chunkSizeAudio = Math.ceil(fileaudio.size / NUM_CHUNKS);
+	logString += 'Num chunks: ' + NUM_CHUNKS + "\n" + 'Chunk Size Video: ' + chunkSizeVideo + ', Total Size Video: ' + filevideo.size + ', Chunk Size Audio: ' + chunkSizeAudio + ', Total Size Audio: ' + fileaudio.size  + "\n";
+    logger.log(logString);
+
+    // Slice the video into NUM_CHUNKS and append each to the media element.
+    var i = 0;
+	//Presentation time offset (approx) of these tracks
+	video.currentTime = PTO;
+
+    (function readChunk_(i) {
+      var readerVideo = new FileReader();
+      var readerAudio = new FileReader();
+
+      // Reads aren't guaranteed to finish in the same order they're started in,
+      // so we need to read + append the next chunk after the previous reader
+      // is done (onload is fired).
+      readerVideo.onload = function(e) {
+      	{
+      	var arrayData = new Uint8Array(e.target.result);
+        sourceBuffer.appendBuffer(arrayData);
+		logger.clear();
+        logger.log(logString + 'Appending audio and video chunk ' + i);
+      	}
+        if (i == NUM_CHUNKS - 1){
+          mediaSource.endOfStream();
+        } else {
+          if (i ==0) {//video.paused == true) {
+            video.play(); // Start playing after 1st chunk is appended.
+          }
+          setTimeout(function(){ readChunk_(++i); }, (60/NUM_CHUNKS)*1000);
+        }
+      };
+	  
+	  //Append audio data in the same way.
+      readerAudio.onload = function(e) {
+      	var arrayData = new Uint8Array(e.target.result);
+        audioSourceBuffer.appendBuffer(arrayData);
+      };
+	  
+	  //Read video file
+      var startByteVideo = chunkSizeVideo * i;
+
+      var chunkVideo = filevideo.slice(startByteVideo, startByteVideo + chunkSizeVideo);
+
+      readerVideo.readAsArrayBuffer(chunkVideo);
+	  
+	  //Read audio file
+      var startByteAudio = chunkSizeAudio * i;
+
+      var chunkAudio = fileaudio.slice(startByteAudio, startByteAudio + chunkSizeAudio);
+
+      readerAudio.readAsArrayBuffer(chunkAudio);
+    })(i);  // Start the recursive call by self calling.
+  });
+}
+
+mediaSource.addEventListener('sourceopen', callback, false);
+mediaSource.addEventListener('webkitsourceopen', callback, false);
+
+mediaSource.addEventListener('webkitsourceended', function(e) {
+  logger.log('mediaSource readyState: ' + this.readyState);
+}, false);
+
+function GET(url1, url2, callback) {
+	var xhr1Done = false;
+	var xhr2Done = false;
+		logger.clear();
+        logger.log(logString + 'Downloading track data, please wait... ');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url1, true);
+  xhr.responseType = 'arraybuffer';
+  xhr.send();
+  
+  var xhr2 = new XMLHttpRequest();
+  xhr2.open('GET', url2, true);
+  xhr2.responseType = 'arraybuffer';
+  xhr2.send();
+
+	//Whichever request finishes last, should trigger the following processing, hacked for now
+  xhr.onload = function(e) {
+    if (xhr.status != 200) {
+      alert("Unexpected status code " + xhr.status + " for " + url1);
+      return false;
+    }
+	xhr1Done = true;
+	
+	if(xhr2Done == true)
+    	callback(new Uint8Array(xhr.response),new Uint8Array(xhr2.response));
+  };
+
+  xhr2.onload = function(e) {
+    if (xhr2.status != 200) {
+      alert("Unexpected status code " + xhr2.status + " for " + url2);
+      return false;
+    }
+	xhr2Done = true;
+	
+	if(xhr1Done == true)
+    	callback(new Uint8Array(xhr.response),new Uint8Array(xhr2.response));
+  };
+}
+</script>
+<script>
+function Logger(id) {
+  this.el = document.getElementById('log');
+}
+Logger.prototype.log = function(msg) {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.createTextNode(msg));
+  fragment.appendChild(document.createElement('br'));
+  this.el.appendChild(fragment);
+};
+
+Logger.prototype.clear = function() {
+  this.el.textContent = '';
+};
+
+var logger = new Logger('log');
+</script>
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-22014378-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+<script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<FDT-Instance Expires="3605617417"
+	FEC-OTI-FEC-Encoding-ID="0"
+	FEC-OTI-Maximum-Source-Block-Length="64"
+	FEC-OTI-Encoding-Symbol-Length="1428">
+	<File TOI="1"
+		Content-Location="file:///BBB_32k_76.mp4"
+		Content-Length="8202"
+		Content-MD5="X7VhCQoQNszTAlaelxSLcg=="/>
+	<File TOI="2"
+		Content-Location="file:///BBB_720_1M_video_76.mp4"
+		Content-Length="245058"
+		Content-MD5="/XGaDMZZaSRWJ1+572BOgQ=="/>
+	<File TOI="3"
+		Content-Location="file:///BBB_32k_77.mp4"
+		Content-Length="8192"
+		Content-MD5="SM/uNuzob3faA9PWgCTLbg=="/>
+	<File TOI="4"
+		Content-Location="file:///BBB_720_1M_video_77.mp4"
+		Content-Length="316360"
+		Content-MD5="oWzpPyYXKXqi1HgFfhz7xQ=="/>
+	<File TOI="5"
+		Content-Location="file:///BBB_32k_78.mp4"
+		Content-Length="8202"
+		Content-MD5="HxCbzijczJMT7dZuAooaTA=="/>
+	<File TOI="6"
+		Content-Location="file:///BBB_720_1M_video_78.mp4"
+		Content-Length="206471"
+		Content-MD5="LfIdZyGT/QPBevQwgEzMYg=="/>
+	<File TOI="7"
+		Content-Location="file:///BBB_32k_79.mp4"
+		Content-Length="8203"
+		Content-MD5="UAKGxz++sKi7DlgURTZsOA=="/>
+	<File TOI="8"
+		Content-Location="file:///BBB_720_1M_video_79.mp4"
+		Content-Length="149831"
+		Content-MD5="EE240exDSMzP2IRh+npqQQ=="/>
+	<File TOI="9"
+		Content-Location="file:///BBB_32k_80.mp4"
+		Content-Length="8165"
+		Content-MD5="1iCFF8UsAwm8pX5wutjhTQ=="/>
+	<File TOI="10"
+		Content-Location="file:///BBB_720_1M_video_80.mp4"
+		Content-Length="191981"
+		Content-MD5="Ito/ECQNiQ44PP8sowcGIA=="/>
+	<File TOI="11"
+		Content-Location="file:///BBB_32k_81.mp4"
+		Content-Length="8240"
+		Content-MD5="yT8CL2iv3ZQ+1I3QDeFBtA=="/>
+	<File TOI="12"
+		Content-Location="file:///BBB_720_1M_video_81.mp4"
+		Content-Length="312600"
+		Content-MD5="wxAHN76/lGrFj2znwXwG0g=="/>
+	<File TOI="13"
+		Content-Location="file:///BBB_32k_82.mp4"
+		Content-Length="8168"
+		Content-MD5="GZ/Yj5DqdrbEyojrihrHcg=="/>
+	<File TOI="14"
+		Content-Location="file:///BBB_720_1M_video_82.mp4"
+		Content-Length="318261"
+		Content-MD5="RVrMuMOWe3JvHTAlbIqN7g=="/>
+	<File TOI="15"
+		Content-Location="file:///BBB_32k_83.mp4"
+		Content-Length="8167"
+		Content-MD5="UOzPU+/4FmXCzBnXxLMfdg=="/>
+	<File TOI="16"
+		Content-Location="file:///BBB_720_1M_video_83.mp4"
+		Content-Length="260653"
+		Content-MD5="zmws9qNnwbBHd7RC3zlLzw=="/>
+	<File TOI="17"
+		Content-Location="file:///BBB_32k_84.mp4"
+		Content-Length="8250"
+		Content-MD5="vRdCxFXMayThwUZX6y/eKg=="/>
+	<File TOI="18"
+		Content-Location="file:///BBB_720_1M_video_84.mp4"
+		Content-Length="154441"
+		Content-MD5="xmM3YkWd08tVp9o6DlA3ww=="/>
+	<File TOI="19"
+		Content-Location="file:///BBB_32k_85.mp4"
+		Content-Length="8196"
+		Content-MD5="lAgrFrk8Lny4VIp+fe813w=="/>
+	<File TOI="20"
+		Content-Location="file:///BBB_720_1M_video_85.mp4"
+		Content-Length="278328"
+		Content-MD5="raWs9LKx89oJ5PQulJzZdw=="/>
+	<File TOI="21"
+		Content-Location="file:///BBB_32k_86.mp4"
+		Content-Length="8202"
+		Content-MD5="BTPt1KWTjp6QlADa49p0nw=="/>
+	<File TOI="22"
+		Content-Location="file:///BBB_720_1M_video_86.mp4"
+		Content-Length="102796"
+		Content-MD5="cQOuH1asv/D6/BzyaYl4Iw=="/>
+	<File TOI="23"
+		Content-Location="file:///BBB_32k_87.mp4"
+		Content-Length="8182"
+		Content-MD5="UGt4aX01+XCB4reAAF79Qg=="/>
+	<File TOI="24"
+		Content-Location="file:///BBB_720_1M_video_87.mp4"
+		Content-Length="138127"
+		Content-MD5="lpqGU0DrCWDF2anr8Ct1hQ=="/>
+	<File TOI="25"
+		Content-Location="file:///BBB_32k_88.mp4"
+		Content-Length="8147"
+		Content-MD5="vpootgqN5dm056/CzPJdlA=="/>
+	<File TOI="26"
+		Content-Location="file:///BBB_720_1M_video_88.mp4"
+		Content-Length="216610"
+		Content-MD5="xPGt+sqRphbAJ7wvV1dy5A=="/>
+	<File TOI="27"
+		Content-Location="file:///BBB_32k_89.mp4"
+		Content-Length="8286"
+		Content-MD5="pOaFthuvNJgm+lmnLuXDYA=="/>
+	<File TOI="28"
+		Content-Location="file:///BBB_720_1M_video_89.mp4"
+		Content-Length="431455"
+		Content-MD5="vrgsBbNkQ9tJQdQNlQs8Pw=="/>
+	<File TOI="29"
+		Content-Location="file:///BBB_32k_90.mp4"
+		Content-Length="8179"
+		Content-MD5="RnjEW85nAhJOB3S8JJAIlw=="/>
+	<File TOI="30"
+		Content-Location="file:///BBB_720_1M_video_90.mp4"
+		Content-Length="244122"
+		Content-MD5="0R2yrfrfS2KIjk9YK/Tclg=="/>
+	<File TOI="31"
+		Content-Location="file:///BBB_32k_91.mp4"
+		Content-Length="8158"
+		Content-MD5="+WFQQcDAYCewoiBpStxg0w=="/>
+	<File TOI="32"
+		Content-Location="file:///BBB_720_1M_video_91.mp4"
+		Content-Length="380360"
+		Content-MD5="m3PQ6FIRWrTrQcuLU7eYUg=="/>
+	<File TOI="33"
+		Content-Location="file:///BBB_32k_92.mp4"
+		Content-Length="8238"
+		Content-MD5="w5AZJa5072vbp3Vl5pqDEA=="/>
+	<File TOI="34"
+		Content-Location="file:///BBB_720_1M_video_92.mp4"
+		Content-Length="334444"
+		Content-MD5="Xi1CgYqZHKkJHSl0kzhgYA=="/>
+	<File TOI="35"
+		Content-Location="file:///BBB_32k_93.mp4"
+		Content-Length="8183"
+		Content-MD5="2u3yQ4NhBcsKKKqJXZztFw=="/>
+	<File TOI="36"
+		Content-Location="file:///BBB_720_1M_video_93.mp4"
+		Content-Length="291086"
+		Content-MD5="ZenMlrygI7nGuDOMn2uE9A=="/>
+	<File TOI="37"
+		Content-Location="file:///BBB_32k_94.mp4"
+		Content-Length="8201"
+		Content-MD5="5tO1Wim+ionmd8d94HcZhg=="/>
+	<File TOI="38"
+		Content-Location="file:///BBB_720_1M_video_94.mp4"
+		Content-Length="279792"
+		Content-MD5="IANmeNHWSRpi6xsKR/eUqw=="/>
+	<File TOI="39"
+		Content-Location="file:///BBB_32k_95.mp4"
+		Content-Length="8237"
+		Content-MD5="kYvKpqw5jGv5y5RPrbFU3w=="/>
+	<File TOI="40"
+		Content-Location="file:///BBB_720_1M_video_95.mp4"
+		Content-Length="233455"
+		Content-MD5="AZiJFglfR/NPKeKTIbaZ1w=="/>
+	<File TOI="41"
+		Content-Location="file:///BBB_32k_96.mp4"
+		Content-Length="8148"
+		Content-MD5="f1otRK15id4d+2pUFR3qng=="/>
+	<File TOI="42"
+		Content-Location="file:///BBB_720_1M_video_96.mp4"
+		Content-Length="106416"
+		Content-MD5="8XpDnj1AiDV172DOR9i0ew=="/>
+	<File TOI="43"
+		Content-Location="file:///BBB_32k_97.mp4"
+		Content-Length="8176"
+		Content-MD5="wCR/YWS7qd0PjvmDGZktJQ=="/>
+	<File TOI="44"
+		Content-Location="file:///BBB_720_1M_video_97.mp4"
+		Content-Length="377196"
+		Content-MD5="RQPjzns0VDjqHuFWRS2R+Q=="/>
+	<File TOI="45"
+		Content-Location="file:///BBB_32k_98.mp4"
+		Content-Length="8240"
+		Content-MD5="3c6w1g5Tg+FuHAaePHGkWw=="/>
+	<File TOI="46"
+		Content-Location="file:///BBB_720_1M_video_98.mp4"
+		Content-Length="285875"
+		Content-MD5="TnYDJ05nrQrn/xqxLVbtxA=="/>
+	<File TOI="47"
+		Content-Location="file:///BBB_32k_99.mp4"
+		Content-Length="8127"
+		Content-MD5="pii87EIsb4k+Z3HFRrsfhw=="/>
+	<File TOI="48"
+		Content-Location="file:///BBB_720_1M_video_99.mp4"
+		Content-Length="194027"
+		Content-MD5="ek/gbk3uPWg1xCRfHV2x0Q=="/>
+	<File TOI="49"
+		Content-Location="file:///BBB_32k_100.mp4"
+		Content-Length="8275"
+		Content-MD5="N+sVFXWgGK4KWjUCVNo7Kw=="/>
+	<File TOI="50"
+		Content-Location="file:///BBB_720_1M_video_100.mp4"
+		Content-Length="202594"
+		Content-MD5="KcEQ4qr9RLbCxwNDnYZu8w=="/>
+</FDT-Instance>

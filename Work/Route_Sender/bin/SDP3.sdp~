@@ -1,0 +1,9 @@
+v=0
+o=root 2890844526 2890842807 IN IP4 192.168.1.10
+s=DASH
+t=0 0
+a=source-filter: incl IN IP4 * 192.168.1.10
+a=flute-tsi:9
+a=flute-ch:1
+m=application 4000 FLUTE/UDP 0
+c=IN IP4 224.1.1.1/4000

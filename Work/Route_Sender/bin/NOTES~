@@ -1,0 +1,35 @@
+1- ifconfig lo multicast					//Enable multicast on loopback
+2- route add -net 224.0.0.0 netmask 240.0.0.0 dev lo		//lo is default for multicast
+
+3- Increase UDP buffer sizes:
+
+sudo sysctl -A | grep mem				to get initial config
+
+vm.overcommit_memory = 0
+vm.nr_hugepages_mempolicy = 0
+vm.lowmem_reserve_ratio = 256   256     32
+vm.memory_failure_early_kill = 0
+vm.memory_failure_recovery = 1
+net.core.wmem_max = 131071
+net.core.rmem_max = 131071
+net.core.wmem_default = 229376
+net.core.rmem_default = 229376
+error: permission denied on key 'net.ipv4.route.flush'
+net.core.optmem_max = 20480
+net.ipv4.igmp_max_memberships = 20
+net.ipv4.tcp_mem = 96057        128079  192114
+net.ipv4.tcp_wmem = 4096        16384   4098528
+net.ipv4.tcp_rmem = 4096        87380   4098528
+net.ipv4.udp_mem = 96057        128079  192114
+net.ipv4.udp_rmem_min = 4096
+net.ipv4.udp_wmem_min = 4096
+
+
+USE info under: https://wwwx.cs.unc.edu/~sparkst/howto/network_tuning.php
+
+sudo sysctl -w net.core.rmem_max=8388608;sudo sysctl -w net.core.wmem_max=8388608;sudo sysctl -w net.core.rmem_default=65536;sudo sysctl -w net.core.wmem_default=65536;sudo sysctl -w net.ipv4.tcp_rmem='4096 87380 8388608';sudo sysctl -w net.ipv4.tcp_wmem='4096 65536 8388608';sudo sysctl -w net.ipv4.tcp_mem='8388608 8388608 8388608';sudo sysctl -w net.ipv4.route.flush=1
+
+
+CAPTURE packets:
+
+sudo tcpdump -i lo -s 65535 -B 400000 udp and dst 224.1.1.1 and port 4000

@@ -1,0 +1,11 @@
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/dist.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/libwebsockets_rpm.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/libwebsockets_srpm.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-client.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-echo.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-fraggle.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-ping.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-server.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/test-server-extpoll.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/websockets.dir
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/websockets_shared.dir

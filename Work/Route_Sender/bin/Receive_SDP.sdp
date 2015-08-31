@@ -1,0 +1,10 @@
+v=0
+o=nomor 2890844526 2890842807 IN IP4 10.4.192.60
+s=DASH
+t=0 0
+a=source-filter: incl IN IP4 * 10.4.192.60
+a=flute-tsi:1
+a=flute-ch:1
+m=application 4000 FLUTE/UDP 0
+c=IN IP4 224.1.1.1/4000
+a=FEC-declaration:0 encoding-id=129; instance-id=0

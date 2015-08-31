@@ -1,0 +1,1829 @@
+Converting MPD
+2014-11-24T17:31:28
+1416850288000000
+Done
+Starting FLUTE Sender in 4 seconds
+Opening Log File
+Sending FDT Instance (ID=0)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are:  (null)
+FDT Instance sent (ID=0)
+Sending file: BBB/BBB_720_4M_video_init.mp4 (TOI=1)
+THIS IS THE NUMBER OF READ BYTES 893
+The read string is 2 0 48579 1416850287077938 32943 1416850287198605 43913 1416850287359452 45437 1416850287525881 50728 1416850287711691 33400 1416850287834031 18012 1416850287900000
+
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 0
+100.00% of object sent (TOI=1)
+The values of str and tok are: 2 2
+1/1 Source Blocks sent (TOI=1 SBN=0)
+File sent: BBB/BBB_720_4M_video_init.mp4 (TOI=1)
+elapsedTime 1882
+Sending FDT Instance (ID=1)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 2 2
+FDT Instance sent (ID=1)
+Sending file: BBB/BBB_720_4M_video_1.mp4 (TOI=2)
+THIS IS THE NUMBER OF READ BYTES 273012
+The chunk string size: 48579
+The chunk integer size: 48579
+Waiting for 8392514 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48579
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47151
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45723
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44295
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42867
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41439
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40011
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38583
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37155
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35727
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34299
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32871
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31443
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30015
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28587
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27159
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25731
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24303
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22875
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21447
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20019
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18591
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17163
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15735
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14307
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12879
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11451
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10023
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8595
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7167
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5739
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4311
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2883
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1455
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27
+The chunk string size: 32943
+The chunk integer size: 32943
+Waiting for 118677 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 27 32943
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31515
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30087
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28659
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27231
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25803
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24375
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22947
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21519
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20091
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18663
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17235
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15807
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14379
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12951
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11523
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10095
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8667
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7239
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5811
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4383
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2955
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1527
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99
+The chunk string size: 43913
+The chunk integer size: 43913
+Waiting for 159355 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 99 43913
+30.38% of object sent (TOI=2)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42485
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41057
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39629
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38201
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36773
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35345
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33917
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32489
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31061
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29633
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28205
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26777
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25349
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23921
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22493
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21065
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19637
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18209
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16781
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15353
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13925
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12497
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11069
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9641
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8213
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6785
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5357
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3929
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2501
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1073
+The chunk string size: 45437
+The chunk integer size: 45437
+Waiting for 164504 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1073 45437
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44009
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42581
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41153
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39725
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38297
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36869
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35441
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34013
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32585
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31157
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29729
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28301
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26873
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25445
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24017
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22589
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21161
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19733
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18305
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16877
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15449
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14021
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12593
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11165
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9737
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8309
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6881
+60.59% of object sent (TOI=2)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5453
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4025
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2597
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1169
+The chunk string size: 50728
+The chunk integer size: 50728
+Waiting for 181995 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1169 50728
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49300
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47872
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23596
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22168
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20740
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19312
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17884
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16456
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15028
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13600
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12172
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10744
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9316
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7888
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6460
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5032
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3604
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2176
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 748
+The chunk string size: 33400
+The chunk integer size: 33400
+Waiting for 117130 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 748 33400
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31972
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30544
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29116
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27688
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26260
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24832
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23404
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21976
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20548
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19120
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17692
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16264
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14836
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13408
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11980
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10552
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9124
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7696
+91.11% of object sent (TOI=2)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6268
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4840
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3412
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1984
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 556
+The chunk string size: 18012
+The chunk integer size: 18012
+Waiting for 62507 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 556 18012
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16584
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15156
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13728
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12300
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10872
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 876
+100.00% of object sent (TOI=2)
+The values of str and tok are: 2 1416850287900000
+READ NEXT RECORD IN FLUTE INPUT
+1/1 Source Blocks sent (TOI=2 SBN=0)
+File sent: BBB/BBB_720_4M_video_1.mp4 (TOI=2)
+elapsedTime 9234639
+Sending FDT Instance (ID=2)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 2 1416850287900000
+READ NEXT RECORD IN FLUTE INPUT
+FDT Instance sent (ID=2)
+Sending file: BBB/BBB_720_4M_video_init.mp4 (TOI=3)
+THIS IS THE NUMBER OF READ BYTES 893
+The read string is 4 0 117031 1416850288040524 162372 1416850288235491 97841 1416850288352973 104824 1416850288478840 123886 1416850288627595 111812 1416850288761853 115054 1416850288900000
+
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 0
+100.00% of object sent (TOI=3)
+The values of str and tok are: 4 4
+1/1 Source Blocks sent (TOI=3 SBN=0)
+File sent: BBB/BBB_720_4M_video_init.mp4 (TOI=3)
+elapsedTime 800
+Sending FDT Instance (ID=3)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 4 4
+FDT Instance sent (ID=3)
+Sending file: BBB/BBB_720_4M_video_2.mp4 (TOI=4)
+THIS IS THE NUMBER OF READ BYTES 832820
+The chunk string size: 117031
+The chunk integer size: 117031
+Waiting for 86560 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 117031
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 115603
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 114175
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 112747
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 111319
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 109891
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 108463
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 107035
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 105607
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 104179
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102751
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101323
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99895
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 98467
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97039
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 95611
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94183
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92755
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91327
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89899
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 88471
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87043
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 85615
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84187
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82759
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81331
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79903
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78475
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77047
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75619
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74191
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72763
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71335
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69907
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68479
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67051
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65623
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64195
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62767
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61339
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59911
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58483
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57055
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55627
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54199
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52771
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51343
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49915
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48487
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47059
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45631
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44203
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42775
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41347
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39919
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38491
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37063
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35635
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34207
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32779
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31351
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29923
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28495
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27067
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25639
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24211
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22783
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21355
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19927
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18499
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17071
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15643
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14215
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12787
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11359
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9931
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8503
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7075
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5647
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4219
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2791
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1363
+The chunk string size: 162372
+The chunk integer size: 162372
+Waiting for 189623 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1363 162372
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 160944
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 159516
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 158088
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 156660
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 155232
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 153804
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 152376
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 150948
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 149520
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 148092
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 146664
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 145236
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 143808
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 142380
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 140952
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 139524
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 138096
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 136668
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 135240
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 133812
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 132384
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 130956
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 129528
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 128100
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 126672
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 125244
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 123816
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 122388
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 120960
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 119532
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 118104
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 116676
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 115248
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 113820
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 112392
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 110964
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 109536
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 108108
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 106680
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 105252
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103824
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102396
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100968
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99540
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 98112
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96684
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 95256
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93828
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92400
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90972
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89544
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 88116
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86688
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 85260
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83832
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82404
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80976
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79548
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78120
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76692
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75264
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73836
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72408
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70980
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69552
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68124
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66696
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65268
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63840
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62412
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60984
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59556
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58128
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56700
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55272
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53844
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52416
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50988
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49560
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48132
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46704
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45276
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43848
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42420
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40992
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39564
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38136
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36708
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35280
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33852
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32424
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30996
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29568
+30.17% of object sent (TOI=4)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28140
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26712
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25284
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23856
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22428
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21000
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19572
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18144
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16716
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15288
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13860
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12432
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11004
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9576
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8148
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6720
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5292
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3864
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2436
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1008
+The chunk string size: 97841
+The chunk integer size: 97841
+Waiting for 107477 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1008 97841
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96413
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94985
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93557
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92129
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90701
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89273
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87845
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86417
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84989
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83561
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82133
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80705
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79277
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77849
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76421
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74993
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73565
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72137
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70709
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69281
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67853
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66425
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64997
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63569
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62141
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60713
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59285
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57857
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56429
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55001
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53573
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52145
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50717
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49289
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47861
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46433
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45005
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43577
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42149
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40721
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39293
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37865
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36437
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35009
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33581
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32153
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30725
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29297
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27869
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26441
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25013
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23585
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22157
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20729
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19301
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17873
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16445
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15017
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13589
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12161
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10733
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9305
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7877
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6449
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5021
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3593
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2165
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 737
+The chunk string size: 104824
+The chunk integer size: 104824
+Waiting for 116917 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 737 104824
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103396
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101968
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100540
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99112
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97684
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96256
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94828
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93400
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91972
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90544
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89116
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87688
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86260
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84832
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83404
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81976
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80548
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79120
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77692
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76264
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74836
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73408
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71980
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70552
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69124
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67696
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66268
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64840
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63412
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61984
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60556
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59128
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57700
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56272
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54844
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53416
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51988
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50560
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49132
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47704
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46276
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44848
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43420
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41992
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40564
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39136
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37708
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36280
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34852
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33424
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31996
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30568
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29140
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27712
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26284
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24856
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23428
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22000
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20572
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19144
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17716
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16288
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14860
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13432
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12004
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10576
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9148
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7720
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6292
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4864
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3436
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2008
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 580
+The chunk string size: 123886
+The chunk integer size: 123886
+Waiting for 142728 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 580 123886
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 122458
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 121030
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 119602
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 118174
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 116746
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 115318
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 113890
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 112462
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 111034
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 109606
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 108178
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 106750
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 105322
+60.28% of object sent (TOI=4)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103894
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102466
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101038
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99610
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 98182
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96754
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 95326
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93898
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92470
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91042
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89614
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 88186
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86758
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 85330
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83902
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82474
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81046
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79618
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78190
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76762
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75334
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73906
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72478
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71050
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69622
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68194
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66766
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65338
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63910
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62482
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61054
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59626
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58198
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56770
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55342
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53914
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52486
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51058
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49630
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48202
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46774
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45346
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43918
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42490
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41062
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39634
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38206
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36778
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35350
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33922
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32494
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31066
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29638
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28210
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26782
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25354
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23926
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22498
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21070
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19642
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18214
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16786
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15358
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13930
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12502
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11074
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9646
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8218
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6790
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5362
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3934
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2506
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1078
+The chunk string size: 111812
+The chunk integer size: 111812
+Waiting for 129336 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1078 111812
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 110384
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 108956
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 107528
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 106100
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 104672
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103244
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101816
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100388
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 98960
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97532
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96104
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94676
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93248
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91820
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90392
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 88964
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87536
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86108
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84680
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83252
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81824
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80396
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78968
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77540
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76112
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74684
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73256
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71828
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70400
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68972
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67544
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66116
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64688
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63260
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61832
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60404
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58976
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57548
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56120
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54692
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53264
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51836
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50408
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48980
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47552
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46124
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44696
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43268
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41840
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40412
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38984
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37556
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36128
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34700
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33272
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31844
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30416
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28988
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27560
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26132
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24704
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23276
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21848
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20420
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18992
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17564
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16136
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14708
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13280
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11852
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10424
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8996
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7568
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6140
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4712
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3284
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1856
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 428
+The chunk string size: 115054
+The chunk integer size: 115054
+Waiting for 133634 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 428 115054
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 113626
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 112198
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 110770
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 109342
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 107914
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 106486
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 105058
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103630
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102202
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100774
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99346
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97918
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96490
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 95062
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93634
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92206
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90778
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89350
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87922
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86494
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 85066
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83638
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82210
+90.30% of object sent (TOI=4)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80782
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79354
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77926
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76498
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75070
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73642
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72214
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70786
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69358
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67930
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66502
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65074
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63646
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62218
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60790
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59362
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57934
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56506
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55078
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53650
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52222
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50794
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49366
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47938
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46510
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45082
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43654
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42226
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40798
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39370
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37942
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36514
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35086
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33658
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32230
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30802
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29374
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27946
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26518
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25090
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23662
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22234
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20806
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19378
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17950
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16522
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15094
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13666
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12238
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10810
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9382
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7954
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6526
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5098
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3670
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2242
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 814
+100.00% of object sent (TOI=4)
+The values of str and tok are: 4 1416850288900000
+READ NEXT RECORD IN FLUTE INPUT
+1/1 Source Blocks sent (TOI=4 SBN=0)
+File sent: BBB/BBB_720_4M_video_2.mp4 (TOI=4)
+elapsedTime 1002839
+Sending FDT Instance (ID=4)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 4 1416850288900000
+READ NEXT RECORD IN FLUTE INPUT
+FDT Instance sent (ID=4)
+Sending file: BBB/BBB_720_4M_video_init.mp4 (TOI=5)
+THIS IS THE NUMBER OF READ BYTES 893
+The read string is 6 0 71978 1416850289029680 82153 1416850289177691 68207 1416850289300577 82496 1416850289449207 75894 1416850289585942 61432 1416850289696622 56444 1416850289798311 56444 1416850289900000
+
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 0
+100.00% of object sent (TOI=5)
+The values of str and tok are: 6 6
+1/1 Source Blocks sent (TOI=5 SBN=0)
+File sent: BBB/BBB_720_4M_video_init.mp4 (TOI=5)
+elapsedTime 484
+Sending FDT Instance (ID=5)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 6 6
+FDT Instance sent (ID=5)
+Sending file: BBB/BBB_720_4M_video_3.mp4 (TOI=6)
+THIS IS THE NUMBER OF READ BYTES 555048
+The chunk string size: 71978
+The chunk integer size: 71978
+Waiting for 90890 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71978
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70550
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69122
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67694
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66266
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64838
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63410
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61982
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60554
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59126
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57698
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56270
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54842
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53414
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51986
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50558
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49130
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47702
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46274
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44846
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43418
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41990
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40562
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39134
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37706
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36278
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34850
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33422
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31994
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30566
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29138
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27710
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26282
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24854
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23426
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21998
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20570
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19142
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17714
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16286
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14858
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13430
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12002
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10574
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9146
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7718
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6290
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4862
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3434
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2006
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 578
+The chunk string size: 82153
+The chunk integer size: 82153
+Waiting for 145038 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 578 82153
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80725
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79297
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77869
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76441
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75013
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73585
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72157
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70729
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69301
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67873
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66445
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65017
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63589
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62161
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60733
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59305
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57877
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56449
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55021
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53593
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52165
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50737
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49309
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47881
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46453
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45025
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43597
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42169
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40741
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39313
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37885
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36457
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35029
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33601
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32173
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30745
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29317
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27889
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26461
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25033
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23605
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22177
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20749
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19321
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17893
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16465
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15037
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13609
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12181
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10753
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9325
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7897
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6469
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5041
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3613
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2185
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 757
+The chunk string size: 68207
+The chunk integer size: 68207
+Waiting for 119521 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 757 68207
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66779
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65351
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63923
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62495
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61067
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59639
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58211
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56783
+30.08% of object sent (TOI=6)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55355
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53927
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52499
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51071
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49643
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48215
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46787
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45359
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43931
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42503
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41075
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39647
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38219
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36791
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35363
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33935
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32507
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31079
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29651
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28223
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26795
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25367
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23939
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22511
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21083
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19655
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18227
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16799
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15371
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13943
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12515
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11087
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9659
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8231
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6803
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5375
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3947
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2519
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1091
+The chunk string size: 82496
+The chunk integer size: 82496
+Waiting for 145488 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1091 82496
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81068
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79640
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78212
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76784
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75356
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73928
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72500
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71072
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69644
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68216
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66788
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65360
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63932
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62504
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61076
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59648
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58220
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56792
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55364
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53936
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52508
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51080
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49652
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48224
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46796
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45368
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43940
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42512
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41084
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39656
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38228
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36800
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35372
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33944
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32516
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31088
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29660
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28232
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26804
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25376
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23948
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22520
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21092
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19664
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18236
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16808
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15380
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13952
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12524
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11096
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9668
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8240
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6812
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5384
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3956
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2528
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1100
+The chunk string size: 75894
+The chunk integer size: 75894
+Waiting for 131352 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1100 75894
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74466
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73038
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71610
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70182
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68754
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67326
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65898
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64470
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63042
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61614
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60186
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58758
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57330
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55902
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54474
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53046
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51618
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50190
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48762
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47334
+60.32% of object sent (TOI=6)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45906
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44478
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43050
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41622
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40194
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38766
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37338
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35910
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34482
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33054
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31626
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30198
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28770
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27342
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25914
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24486
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23058
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21630
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20202
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18774
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17346
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15918
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14490
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13062
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11634
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10206
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8778
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7350
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5922
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4494
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3066
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1638
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 210
+The chunk string size: 61432
+The chunk integer size: 61432
+Waiting for 102274 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 210 61432
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60004
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58576
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57148
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55720
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54292
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52864
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51436
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50008
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48580
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47152
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45724
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44296
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42868
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41440
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40012
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38584
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37156
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35728
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34300
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32872
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8596
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7168
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5740
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4312
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2884
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1456
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28
+The chunk string size: 56444
+The chunk integer size: 56444
+Waiting for 99343 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 28 56444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33596
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32168
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30740
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29312
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27884
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26456
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25028
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23600
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22172
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20744
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19316
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17888
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16460
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15032
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13604
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12176
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10748
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9320
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7892
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6464
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5036
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3608
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2180
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 752
+The chunk string size: 56444
+The chunk integer size: 56444
+Waiting for 99293 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 752 56444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55016
+90.35% of object sent (TOI=6)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33596
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32168
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30740
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29312
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27884
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26456
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25028
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23600
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22172
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20744
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19316
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17888
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16460
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15032
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13604
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12176
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10748
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9320
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7892
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6464
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5036
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3608
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2180
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 752
+100.00% of object sent (TOI=6)
+The values of str and tok are: 6 1416850289900000
+READ NEXT RECORD IN FLUTE INPUT
+1/1 Source Blocks sent (TOI=6 SBN=0)
+File sent: BBB/BBB_720_4M_video_3.mp4 (TOI=6)
+elapsedTime 1001564
+Sending FDT Instance (ID=6)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 6 1416850289900000
+READ NEXT RECORD IN FLUTE INPUT
+FDT Instance sent (ID=6)
+Sending file: BBB/BBB_720_4M_video_init.mp4 (TOI=7)
+THIS IS THE NUMBER OF READ BYTES 893
+The read string is 8 0 110552 1416850290092460 105947 1416850290276904 87750 1416850290429668 60192 1416850290534456 104988 1416850290717228 104989 1416850290900000
+
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 0
+100.00% of object sent (TOI=7)
+The values of str and tok are: 8 8
+1/1 Source Blocks sent (TOI=7 SBN=0)
+File sent: BBB/BBB_720_4M_video_init.mp4 (TOI=7)
+elapsedTime 794
+Sending FDT Instance (ID=7)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 8 8
+FDT Instance sent (ID=7)
+Sending file: BBB/BBB_720_4M_video_4.mp4 (TOI=8)
+THIS IS THE NUMBER OF READ BYTES 574418
+The chunk string size: 110552
+The chunk integer size: 110552
+Waiting for 148343 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 110552
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 109124
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 107696
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 106268
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 104840
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103412
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101984
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100556
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99128
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97700
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96272
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94844
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93416
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91988
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90560
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89132
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87704
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86276
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84848
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83420
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81992
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80564
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79136
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77708
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76280
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74852
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73424
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71996
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70568
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69140
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67712
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66284
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64856
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63428
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62000
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60572
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59144
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57716
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56288
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54860
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53432
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52004
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50576
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49148
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47720
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46292
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44864
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43436
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42008
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40580
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39152
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37724
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36296
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34868
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33440
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32012
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30584
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29156
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27728
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26300
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24872
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 596
+The chunk string size: 105947
+The chunk integer size: 105947
+Waiting for 175357 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 596 105947
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 104519
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103091
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 101663
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100235
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 98807
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97379
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 95951
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94523
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93095
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 91667
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90239
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 88811
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87383
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 85955
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84527
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83099
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 81671
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80243
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 78815
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77387
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75959
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74531
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73103
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 71675
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70247
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 68819
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67391
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65963
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64535
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63107
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 61679
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60251
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58823
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57395
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55967
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54539
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53111
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51683
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50255
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48827
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47399
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45971
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44543
+30.18% of object sent (TOI=8)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43115
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41687
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40259
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38831
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37403
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35975
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34547
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33119
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31691
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30263
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28835
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27407
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25979
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24551
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23123
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21695
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20267
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18839
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17411
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15983
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14555
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13127
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11699
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10271
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8843
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7415
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5987
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4559
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3131
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1703
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 275
+The chunk string size: 87750
+The chunk integer size: 87750
+Waiting for 148384 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 275 87750
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86322
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84894
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83466
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82038
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80610
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79182
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77754
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76326
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 74898
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73470
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72042
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70614
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69186
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67758
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66330
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 64902
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63474
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62046
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60618
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59190
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57762
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56334
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54906
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53478
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52050
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50622
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49194
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47766
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46338
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44910
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43482
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42054
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40626
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39198
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37770
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36342
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34914
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33486
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32058
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30630
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29202
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27774
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26346
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24918
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23490
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22062
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20634
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19206
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17778
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16350
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14922
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13494
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12066
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10638
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9210
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7782
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6354
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4926
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3498
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2070
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 642
+The chunk string size: 60192
+The chunk integer size: 60192
+Waiting for 96794 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 642 60192
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 58764
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57336
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55908
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 54480
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53052
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 51624
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50196
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 48768
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47340
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45912
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 44484
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43056
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 41628
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40200
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 38772
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37344
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35916
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 34488
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33060
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 31632
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30204
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 28776
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27348
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25920
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 24492
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23064
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 21636
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20208
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 18780
+60.42% of object sent (TOI=8)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17352
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15924
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 14496
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13068
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 11640
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10212
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 8784
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7356
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5928
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 4500
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3072
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 1644
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 216
+The chunk string size: 104988
+The chunk integer size: 104988
+Waiting for 177706 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 216 104988
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103560
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102132
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100704
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99276
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97848
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96420
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94992
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93564
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92136
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90708
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89280
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87852
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86424
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84996
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83568
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82140
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80712
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79284
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77856
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76428
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75000
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73572
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72144
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70716
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69288
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67860
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66432
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65004
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63576
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62148
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60720
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59292
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57864
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56436
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55008
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53580
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52152
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50724
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49296
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47868
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46440
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45012
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43584
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42156
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40728
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39300
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37872
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36444
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35016
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33588
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32160
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30732
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29304
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27876
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26448
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25020
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23592
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22164
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20736
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19308
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17880
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16452
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15024
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13596
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12168
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10740
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9312
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7884
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6456
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5028
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3600
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2172
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 744
+The chunk string size: 104989
+The chunk integer size: 104989
+Waiting for 174373 microsenconds
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 744 104989
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103561
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 102133
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 100705
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 99277
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 97849
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 96421
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 94993
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 93565
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 92137
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 90709
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 89281
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 87853
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 86425
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 84997
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 83569
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 82141
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 80713
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 79285
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 77857
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 76429
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 75001
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 73573
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 72145
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 70717
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 69289
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 67861
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 66433
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 65005
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 63577
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 62149
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 60721
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 59293
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 57865
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 56437
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 55009
+90.67% of object sent (TOI=8)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 53581
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 52153
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 50725
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 49297
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 47869
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 46441
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 45013
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 43585
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 42157
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 40729
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 39301
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 37873
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 36445
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 35017
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 33589
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 32161
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 30733
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 29305
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 27877
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 26449
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 25021
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 23593
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 22165
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 20737
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 19309
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 17881
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 16453
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 15025
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 13597
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 12169
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 10741
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 9313
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 7885
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 6457
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 5029
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 3601
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 2173
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 745
+100.00% of object sent (TOI=8)
+The values of str and tok are: 8 1416850290900000
+READ NEXT RECORD IN FLUTE INPUT
+1/1 Source Blocks sent (TOI=8 SBN=0)
+File sent: BBB/BBB_720_4M_video_4.mp4 (TOI=8)
+elapsedTime 997916
+Sending FDT Instance (ID=8)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 8 1416850290900000
+READ NEXT RECORD IN FLUTE INPUT
+FDT Instance sent (ID=8)
+Sending file: BBB/BBB_720_4M_video_init.mp4 (TOI=9)
+THIS IS THE NUMBER OF READ BYTES 893
+The read string is 10 0 103421 1416850291074062 98006 1416850291239010 112140 1416850291427745 105894 1416850291605968 60410 1416850291707640 69711 1416850291824967 44585 1416850291900000
+
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 0
+100.00% of object sent (TOI=9)
+The values of str and tok are: 10 10
+1/1 Source Blocks sent (TOI=9 SBN=0)
+File sent: BBB/BBB_720_4M_video_init.mp4 (TOI=9)
+elapsedTime 360
+Sending FDT Instance (ID=9)
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1 0
+100.00% of object sent (TOI=0)
+The values of str and tok are: 10 10
+FDT Instance sent (ID=9)
+Sending file: BBB/BBB_720_4M_video_5.mp4 (TOI=10)
+THIS IS THE NUMBER OF READ BYTES 594167
+The chunk string size: 103421
+The chunk integer size: 103421
+Waiting for 132850 microsenconds
+Exiting...
+The nb_of_symbols to send in the next packet and the remaining es in chunk are: 1428 103421
+1/1 Source Blocks sent (TOI=10 SBN=0)
+Sending session close packets
+Total bytes sent: 2319564
+Closing Log File

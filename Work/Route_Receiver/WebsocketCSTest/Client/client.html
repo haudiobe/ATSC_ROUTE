@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript">
+        			
+            $(function() {
+                window.WebSocket = window.WebSocket || window.MozWebSocket;
+
+                var websocket = new WebSocket('ws://127.0.0.1:9000',
+                                              'dumb-increment-protocol');
+											  
+                var websocketAudio= new WebSocket('ws://127.0.0.1:9001',
+                                              'dumb-increment-protocol');
+
+                websocket.onopen = function () {
+                    $('h1').css('color', 'green');
+					websocket.send("video");
+                };
+
+                websocket.onerror = function () {
+                    $('h1').css('color', 'red');
+                };
+			
+                websocketAudio.onopen = function () {
+                    $('h1').css('color', 'green');
+					websocketAudio.send("audio");
+                };
+
+                websocketAudio.onerror = function () {
+                    $('h1').css('color', 'red');
+                };
+				
+				// Convert an integer to a string made up of the bytes in network/big-endian order.
+				function htonl(n)
+				{
+				     var newv = ((n & 0xFF000000) >>> 24) + ((n & 0x00FF0000) >>> 8) + ((n & 0x0000FF00) <<  8) + ((n & 0x000000FF) <<  24);
+					 return newv;
+				}
+				
+				var messageCount = 0;
+				var lastnumber = -1;
+
+                websocket.onmessage = function (message) {
+	                //websocket.send("ack");
+                    //console.log(message.data);
+					var arraybuffer;
+					var intarray;
+					var fileReader = new FileReader();
+					var msgpt1 = "", msgp2 = "";
+					fileReader.onload = function() {
+					    arraybuffer = this.result;
+						intarray = new Uint32Array(arraybuffer);
+						arraybuffer = arraybuffer;
+						var elem = document.getElementById('field_name');
+						var correctCnt = htonl(intarray[0]);
+						msgp2 = ", Cntr: " + correctCnt;
+
+						if(lastnumber == -1)lastnumber = correctCnt - 1;
+						if(0)//(correctCnt - lastnumber) != 1)
+							{
+							var elem2 = document.getElementById('field_name2');
+							elem2.innerHTML = "Last num: " + lastnumber + " This num: " + correctCnt + " <<<<------------ Lost count";
+							}
+						lastnumber = correctCnt;
+						//if(messageCount %50 == 0)
+							elem.innerHTML = msgpt1 + msgp2;
+					};
+					fileReader.readAsArrayBuffer(message.data);
+					
+					var elem = document.getElementById('field_name');
+					msgpt1 = messageCount + ", Size: " + message.data.size;
+						//if(messageCount %50 == 0)
+						//elem.innerHTML = msgpt1 + msgp2;
+                    //$('div').append($('<p>', { text: messageCount }));
+					messageCount = messageCount + 1;
+                };
+				
+				var messageCountAudio = 0;
+				var lastnumberAudio = -1;
+				
+                websocketAudio.onmessage = function (message) {
+	                //websocket.send("ack");
+                    //console.log(message.data);
+					var arraybuffer;
+					var intarray;
+					var fileReader = new FileReader();
+					var msgpt1 = "", msgp2 = "";
+					fileReader.onload = function() {
+					    arraybuffer = this.result;
+						intarray = new Uint32Array(arraybuffer);
+						arraybuffer = arraybuffer;
+						var elem = document.getElementById('field_name3');
+						var correctCnt = htonl(intarray[0]);
+						msgp2 = ", Cntr: " + correctCnt;
+
+						if(lastnumberAudio == -1)lastnumberAudio = correctCnt - 1;
+						if(0)//(correctCnt - lastnumber) != 1)
+							{
+							var elem2 = document.getElementById('field_name4');
+							elem2.innerHTML = "Last num: " + lastnumberAudio + " This num: " + correctCnt + " <<<<------------ Lost count";
+							}
+						lastnumberAudio = correctCnt;
+						//if(messageCountAudio %50 == 0)
+							elem.innerHTML = msgpt1 + msgp2;
+					};
+					fileReader.readAsArrayBuffer(message.data);
+					
+					var elem = document.getElementById('field_name3');
+					msgpt1 = messageCountAudio + ", Size: " + message.data.size;
+						//if(messageCountAudio %50 == 0)
+						//elem.innerHTML = msgpt1 + msgp2;
+                    //$('div').append($('<p>', { text: messageCountAudio }));
+					messageCountAudio = messageCountAudio + 1;
+                };
+                
+
+                $('button').click(function(e) {
+                    e.preventDefault();
+                    websocket.send($('input').val());
+                    $('input').val('');
+                });
+            });
+        </script>
+        </head>
+    <body>
+        <h1>WebSockets test</h1>
+        <form>
+            <input type="text" />
+            <button>Send</button>
+        </form>
+		<div id="panel">
+		  <div id="field_name">Response here</div>
+		  <div id="field_name2">Error check here</div>
+		  <div id="field_name3">Audio Response here</div>
+		  <div id="field_name4">Audio Error check here</div>
+		</div>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+Determining if the include file in6addr.h exists failed with the following output:
+Change Dir: /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1493697842/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1493697842.dir/build.make CMakeFiles/cmTryCompileExec1493697842.dir/build
+make[1]: Entering directory `/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1493697842.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec1493697842.dir/CheckIncludeFile.c.o   -c /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: in6addr.h: No such file or directory
+ #include <in6addr.h>
+                     ^
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTryCompileExec1493697842.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory `/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1493697842/fast] Error 2
+
+
+Determining if the include file vfork.h exists failed with the following output:
+Change Dir: /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2610952464/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2610952464.dir/build.make CMakeFiles/cmTryCompileExec2610952464.dir/build
+make[1]: Entering directory `/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2610952464.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec2610952464.dir/CheckIncludeFile.c.o   -c /var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: vfork.h: No such file or directory
+ #include <vfork.h>
+                   ^
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTryCompileExec2610952464.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory `/var/www/html/Work/Route_Receiver/libwebsockets-master/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec2610952464/fast] Error 2
+
+

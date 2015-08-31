@@ -1,0 +1,3 @@
+ EXTRACT THE CONTENT LENGTH FROM THE FDT
+ 
+ awk '{if (index($1,"Content-Length")) {sub(/Content-Length="/,"");sub(/"\/>/,"");print $1}}' fdt_Video_OneSBN.xml

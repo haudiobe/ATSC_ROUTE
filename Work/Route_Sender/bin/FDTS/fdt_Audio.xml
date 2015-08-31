@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<FDT-Instance Expires="32511974400"
+	FEC-OTI-FEC-Encoding-ID="129"
+	FEC-OTI-FEC-Instance-ID="0"
+	FEC-OTI-Maximum-Source-Block-Length="64"
+	FEC-OTI-Encoding-Symbol-Length="1428"
+	FEC-OTI-Max-Number-of-Encoding-Symbols="96">
+</FDT-Instance>

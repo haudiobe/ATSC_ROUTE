@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=960, user-scalable=yes">
+    
+    <meta charset="utf-8">
+    <title>ATSC Demo Content</title>
+    <script src="js/dash.all-1.2.0.js"></script>
+    <script>
+     var contentList = [
+       "Scenary_of_Europe_2K/euro_beauty_t2_2k_6m_dash.mpd",
+       "Scenary_of_Europe_4K/euro_beauty_t2_15m_dash.mpd",
+       "Feel_the_Beauty_2K/feel_the_beauty_t2_2k_6m_dash.mpd",
+       "Feel_the_Beauty_4K/feel_the_beauty_t2_15m_dash.mpd",
+     ];
+
+     function onLoad() {
+       var videoTag = document.querySelector("#videoPlayer");
+       var context = new Dash.di.DashContext();
+       var player= new MediaPlayer(context);
+       player.startup();
+       player.attachView(videoTag);
+
+       var fullScreenButtonTag = document.querySelector("#fullScreenButton");
+       var contentListTag  = document.querySelector("#contentList");
+       var playButtonTag = document.querySelector("#playButton");
+       var prevButtonTag = document.querySelector("#prevButton");
+       var nextButtonTag = document.querySelector("#nextButton");
+       var videoEventTag = document.querySelector("#videoEvent");
+       var startupDelayTag = document.querySelector("#startupDelay");
+       var currentTimeTag = document.querySelector("#currentTime");
+       var bufferedTimeTag = document.querySelector("#bufferedTime");
+
+       var startupTimeMs = 0;
+       var startupEnd = false;
+       function initStartupDelay() {
+	 startupEnd = false;
+	 startupDelayTag.value = "";
+	 videoEventTag.value = "";
+	 startupTimeMs = Date.now();	// start measuring startupDelay
+       }
+       function updateStartupDelay() {
+	 if (startupTimeMs > 0 && !startupEnd) {
+	   var delayTimeMs = Date.now() - startupTimeMs;
+	   startupDelay.value = delayTimeMs;
+	 }
+       }
+       function showEvent(msg) {
+	 var elapsedTimeMs = Date.now() - startupTimeMs;
+	 msg = elapsedTimeMs + ":" + msg + " ";
+	 console.log("#### " + msg);
+	 videoEventTag.value += msg;
+       }
+       videoTag.addEventListener('loadstart', function(video, e) {showEvent("loadstart");});
+       videoTag.addEventListener('loadedmetadata', function(video, e) {showEvent("loadedmetadata");});
+       videoTag.addEventListener('loadeddata', function(video, e) {showEvent("loadeddata");});
+       videoTag.addEventListener('canplay', function(video, e) {showEvent("canplay");});
+       videoTag.addEventListener('canplaythrough', function(video, e) {showEvent("canplaythrough");});
+       videoTag.addEventListener('playing', function(video, e) {showEvent("playing");});
+       videoTag.addEventListener('progress', function(video, e) {
+	 // showEvent("progress");
+       });
+
+       setInterval(function() {
+	 updateStartupDelay();
+	 var currentPos = videoTag.currentTime;
+	 var buffered = videoTag.buffered;
+	 var bufferedTime= -1;
+	 var startPos, endPos;
+
+	 if (currentPos > 0.0) {
+	   startupEnd = true;
+	 }
+	 if (buffered) {
+	   for (var i=0; i < buffered.length; i++) {
+	     startPos = buffered.start(i);
+	     endPos = buffered.end(i);
+	     if (startPos < currentPos && endPos > currentPos) {
+	       bufferedTime = endPos - currentPos;
+	     }
+	   }
+	 }
+	 currentPos = Math.round(currentPos);
+	 var hour = Math.floor(currentPos / 3600);
+	 var min = Math.floor((currentPos / 60) % 60);
+	 var sec = Math.floor(currentPos % 60);
+	 var time = ("0" + hour.toString()).substr(-2) + ":" + ("0" + min.toString()).substr(-2) + ":" + ("0" + sec.toString()).substr(-2);
+	 currentTimeTag.value = time;
+	 bufferedTimeTag.value = Math.round(bufferedTime * 10) / 10;
+       }, 100);	// 100 ms
+
+       for (var i=0; i < contentList.length; i++) {
+	 var url = contentList[i];
+	 var label = url;
+//	 var idx = label.lastIndexOf("/");
+//	 if (idx > 0) label = label.slice(idx+1);
+	 label = (i+1) + ": " + label;
+	 contentListTag.options[i] = new Option(label, url);
+       }
+
+       function playSelectedContent(idx) {
+	   if (typeof idx != 'undefined') {
+	     contentListTag.selectedIndex = idx;
+	   }
+	   var url = contentListTag.value;
+	   initStartupDelay();
+
+	   player.attachSource(url);
+	   videoTag.play();
+       }
+       contentListTag.addEventListener('change', function () {
+	 console.log("### content changed");
+	 videoTag.pause();
+       });
+       playButtonTag.addEventListener('click', function () {
+	 playSelectedContent();
+       });
+       prevButtonTag.addEventListener('click', function () {
+	 var idx = contentListTag.selectedIndex;
+	 if (--idx < 0)
+	   idx = contentListTag.options.length-1;
+	 playSelectedContent(idx);
+       });
+       nextButtonTag.addEventListener('click', function () {
+	 var idx = contentListTag.selectedIndex;
+	 if (++idx >= contentListTag.options.length)
+	   idx = 0;
+	 playSelectedContent(idx);
+       });
+
+       fullScreenButtonTag.addEventListener('click', function () {
+	 if (fullScreenButtonTag.innerHTML == "fullScreen") {
+	   var screen = document.body;
+	   var requested = false;
+	   if (screen.webkitRequestFullScreen) {
+	     screen.webkitRequestFullScreen();
+	     requested = true;
+	   } else if (screen.requestFullScreen) {
+	     screen.requestFullScreen();
+	     requested = true;
+	   }
+	   if (requested) {
+	     fullScreenButtonTag.innerHTML = "normalScreen";
+	   }  else {
+	     fullScreenButtonTag.innerHTML = "";
+	   }
+	 } else if (fullScreenButtonTag.innerHTML == "normalScreen") {
+	   var requested = false;
+	   if (document.webkitCancelFullScreen) {
+	     document.webkitCancelFullScreen();
+	     requested = true;
+	   } else if (document.exsitFullScreen) {
+	     document.exsitFullScreen();
+	     requested = true;
+	   }
+	   if (requested) {
+	     fullScreenButtonTag.innerHTML = "fullScreen";
+	   } else {
+	     fullScreenButtonTag.innerHTML = "";
+	   }
+	 }
+       });
+
+       function onFailed(e) {
+    	 // video playback failed - show a message saying why
+    	 switch (e.target.error.code) {
+    	   case e.target.error.MEDIA_ERR_ABORTED:
+    	     alert('You aborted the video playback.');
+    	     break;
+    	   case e.target.error.MEDIA_ERR_NETWORK:
+    	     alert('A network error caused the video download to fail part-way.');
+    	     break;
+    	   case e.target.error.MEDIA_ERR_DECODE:
+    	     alert('The video playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+    	     break;
+    	   case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+    	     alert('The video could not be loaded, either because the server or network failed or because the format is not supported.');
+    	     break;
+    	   default:
+    	     alert('An unknown error occurred.');
+    	     break;
+    	 }
+       }
+     }
+    </script>
+    <style>
+     body {
+       background-color: #F8F8F8;
+      }
+
+     #title {
+       display: inline;
+       font-size: 1.5em;
+     }
+     #fullScreenButton {
+       float: right;
+     }
+     #mainPanel {
+       width: 940px;
+       height: 520px;
+       margin: 0px;
+       padding: 10px;
+       background-color: #E0E0E0;
+       border-style: outset;
+      }
+     #controlPanel {
+       width:100%;
+       margin: 2px;
+     }
+     #eventPanel {
+       width:100%;
+       margin: 2px;
+     }
+     #statusPanel {
+       margin: 2px;
+     }
+     #videoPanel {
+       text-align: center;
+       height: 400px;
+       bottom: 0;
+       border-style: inset;
+     }
+      #videoPlayer {
+       height: 100%;
+      }
+
+     select, input, label, button {
+       font-family: verdana,arial,helvetica,sans-serif;
+       font-size: 1.0em;
+     }
+     button {
+       margin-left: 2.0em;
+     }
+     label {
+       margin-left: 0.5em;
+     }
+
+     input {
+       background-color: #FFFFFF;
+     }
+     #videoEvent {
+       width: 50em;
+     }
+     #startupDelay {
+       width: 4.0em;
+     }
+     #currentTime {
+       width: 5.0em;
+     }
+     #bufferedTime {
+       width: 3.0em;
+     }
+    </style>
+</head>
+<body id="bodyPanel" onLoad="onLoad()">
+  <div id="mainPanel">
+    <div>
+      <h1 id="title">ATSC Demo Content</h1>
+      <button id="fullScreenButton">fullScreen</button>
+    </div>
+    <div id="controlPanel">
+      <select id="contentList"></select>
+      <button id="playButton">play</button>
+      <button id="prevButton">prev</button>
+      <button id="nextButton">next</button>
+    </div>
+    <form id="eventPanel">
+      <label>StartupEvent</label>
+      <input readonly type="text" id="videoEvent">
+    </form>
+    <form id="statusPanel">
+      <label >StartupDelay(ms)</label>
+      <input readonly type="text" id="startupDelay">
+      <label>CurrentTime</label>
+      <input readonly type="text" id="currentTime">
+      <label>BufferedTime(sec)</label>
+      <input readonly type="text" id="bufferedTime">
+    </form>
+    <div id="videoPanel">
+      <video id="videoPlayer" controls="true" onerror="onFailed(event)">No Video support</video>
+    </div>
+  </div>
+</body>
+</html>

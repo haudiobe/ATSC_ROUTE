@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<associatedProcedureDescription>
+  <postFileRepair offsetTime="1" randomTimePeriod="2">
+    <serviceURI>http://www.example.com/cgi-bin/mbms-rel6-FLUTE-repair</serviceURI>
+  </postFileRepair>
+</associatedProcedureDescription>

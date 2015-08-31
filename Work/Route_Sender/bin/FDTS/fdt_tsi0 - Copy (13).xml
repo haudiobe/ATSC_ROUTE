@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<FDT-Instance Expires="3605617857"
+	FEC-OTI-FEC-Encoding-ID="0"
+	FEC-OTI-Maximum-Source-Block-Length="64"
+	FEC-OTI-Encoding-Symbol-Length="1428">
+	<File TOI="1"
+		Content-Location="file:///BBB_32k_293.mp4"
+		Content-Length="8148"
+		Content-MD5="3IT6AS00RcvO95W/hXVd9Q=="/>
+	<File TOI="2"
+		Content-Location="file:///BBB_720_1M_video_293.mp4"
+		Content-Length="128783"
+		Content-MD5="h5u8KgCCMmSl3RnZZBiFkg=="/>
+	<File TOI="3"
+		Content-Location="file:///BBB_32k_294.mp4"
+		Content-Length="8160"
+		Content-MD5="UrzrYkQbf0VOJvxmb+8bdA=="/>
+	<File TOI="4"
+		Content-Location="file:///BBB_720_1M_video_294.mp4"
+		Content-Length="84101"
+		Content-MD5="a7eq3xEaIoWRO06x0GTRCA=="/>
+	<File TOI="5"
+		Content-Location="file:///BBB_32k_295.mp4"
+		Content-Length="8296"
+		Content-MD5="4jA6i8Ro+LzhHFoCMjw5ZQ=="/>
+	<File TOI="6"
+		Content-Location="file:///BBB_720_1M_video_295.mp4"
+		Content-Length="185427"
+		Content-MD5="+gftsOuxA7QIaBIoJNDv4g=="/>
+	<File TOI="7"
+		Content-Location="file:///BBB_32k_296.mp4"
+		Content-Length="8150"
+		Content-MD5="TU3xJMYYZD2q1dD2Hzt7ow=="/>
+	<File TOI="8"
+		Content-Location="file:///BBB_720_1M_video_296.mp4"
+		Content-Length="197483"
+		Content-MD5="A3ZGq4Gqax0Fs4/VRh9YSA=="/>
+	<File TOI="9"
+		Content-Location="file:///BBB_32k_297.mp4"
+		Content-Length="8279"
+		Content-MD5="FiHlgRB9DelBbG3lBLolBQ=="/>
+	<File TOI="10"
+		Content-Location="file:///BBB_720_1M_video_297.mp4"
+		Content-Length="206354"
+		Content-MD5="uiZbYR9djvfRznFOyb2OMw=="/>
+	<File TOI="11"
+		Content-Location="file:///BBB_32k_298.mp4"
+		Content-Length="8187"
+		Content-MD5="/Mvlxita8jA/DHzNzpwrhQ=="/>
+	<File TOI="12"
+		Content-Location="file:///BBB_32k_299.mp4"
+		Content-Length="8176"
+		Content-MD5="EXIEI+xgCkgu0o+zEeljXg=="/>
+	<File TOI="13"
+		Content-Location="file:///BBB_32k_300.mp4"
+		Content-Length="8228"
+		Content-MD5="6GEn57wwfPN3n6s42Kpu8Q=="/>
+	<File TOI="14"
+		Content-Location="file:///BBB_32k_301.mp4"
+		Content-Length="8189"
+		Content-MD5="jBsqEEvj9WdGVKCddvGbqA=="/>
+	<File TOI="15"
+		Content-Location="file:///BBB_32k_302.mp4"
+		Content-Length="8214"
+		Content-MD5="lTGHgEvrpxq1I37Io1l+xg=="/>
+	<File TOI="16"
+		Content-Location="file:///BBB_32k_303.mp4"
+		Content-Length="6038"
+		Content-MD5="/YncxGvp8F2yqkEYnq3WCQ=="/>
+</FDT-Instance>

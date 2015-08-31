@@ -1,0 +1,6 @@
+timescale="12288"
+duration="24576"
+media="BBB_720_1M_video_$Number$.mp4"
+timescale="48000"
+duration="94175"
+media="BBB_32k_$Number$.mp4"

@@ -1,0 +1,386 @@
+FLUTE File Repair Procedure
+
+Jani Peltotalo
+Sami Peltotalo
+Tampere University of Technology
+Version 03
+31.1.2007
+
+================================================================================
+
+Table of Content
+================================================================================
+1. File Repair Messages
+  1.1. File Repair Request Message
+  1.2. File Repair Response Message for Point-to-Point (PTP) Repair
+  1.3. File Repair Response Message for Redirection to Multicast Repair
+  1.4. File Repair Response Message for Server Error
+2. Receiver Side Operation
+  2.1. Initial FLUTE Session
+  2.2. File Repair Client
+    2.2.1. Point-to-Point Repair
+    2.2.2. Redirection to Multicast Repair
+    2.2.3. Multicast Repair
+3. Server Side Operation
+  3.1. Initial FLUTE Session
+  3.2. File Repair Server
+    3.2.1. HTTP Server
+    3.2.2. Point-to-Point Repair
+    3.2.3. Redirection to Multicast Repair
+  3.3. Repair FLUTE Session
+  3.4. Repair FLUTE Session using Repair Sender
+  3.5. Communication between HTTP Server Host and Multicast Server Host	
+
+1. File Repair Messages
+================================================================================
+
+1.1 File Repair Request Message
+--------------------------------------------------------------------------------
+
+File repair request message is a HTTP GET message. Requested file URI and Source
+Block Number (SBN) and Encoding Symbol ID (ESI) values are URL encoded. An
+example file repair request is given below:
+
+GET /cgi-bin/mbms-rel6-FLUTE-repair?fileURI=file://example.com/rfc/rfc3451.txt
+   &SBN=4;ESI=4&SBN=5;ESI=2,7 HTTP/1.1
+
+1.2 File Repair Response Message for Point-to-Point (PTP) Repair
+--------------------------------------------------------------------------------
+
+File repair response message consists of HTTP header and a file repair response
+payload (HTTP payload). HTTP status is set to "200 OK". The Content-Type is set
+to "application/simpleSymbolContainer", which denotes that the message body is
+a simple container of encoding symbols. The Content-Transfer-Encoding is set
+to "binary".
+
+A group of encoding symbols in the file repair response payload is preceded by
+the group’s Length Indicator and FEC Payload ID.
+
+1.3 File Repair Response Message for Redirection to Multicast Repair
+--------------------------------------------------------------------------------
+
+File Repair Server uses the HTTP response status code 302 (Found - Redirection)
+to indicate that file repair data is temporarily available via a different URI.
+The temporary URI is given by the Location field in the HTTP response and is the
+URI of the session description (SDP file) of the multicast repair session.
+
+NOTE: The SDP file for multicast repair session may be carried also as a payload
+(entity-body) in the HTTP response - which is especially useful if the multicast
+repair session is a new (or recently end time modified) FLUTE session and other
+means of service announcement prior to this were not feasible.
+
+NOTE2: This is not used, because libcurl retrieves in any case the SDP file from
+the Location URI.
+
+1.4 File Repair Response Message for Server Error
+--------------------------------------------------------------------------------
+
+File Repair Server uses the HTTP response status code 500 (Internal Server
+Error) to indicate that internal server error has happened. This may happen for
+example when the client requests a file, which does not exist at the server.
+
+2 Receiver Side Operation
+================================================================================
+
+2.1 Initial FLUTE Session
+--------------------------------------------------------------------------------
+
+If the user of FLUTE receiver wants to use file repairing, the receiver is
+started with -R option. This option tells also the used Associated Procedure
+Description (APD) file. This file is get out-of-band and it includes information
+that is needed during the file repair procedure. An example APD file is given
+below:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<associatedProcedureDescription>
+  <postFileRepair offsetTime="5" randomTimePeriod="10">
+    <serverURI>
+      http://www.example.com/cgi-bin/mbms-rel6-FLUTE-repair
+    </serverURI>
+  </postFileRepair>
+  <bmFileRepair
+  sessionDescriptionURI="http://www.example.com/sdp/flute_repair_example_com.sdp"/>
+</associatedProcedureDescription>
+
+After an A flag is detected FLUTE receiver checks that is there uncompleted
+files, and if there is, then the file repair procedure is started. The check is
+done from the File Delivery Table (FDT) database, where each file entry has a
+flag for the receiving status.
+
+Example command line
+
+./flute -A -d:./flute_example_com.sdp -R:./apd.xml
+
+File locations
+
+APD file: default ./ (default name apd.xml)
+SDP file: default ./
+
+How the SDP and APD files are fetched is out-of-space of the document.
+
+2.2 File Repair Client
+--------------------------------------------------------------------------------
+
+File repair client is included into the FLUTE application and it uses libcurl -
+the multiprotocol file transfer library (http://curl.haxx.se/libcurl/) for HTTP
+operations. 
+
+First the file repair client reads the APD file, which tells which method is
+used in the file repairing. Multicast repair is used if the "bmFileRepair"
+element is found from the APD, otherwise point-to-point repair is used.
+
+NOTE: Probably the APD does not include bmFileRepair in the first phase but the
+server could update the APD in-band and redirect the file repair client to use
+multicast repair. This may for example happen when the server is overloaded.
+
+NOTE2: It is also possible to use a B flag as an identifier to start file repair
+procedure. After the B flag is detected file repair client identifies missing
+encoding symbols for object and request those. This feature is not implemented
+currently, and it is quite hard to implement. It needs changes to existing
+"object_completed" checking function and also FLUTE sender needs changes to
+enable the B flag usage.
+
+NOTE3: Also FDT Expires attribute could be used to start the repair procedure,
+but is not used in our implementation.
+
+2.2.1	Point-to-Point Repair
+
+A list of File Repair Server URIs is provided in the APD file. The file repair
+client randomly selects one of the servers from the list (with uniform
+distribution). The file repairing starts after back-off time, i.e. offset-time
++ random time (e.g. 5 sec + 0-10 sec), to enhance system scalability.
+
+Once missing encoding symbols are identified, the file repair client sends one
+or more messages to a File Repair Server requesting transmission of data that
+allows recovery of missing data (Section 1.1). Requested encoding symbols are
+from source symbols space.
+
+All file repair requests and repair responses take place in a single TCP session
+using the HTTP protocol. All requests are sent to the selected server in a
+sequence starting from the first object. If the connection to the server or the
+server fails, the client chooses randomly a new server and tries to connect to
+it. This is done until file repairing has succeeded or all the servers are at
+least tried to be connected.
+
+File repair client fetches missing symbols from 200 OK file repair response
+message (Section 1.2).
+
+2.2.2	Redirection to Multicast Repair
+
+File repair client gets the URI for SDP description of the multicast repair
+session from the Location header field in the 302 file repair response message
+(Section 1.3). After that the file repair client retrieves the SDP file using
+HTTP and then the FLUTE receiver joins to the multicast repair session using
+the SDP file.
+
+2.2.3	Multicast Repair
+
+If the "bmFileRepair" element is found from the APD file then the file repair
+client retrieves an SDP description of the multicast repair session from the
+URI mentioned in the "sessionDescriptionURI" attribute. After that FLUTE
+receiver joins to the multicast repair session using the SDP file.
+
+The FLUTE receiver tries to collect missing encoding symbols for the transport
+objects which file descriptions have been received in the initial FLUTE session.
+Receiver gets also new file description entries from the repair session if some
+FDT instances were lost in the initial FLUTE session. Files which are defined
+in these new instances are also received and "repaired".
+
+3 Server Side Operation
+================================================================================
+
+All transmitted files must have the same directory structure at the all servers.
+
+3.1 Initial FLUTE Session
+--------------------------------------------------------------------------------
+
+FLUTE sender generates with -R option a FluteConf file. FluteConf file name can
+be set also by -R option. FluteConf file includes following information: base
+directory for the transmitted files, FDT file name and used FEC ratio. The
+FEC ratio is not really needed currently for PTP repair, because the client
+requests only source symbols, but the File Repair Server has however capability
+to send also FEC symbols. For multicast repair the FEC ratio is needed. 
+
+FLUTE sender must place FEC-OTI information to the FDT Instance, because the
+File Repair Server and the Repair Sender need the information later on.
+
+An example FluteConf file is shown below:
+
+BaseDir=/path/flute-delivery
+FDTFile=/path/fdt_tsi1.xml
+FECRatio=50
+
+Example command line
+
+./flute -S -d:/path/flute_example_com.sdp -B:/path/flute-delivery -F:rfc -R -x:2 -X:50
+
+File locations
+
+FluteConf file: ./ (default name is flute.conf)
+SDP file: default ./
+
+3.2 File Repair Server
+--------------------------------------------------------------------------------
+
+File Repair Server is implemented using C language and it is called
+mbms-rel6-FLUTE-repair. The server is run in Apache as a CGI script. It utilizes
+part of FLUTE code and it reads RepairConf file to get configuration information.
+RepairConf file includes the following information: RepairMethod is the used
+repair method (i.e. PTP or PTM), RequestedBlocks file name used in special
+multicast repair session, SDP file URI of the multicast repair session and
+FluteConf file name. Used configuration syntax for the RepairConf file is shown
+below:
+
+RepairMethod=PTP
+RequestedBlocksFile=/path/requested_blocks.txt
+FluteConfFile=/path/flute.conf
+PTMRepairSDPFile=sdp/flute_repair_example_com.sdp
+
+The RequestedBlocksFile must exist in the system and have the following access
+rights:
+
+-rw-r--r--  1 www-data www-data    0 2006-01-16 17:51 requested_blocks.txt
+
+NOTE: PTMRepairSDPFile has the file path starting from Apache’s document root
+folder.
+
+3.2.1	HTTP Server
+
+Used HTTP server is Apache/1.3.33 running on Debian GNU/Linux. Small
+modifications are needed to the Apache’s configuration file (httpd.conf).
+Following error document definition is added because as a default Apache puts
+small HTML document to the 302 message’s entity-body and with this trick the
+entity-body is got empty.
+
+ErrorDocument 302 /cgi-bin/redirect.cgi
+
+By using the following environment variable, the File Repair Server knows what
+the used RepairConf file is.
+
+<IfModule mod_env.c>
+SetEnv RepairConf /path/file_repair_server.conf
+</IfModule>
+
+The "mod_env" module has to be loaded to the Apache by adding the following line
+to "modules.conf" file.
+
+LoadModule env_module /usr/lib/apache/1.3/mod_env.so
+
+Command line
+
+/etc/init.d/apache start|stop|restart|reload
+
+File locations
+
+Apache configuration files: /etc/apache/httpd.conf, /etc/apache/modules.conf
+Apache document root: /var/www/
+Apache CGI directory: /usr/lib/cgi-bin/
+
+3.2.2	Point-to-Point Repair
+
+File Repair Server reads FluteConf file to get initial FLUTE session information:
+base directory of the transmitted files, FEC ratio and FDT file name. Then the FDT
+file is read to get more initial FLUTE session information: FEC Encoding ID/FEC
+Instance ID (per file), Encoding Symbol Length (per file), and Maximum Source
+Block Length (per file).
+
+BaseDir and FDTFile location must be set manually in the FluteConf file, because
+the transmitted files and the FDT file are suggested to be at different
+locations at the different hosts.
+
+Requested encoding symbol IDs are fetched from file repair request message and
+the requested encoding symbols are returned in 200 OK file repair response
+message (Section 1.2).
+
+3.2.3	Redirection to Multicast Repair
+
+The File Repair Server sends 302 (Found - Redirection) file repair response
+message, which includes Location response-header. Location header field includes
+an URI of an SDP file for multicast repair session. This is done using a
+separate redirect.cgi script, because as a default Apache puts small HTML
+document to the 302 message’s entity-body and with this trick entity-body is
+got empty.
+
+The File Repair Server also adds requested source block numbers to the
+RequestedBlocks file based on the requested symbols or source blocks. An
+example RequestedBlocks file looks like (TOI:SBN):
+
+1:2
+1:3
+1:7
+2:5
+3:*
+4:1
+
+* means that all source blocks should be transmitted again.
+
+3.3 Repair FLUTE Session
+--------------------------------------------------------------------------------
+
+Multicast file repair data is delivered using FLUTE sender. User has to first
+read FluteConf file to get initial FLUTE session information: base directory for
+the transmitted files, FEC ratio and FDT file name. FDT file name is not
+mandatory but it is safe to use it if someone has added files to the directories
+transmitted in the initial FLUTE session. Also in this way FEC Encoding ID/FEC
+Instance ID (per file), Encoding Symbol Length (per file), Maximum Source Block
+Length (per file) is same with the initial FLUTE session, which is critical.
+
+Example command line
+
+./flute -S -d:./flute_repair_example_com.sdp -B:/path/flute-delivery -f:./fdt_tsi1.xml -X:50
+
+File locations
+
+FluteConf file: default ./ (not used by the program itself)
+FDT file: default ./
+SDP file: default ./
+
+3.4 Repair FLUTE Session using Repair Sender
+--------------------------------------------------------------------------------
+
+Another option for multicast file repair data delivery is to use modified FLUTE
+sender called Repair Sender. It first reads a configuration file to get needed
+information. An example configuration file is below:
+
+RequestedBlocksFile=/path/requested_blocks.txt
+FluteConfFile=/path/flute.conf
+PTMRepairSDPFile=/path/flute_repair_example_com.sdp
+
+After that it reads FluteConf file to get part of the initial FLUTE session
+information; base directory for transmitted files, FEC ratio and FDT file name.
+After that it reads FDT file to get more initial FLUTE session information: FEC
+Encoding ID/FEC Instance ID (per file), Encoding Symbol Length (per file) and
+Maximum Source Block Length (per file).
+
+Repair sender sends source blocks that are found from RequestedBlocks file.  If
+FEC is used also FEC symbols are sent. So the sender does not send the whole
+files. The session does not either carry FDT Instances.
+
+Example command line
+
+./repair_sender -K:/path/repair_sender.conf
+
+File locations
+
+RepairSenderConf file: default ./
+RequestedBlocks file: default ./
+FluteConf file: default ./
+FDT file: ./
+SDP file: default ./
+
+3.5 Communication between HTTP Server Host and Multicast Server Host
+--------------------------------------------------------------------------------
+
+Suggestion is that HTTP server and multicast server are placed at different
+hosts. But so that the initial FLUTE  sender, the repair FLUTE sender and the
+Repair Sender are run at the same host.
+
+Initial FLUTE sender generates FluteConf file and FDT file. File Repair Server
+needs these files (or the information from the files) and how the files are
+transmitted to the File Repair Server is out-of-scope of the document. 
+
+File Repair Server generates RequestedBlocks file and the Repair Sender needs
+this file. How the file is transmitted to the Repair Sender is out-of-scope of
+the document.
+
+SDP file of the multicast repair session should also exits at the both hosts.

@@ -1,0 +1,18 @@
+<!--
+ MPD file Generated with GPAC version 0.5.1-DEV-rev5503M  on 2014-11-14T16:40:10Z
+-->
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011" minBufferTime="PT0.9S" type="dynamic" availabilityStartTime="2014-11-29T12:40:21Z" timeShiftBufferDepth="PT1S" mediaPresentationDuration="PT0H9M55.00S" profiles="urn:mpeg:dash:profile:isoff-live:2011">
+<Period start="PT0S" id="1" duration="PT0H9M55.00S">
+<AdaptationSet segmentAlignment="true" maxWidth="1280" maxHeight="720" maxFrameRate="24" par="16:9">
+<Representation id="1" mimeType="video/mp4" codecs="avc1.4d401f" width="1280" height="720" frameRate="24" sar="1:1" startWithSAP="1" bandwidth="3920025">
+<SegmentTemplate timescale="12288" media="BBB_720_4M_video_$Number$.mp4" startNumber="1" duration="12288" initialization="BBB_720_4M_video_init.mp4"/>
+</Representation>
+</AdaptationSet>
+<AdaptationSet segmentAlignment="true">
+<Representation id="2" mimeType="audio/mp4" codecs="mp4a.40.5" audioSamplingRate="48000" startWithSAP="1" bandwidth="66103">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<SegmentTemplate timescale="48000" media="BBB_64k_$Number$.mp4" startNumber="1" duration="47045" initialization="BBB_64k_init.mp4"/>
+</Representation>
+</AdaptationSet>
+</Period>
+</MPD>

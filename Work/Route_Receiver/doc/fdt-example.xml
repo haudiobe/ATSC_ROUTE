@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<FDT-Instance Expires="3361125175">
+  <!-- Content-Location: is file's directory structure downwards from base directory.
+	 "www.example.com" is sender's host name (it is not required) and "/files/file1.txt" means that
+	 there is "files" directory, which includes "file1.txt" file.
+	 Content-Length: optional
+	 Content-Type: optional -->
+  <File TOI="1"
+	Content-Location="file://www.example.com/files/file1.txt" 
+      Content-Length="40594" 
+	Content-Type="text/plain"/>
+  <File TOI="2"
+      Content-Location="file:///files/file2.txt"
+      Content-Length="32506"
+	Content-Type="text/plain"/>
+  <File TOI="3"
+      Content-Location="files/file3.doc"/>
+</FDT-Instance>
