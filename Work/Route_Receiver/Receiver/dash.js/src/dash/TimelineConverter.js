@@ -118,9 +118,22 @@ Dash.dependencies.TimelineConverter = function () {
             //the Media Segment list is further restricted by the CheckTime together with the MPD attribute
             // MPD@timeShiftBufferDepth such that only Media Segments for which the sum of the start time of the
             // Media Segment and the Period start time falls in the interval [NOW- MPD@timeShiftBufferDepth - @duration, min(CheckTime, NOW)] are included.
-            start = Math.max((now - representation.adaptation.period.mpd.timeShiftBufferDepth), 0);
-            end = (isNaN(checkTime) ? now : Math.min(checkTime, now)) - d;
+            start = Math.max((now - representation.adaptation.period.mpd.timeShiftBufferDepth), representation.adaptation.period.start);
+            var timeAnchor = (isNaN(checkTime) ? now : Math.min(checkTime, now));
+            var periodEnd = representation.adaptation.period.start + representation.adaptation.period.duration;
+            end = timeAnchor >= periodEnd  && (timeAnchor - d) < periodEnd ? periodEnd : timeAnchor - d;
+            //end = (isNaN(checkTime) ? now : Math.min(checkTime, now)) - d;
+
+            //if(endr !== end)
+            //endr = endr;
+
+            //console.log("Start: " + start + ", end: " + end + ", client server: " + clientServerTimeShift);
+            //console.trace();
+
             range = {start: start, end: end};
+
+			if(now > 10.93 && representation.adaptation.type === "audio")
+				now = now;
 
             return range;
         },
@@ -143,6 +156,7 @@ Dash.dependencies.TimelineConverter = function () {
             // the difference between expected and actual live edge time is supposed to be a difference between client
             // and server time as well
             clientServerTimeShift += e.data.liveEdge - (expectedLiveEdge + e.data.searchTime);
+			console.log("Client server timeshift updated to: " + clientServerTimeShift);
             isClientServerTimeSyncCompleted = true;
         },
 
@@ -152,6 +166,7 @@ Dash.dependencies.TimelineConverter = function () {
             }
 
             clientServerTimeShift = e.data.offset / 1000;
+			console.log("Client server timeshift updated to: " + clientServerTimeShift);
 
             isClientServerTimeSyncCompleted = true;
         },

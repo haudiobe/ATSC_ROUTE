@@ -22,6 +22,7 @@ $DASHContentBase="DASH_Content";
 $DASHContentDir=$DASHContentBase . (string)$channel;
 $DASHContent=$currDir . "/" . $DASHContentDir;
 $OriginalMPD= "MultiRate_Dynamic.mpd";
+
 #if($channel == 1)
 #{   
 #    $initAudio = "BBB_64k_init.mp4";
@@ -70,6 +71,7 @@ $segTemplateVideo = "video_8M_*.mp4";
 #    $segTemplateAudio = "ED_MPEG2_64k_*.mp4";
 #    $segTemplateVideo = "ED_720_4M_video_*.mp4";  
 #}
+
 $Delay=0;	#How much would the AST of the patched MPD be lagging the current system time, i.e. how far in future is the AST (in seconds)?
 $PatchedMPD="MultiRate_Dynamic_Patched.mpd";
 $FLUTEReceiver="./";
@@ -128,6 +130,7 @@ while (!array_diff(glob($DASHContent.'/'.$segTemplateVideo), array($DASHContent.
 
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);
+$date_array[0] = round($date_array[0],4);
 $date = date("Y-m-d H:i:s",$date_array[1]);
 //file_put_contents ( "timelog.txt" , "Tuned in:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
 
@@ -136,7 +139,7 @@ $AST_SEC->setTimestamp($date_array[1]);    //Better use a single time than now a
 //$AST_SEC->add(new DateInterval('PT1S'));
 $AST_SEC_W3C = $AST_SEC->format(DATE_W3C);
 
-preg_match('/\.\d{4}/',$date_array[0],$dateFracPart);
+preg_match('/\.\d*/',$date_array[0],$dateFracPart);
 $extension_pos = strrpos($AST_SEC_W3C, '+'); // find position of the last + in W3C date to slip frac seconds
 $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//substr($AST_SEC_W3C, $extension_pos);
 //file_put_contents ( "timelog.txt" , "Setting AST: " . $AST_W3C . " \r\n" , FILE_APPEND );
@@ -158,40 +161,49 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
     
     $periods = parseMPD($dom->documentElement);
     
-    $cumulativeOriginalDuration = 0;    //Cumulation of period duration on source MPD
+
     $cumulativeUpdatedDuration = 0;    //Cumulation of period duration on updated MPD
-    $tuneInPeriodStartOffset = 0;
+    $tuneInPeriodStart = 0;
     
     $MPDNode = &$periods[0]['node']->parentNode;
     
     $MPD_AST = $MPDNode->getAttribute("availabilityStartTime");
-    preg_match('/\.\d{4}(Z)/',$MPD_AST,$matches);
+    preg_match('/\.\d*/',$MPD_AST,$matches);
     $fracAST = "0" . $matches[0];
     $originalAST = new DateTime($MPD_AST);   
-    $timeOffset = $AST_SEC->getTimestamp() + round($date_array[0],4) - ($originalAST->getTimestamp() + $fracAST);  //Offset relative to start
+    $deltaTimeASTTuneIn = $AST_SEC->getTimestamp() + round($date_array[0],4) - ($originalAST->getTimestamp() + $fracAST);  //Time elapsed between the original AST and Tune-in time
     
-    //file_put_contents ( "timelog.txt" , "TimeOffset: " . $timeOffset . "Original ts:" . ($originalAST->getTimestamp() + $fracAST) . "Tune-in TS: " . ($AST_SEC->getTimestamp() + round($date_array[0],4)) . "\r\n" , FILE_APPEND );
+    //file_put_contents ( "timelog.txt" , "TimeOffset: " . $deltaTimeASTTuneIn . ", Original ts:" . ($originalAST->getTimestamp() + $fracAST) . "Tune-in TS: " . ($AST_SEC->getTimestamp() + round($date_array[0],4)) . "\r\n" , FILE_APPEND );
     
     $MPDNode->setAttribute("availabilityStartTime",$AST_W3C);    //Set AST to tune-in time
     
+    $periodStart;   //Start of this period in the iteration
+    $duration;      //Duration of current period in the iteration
+    $lastPeriodStart;   //Period start of the last period in the iteration
+    $lastPeriodDuration;    //Period duration of the last period in iteration
+	
     for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
     {
+        $periodStart = $periods[$periodIndex]['node']->getAttribute("start");
         $duration = somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($periods[$periodIndex]['node']->getAttribute("duration"));
         
-        $periods[$periodIndex]['node']->setAttribute("start","PT". round($cumulativeUpdatedDuration + $tuneInPeriodStartOffset,4)."S"); 
+        if($periodStart === '')
+            $periodStart = $lastPeriodStart + $lastPeriodDuration;
+        else
+            $periodStart = somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($periodStart);	//Convert Duration string to number
+
+        //Set already for the next iteration
+        $lastPeriodStart = $periodStart;
+        $lastPeriodDuration = $duration;
         
-        if($timeOffset < $cumulativeOriginalDuration)   //Tune-in is before this period, it stays intact
+        if($deltaTimeASTTuneIn < $periodStart)   //Tune-in is before this period, it stays intact (except that its start may need an update, which is optional for subsequent periods)
         {
-            $cumulativeOriginalDuration += $duration;
-            $cumulativeUpdatedDuration += $duration; // The eventual duration of updated MPD
-            //$periods[$periodIndex]['node']->removeChild ($periods[$periodIndex]['adaptationSet'][1]['node']);
+            $periods[$periodIndex]['node']->setAttribute("start","PT". round($periodStart - $deltaTimeASTTuneIn,4)."S"); 
+            $lastPeriodStart = $periodStart - $deltaTimeASTTuneIn;
             continue;
         }
         
-        $cumulativeDurationPreceedingPeriods = $cumulativeOriginalDuration; //Save it for later use
-        $cumulativeOriginalDuration += $duration;        
-        
-        if($timeOffset > $cumulativeOriginalDuration)   //This period is no more relavant and is not received, hence remove this
+        if($deltaTimeASTTuneIn > $periodStart + $duration)   //This period is no more relevant and is not received, hence remove this
         {
             $dom->documentElement->removeChild ($periods[$periodIndex]['node']);
             continue;
@@ -207,8 +219,8 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
         $videoStartNum = $videoSegmentTemplate->getAttribute("startNumber");
         $videoPTO = $videoSegmentTemplate->getAttribute("presentationTimeOffset");
         
-        $newVideoStartNumber = ceil(($timeOffset - $cumulativeDurationPreceedingPeriods)*$videoTimescale/$videoSegmentDuration) + $videoStartNum;
-        //file_put_contents ( "timelog.txt" , "new video offset: " . ($timeOffset - $cumulativeDurationPreceedingPeriods)*$videoTimescale/$videoSegmentDuration . "\r\n" , FILE_APPEND );
+        $newVideoStartNumber = ceil(($deltaTimeASTTuneIn - $periodStart)*$videoTimescale/$videoSegmentDuration) + $videoStartNum;
+        //file_put_contents ( "timelog.txt" , "new video offset: " . ($deltaTimeASTTuneIn - $periodStart)*$videoTimescale/$videoSegmentDuration . "\r\n" , FILE_APPEND );
         $videoOffsetUpdate = ($newVideoStartNumber - $videoStartNum) * $videoSegmentDuration/$videoTimescale;
         
         $audioTimescale = $audioSegmentTemplate->getAttribute("timescale");
@@ -216,24 +228,27 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
         $audioStartNum = $audioSegmentTemplate->getAttribute("startNumber");
         $audioPTO = $audioSegmentTemplate->getAttribute("presentationTimeOffset");
         
-        $newAudioStartNumber = ceil(($timeOffset - $cumulativeDurationPreceedingPeriods)*$audioTimescale/$audioSegmentDuration) + $audioStartNum;
-        //file_put_contents ( "timelog.txt" , "new audio offset: " . ($timeOffset - $cumulativeDurationPreceedingPeriods)*$audioTimescale/$audioSegmentDuration . "\r\n" , FILE_APPEND );
+        $newAudioStartNumber = ceil(($deltaTimeASTTuneIn - $periodStart)*$audioTimescale/$audioSegmentDuration) + $audioStartNum;
+        //file_put_contents ( "timelog.txt" , "new audio offset: " . ($deltaTimeASTTuneIn - $periodStart)*$audioTimescale/$audioSegmentDuration . "\r\n" , FILE_APPEND );
         $audioOffsetUpdate = ($newAudioStartNumber - $audioStartNum) * $audioSegmentDuration/$audioTimescale;
         
         // Find the smaller update offset of audio and video, set the other to the smaller
         $offsetUpdate = min($videoOffsetUpdate , $audioOffsetUpdate);
         
-        $newAudioPTO = round($offsetUpdate*$audioTimescale);
-        $newVideoPTO = round($offsetUpdate*$videoTimescale);
+        $newAudioPTO = round($offsetUpdate*$audioTimescale + $audioPTO); //Round, since PTO is int type
+        $newVideoPTO = round($offsetUpdate*$videoTimescale + $videoPTO); //Round, since PTO is int type
         
-        $tuneInPeriodStartOffset = $offsetUpdate - ($timeOffset - $cumulativeDurationPreceedingPeriods);
-        $periods[$periodIndex]['node']->setAttribute("start","PT". round($cumulativeUpdatedDuration + $tuneInPeriodStartOffset ,4)."S");         
+        //The adjusted period start and duration governed by new audio/video offset above.
+        $periods[$periodIndex]['node']->setAttribute("start","PT". round($offsetUpdate + $periodStart - $deltaTimeASTTuneIn ,4)."S");         
         
         $remainingPeriodDuration = $duration - $offsetUpdate;
-        $cumulativeUpdatedDuration += $remainingPeriodDuration; // The eventual duration of updated MPD
         
         $periods[$periodIndex]['node']->setAttribute("duration", "PT". round($remainingPeriodDuration,4) . "S");
         
+        //Update again the last saved values for the next iteration
+        $lastPeriodStart = $offsetUpdate + $periodStart - $deltaTimeASTTuneIn;
+        $lastPeriodDuration = $remainingPeriodDuration;   
+		
         $videoSegmentTemplate->setAttribute("presentationTimeOffset",$newVideoPTO);
         $videoSegmentTemplate->setAttribute("startNumber",$newVideoStartNumber);
 
@@ -244,7 +259,8 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
     }
     
     //Set the updated MPD duration
-    $MPDNode->setAttribute("mediaPresentationDuration","PT". round($cumulativeUpdatedDuration + $tuneInPeriodStartOffset ,4) . "S");
+    
+    $MPDNode->setAttribute("mediaPresentationDuration","PT". round($lastPeriodStart + $lastPeriodDuration ,4) . "S");
     
     $dom->save($DASHContent . "/" . $PatchedMPD);
     
@@ -301,12 +317,24 @@ function &parseMPD($docElement)
 
 function somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durstr)
 {
-        $durstrint = explode('.', $durstr)[0] . 'S';
-        $fracSec = '0.' . explode('S',explode('.', $durstr)[1])[0];
+	    if(strpos($durstr,'.') !== FALSE)	//If indeed there is float values
+		{
+                        $temp = explode('.', $durstr);
+			$durstrint = $temp[0] . 'S';
+                        $temp1 = explode('.', $durstr);
+                        $temp2 = explode('S',$temp1[1]);
+			$fracSec = '0.' . $temp2[0];
+		}
+		else
+		{
+			$durstrint = $durstr;
+			$fracSec = 0;
+		}
+		
         $di = new DateInterval($durstrint);
 
         $durationDT = new DateTime();
-        $reft = new DateTime();
+        $reft = clone $durationDT;
         $durationDT->add($di);
         $duration = $durationDT->getTimestamp() - $reft->getTimestamp() + $fracSec;
         

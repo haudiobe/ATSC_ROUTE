@@ -223,9 +223,11 @@ MediaPlayer.dependencies.TimeSyncController = function () {
             var metrics = this.metricsModel.getReadOnlyMetricsFor("stream"),
                 dateHeaderValue = this.metricsExt.getLatestMPDRequestHeaderValueByID(metrics, "Date"),
                 dateHeaderTime = dateHeaderValue !== null ? new Date(dateHeaderValue).getTime() : Number.NaN;
+            var timeNow = new Date().getTime();
+            dateHeaderTime = timeNow;
 
             if (!isNaN(dateHeaderTime)) {
-                setOffsetMs(dateHeaderTime - new Date().getTime());
+                setOffsetMs(dateHeaderTime - timeNow);
                 completeTimeSyncSequence.call(this, false, dateHeaderTime/1000, offsetToDeviceTimeMs);
             }else {
                 completeTimeSyncSequence.call(this, true);
@@ -278,8 +280,11 @@ MediaPlayer.dependencies.TimeSyncController = function () {
                         source.value,
                         function (serverTime) {
                             // the timing source returned something useful
-                            var deviceTime = new Date().getTime(),
-                                offset = serverTime - deviceTime;
+                            var deviceTime = new Date().getTime();
+
+                            serverTime = deviceTime;
+                            
+                            var offset = serverTime - deviceTime;
 
                             setOffsetMs(offset);
 

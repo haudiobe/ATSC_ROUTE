@@ -230,6 +230,7 @@ section {
     <script src="dash.js/src/streaming/FragmentLoader.js"></script>
     <script src="dash.js/src/streaming/models/FragmentModel.js"></script>
     <script src="dash.js/src/streaming/controllers/StreamController.js"></script>
+	<script src="dash.js/src/streaming/controllers/MediaController.js"></script>
     <script src="dash.js/src/streaming/StreamProcessor.js"></script>
     <script src="dash.js/src/streaming/controllers/ScheduleController.js"></script>
     <script src="dash.js/src/streaming/TimeSyncController.js"></script>
@@ -352,6 +353,7 @@ var totalChannelChanges = 0;
 var switchStartTime = 0;
 var totalSwitchingDuration = 0;
 var totalTuneinDuration = 0;
+var fragmentLoadErrorCount = 0;
 
 window.onload = function()
 {  

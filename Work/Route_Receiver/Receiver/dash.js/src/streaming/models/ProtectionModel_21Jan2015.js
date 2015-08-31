@@ -30,8 +30,12 @@
  */
 
 /**
- * Implemented in:
- *   Chrome 40 with chrome://flags -- Enable Encrypted Media Extensions
+ * Most recent EME implementation
+ *
+ * Implemented by Google Chrome v36+ (Windows, OSX, Linux)
+ *
+ * @implements MediaPlayer.models.ProtectionModel
+ * @class
  */
 MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 
@@ -64,6 +68,17 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
                     }
                 });
             })(idx);
+        },
+
+        closeKeySessionInternal = function(sessionToken) {
+            var session = sessionToken.session;
+
+            // Remove event listeners
+            session.removeEventListener("keystatuseschange", sessionToken);
+            session.removeEventListener("message", sessionToken);
+
+            // Send our request to the key session
+            return session.close();
         },
 
         // This is our main event handler for all desired HTMLMediaElement events
@@ -99,11 +114,10 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 
         // Function to create our session token objects which manage the EME
         // MediaKeySession and session-specific event handler
-        createSessionToken = function(session, initData) {
+        createSessionToken = function(session, initData, sessionType) {
 
             var self = this;
-            var token = {
-                prototype: (new MediaPlayer.models.SessionToken()).prototype,
+            var token = { // Implements MediaPlayer.vo.protection.SessionToken
                 session: session,
                 initData: initData,
 
@@ -135,6 +149,10 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 
                 getKeyStatuses: function() {
                     return this.session.keyStatuses;
+                },
+
+                getSessionType: function() {
+                    return sessionType;
                 }
             };
 
@@ -174,12 +192,41 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
         },
 
         teardown: function() {
-            if (videoElement) {
-                videoElement.removeEventListener("encrypted", eventHandler);
-                videoElement.setMediaKeys(null);
-            }
-            for (var i = 0; i < sessions.length; i++) {
-                this.closeKeySession(sessions[i]);
+            var numSessions = sessions.length,
+                session,
+                self = this;
+            if (numSessions !== 0) {
+                // Called when we are done closing a session.  Success or fail
+                var done = function(session) {
+                    removeSession(session);
+                    if (sessions.length === 0) {
+                        if (videoElement) {
+                            videoElement.removeEventListener("encrypted", eventHandler);
+                            videoElement.setMediaKeys(null).then(function () {
+                                self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_TEARDOWN_COMPLETE);
+                            });
+                        } else {
+                            self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_TEARDOWN_COMPLETE);
+                        }
+                    }
+                };
+                for (var i = 0; i < numSessions; i++) {
+                    session = sessions[i];
+                    (function (s) {
+                        // Override closed promise resolver
+                        session.session.closed.then(function () {
+                            done(s);
+                        });
+                        // Close the session and handle errors, otherwise promise
+                        // resolver above will be called
+                        closeKeySessionInternal(session).catch(function () {
+                            done(s);
+                        });
+
+                    })(session);
+                }
+            } else {
+                this.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_TEARDOWN_COMPLETE);
             }
         },
 
@@ -213,13 +260,23 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
         },
 
         setMediaElement: function(mediaElement) {
+            if (videoElement === mediaElement)
+                return;
+
+            // Replacing the previous element
             if (videoElement) {
                 videoElement.removeEventListener("encrypted", eventHandler);
+                videoElement.setMediaKeys(null);
             }
+
             videoElement = mediaElement;
-            videoElement.addEventListener("encrypted", eventHandler);
-            if (mediaKeys) {
-                videoElement.setMediaKeys(mediaKeys);
+
+            // Only if we are not detaching from the existing element
+            if (videoElement) {
+                videoElement.addEventListener("encrypted", eventHandler);
+                if (mediaKeys) {
+                    videoElement.setMediaKeys(mediaKeys);
+                }
             }
         },
 
@@ -244,7 +301,7 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
             }
 
             var session = mediaKeys.createSession(sessionType);
-            var sessionToken = createSessionToken.call(this, session, initData);
+            var sessionToken = createSessionToken.call(this, session, initData, sessionType);
 
             // Generate initial key request
             var self = this;
@@ -305,7 +362,7 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
             session.remove().then(function () {
                 self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_KEY_SESSION_REMOVED,
                         sessionToken.getSessionID());
-            }).catch(function (error) {
+            }, function (error) {
                 self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_KEY_SESSION_REMOVED,
                         null, "Error removing session (" + sessionToken.getSessionID() + "). " + error.name);
             });
@@ -313,15 +370,10 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 
         closeKeySession: function(sessionToken) {
 
-            var session = sessionToken.session;
-
-            // Remove event listeners
-            session.removeEventListener("keystatuseschange", sessionToken);
-            session.removeEventListener("message", sessionToken);
-
             // Send our request to the key session
             var self = this;
-            session.close().catch(function(error) {
+            closeKeySessionInternal(sessionToken).catch(function(error) {
+                removeSession(sessionToken);
                 self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_KEY_SESSION_CLOSED,
                         null, "Error closing session (" + sessionToken.getSessionID() + ") " + error.name);
             });
@@ -330,10 +382,10 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 };
 
 /**
- * Detects presence of EME v3Feb2014 APIs
+ * Detects presence of EME v21Jan2015 APIs
  *
  * @param videoElement {HTMLMediaElement} the media element that will be
- * used for detecting APIs
+ * used for detecting API support
  * @returns {Boolean} true if support was detected, false otherwise
  */
 MediaPlayer.models.ProtectionModel_21Jan2015.detect = function(videoElement) {

@@ -1,14 +1,30 @@
 <?php
 
-echo $argv[0]. PHP_EOL;
+
 if (isset($argv[0])) {
+    echo $argv[0]. PHP_EOL;
     parse_str(implode('&', array_slice($argv, 1)), $_GET);
 }
 $adInsertion = TRUE;
-$adInsertionTime = 60;  //In seconds from start
+$adInsertionTimeRequest = 60;  //In seconds from start
 $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
-$AST_W3C=$_GET['AST'];
+
+if(isset($_GET['AST']))
+{
+    $AST_W3C=$_GET['AST'];
+}
+else
+{
+    $AST_SEC = new DateTime( 'now',  new DateTimeZone( 'UTC' ) );	/* initializer for availability start time */
+    $AST_SEC->setTimestamp($date_array[1]);    //Better use a single time than now above
+    //$AST_SEC->add(new DateInterval('PT1S'));
+    $AST_SEC_W3C = $AST_SEC->format(DATE_W3C);
+
+    preg_match('/\.\d*/',$date_array[0],$dateFracPart);
+    $extension_pos = strrpos($AST_SEC_W3C, '+'); // find position of the last + in W3C date to slip frac seconds
+    $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//substr($AST_SEC_W3C, $extension_pos);
+}
 
 $AST_SEC = new DateTime( 'now',  new DateTimeZone( 'UTC' ) );	/* initializer for availability start time */
 $AST_SEC->add(new DateInterval('PT1S'));   //????????????????? some rounding issue??
@@ -53,7 +69,7 @@ $savedTotalDuration = 0;
 $restPeriodDuration = 0;
 $numVideoSegments = 0;
 $numAudioSegments = 0;
-
+echo "test here". PHP_EOL;
 for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
 {
     $durationInMPD =$periods[$periodIndex]['node']->getAttribute("duration");
@@ -76,20 +92,19 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
         
         if($periodIndex == 0)
         {
-            $numVideoSegments = ceil($adInsertionTime*$videoTimescale/$videoSegmentDuration);
-            $numAudioSegments = ceil($adInsertionTime*$audioTimescale/$audioSegmentDuration);
+			$adInsertionTime = getadInsertionTime($adInsertionTimeRequest,$videoSegmentDuration/$videoTimescale,0,$audioSegmentDuration/$audioTimescale,0);
+            $numVideoSegments = round($adInsertionTime*$videoTimescale/$videoSegmentDuration);
+            $numAudioSegments = round($adInsertionTime*$audioTimescale/$audioSegmentDuration);
             
             $savedTotalDuration = $duration;            
             
-            if($numVideoSegments*$videoSegmentDuration/$videoTimescale > $numAudioSegments*$audioSegmentDuration/$audioTimescale)
+            if($numVideoSegments*$videoSegmentDuration/$videoTimescale < $numAudioSegments*$audioSegmentDuration/$audioTimescale)
             {
                 $duration = $numVideoSegments*$videoSegmentDuration/$videoTimescale;
-                $numAudioSegments = ceil($duration*$audioTimescale/$audioSegmentDuration);
             }
             else
             {
                 $duration = $numAudioSegments*$audioSegmentDuration/$audioTimescale;
-                $numVideoSegments = ceil($duration*$videoTimescale/$videoSegmentDuration);                
             }
             
             $restPeriodDuration = $savedTotalDuration - $duration;
@@ -189,15 +204,33 @@ function &parseMPD($docElement)
     return $periods;
 }
 
+function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$initialVideoOffset,$audioSegmentDurationInSec,$initialAudioOffset)
+{
+	$nearestVideoSegmentEndingTime = round(($adInsertionTimeRequest - $initialVideoOffset)/$videoSegmentDurationInSec)*$videoSegmentDurationInSec + $initialVideoOffset;
+	$nearestAudioSegmentEndingTime = round(($nearestVideoSegmentEndingTime - $initialAudioOffset)/$audioSegmentDurationInSec)*$audioSegmentDurationInSec + $initialAudioOffset;
+	return min($nearestVideoSegmentEndingTime,$nearestAudioSegmentEndingTime);
+}
+
 function somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durstr)
 {
-    
-        $durstrint = explode('.', $durstr)[0] . 'S';
-        $fracSec = '0.' . explode('S',explode('.', $durstr)[1])[0];
+	    if(strpos($durstr,'.') !== FALSE)	//If indeed there is float values
+		{
+                        $temp = explode('.', $durstr);
+			$durstrint = $temp[0] . 'S';
+                        $temp1 = explode('.', $durstr);
+                        $temp2 = explode('S',$temp1[1]);
+			$fracSec = '0.' . $temp2[0];
+		}
+		else
+		{
+			$durstrint = $durstr;
+			$fracSec = 0;
+		}
+		
         $di = new DateInterval($durstrint);
 
         $durationDT = new DateTime();
-        $reft = new DateTime();
+        $reft = clone $durationDT;
         $durationDT->add($di);
         $duration = $durationDT->getTimestamp() - $reft->getTimestamp() + $fracSec;
         

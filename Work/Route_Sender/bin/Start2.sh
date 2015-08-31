@@ -73,7 +73,6 @@ chmod 777 $DASHContent2/*
 
 echo "Done"
 
-
 #Starting the FLUTE Sender After Sleep
 #echo "Starting FLUTE Sender in $(($Delay - $x)) seconds"
 #sleep $(($Delay - $x))

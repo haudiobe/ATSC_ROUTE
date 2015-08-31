@@ -123,6 +123,9 @@ MediaPlayer.models.VideoModel = function () {
             // setTimeout is used to workaround InvalidStateError in IE11
             try{
                 element.currentTime = currentTime;
+				var currentdate = new Date();
+				this.log("************* !!! Setting current time: " + currentTime + ", Time: " + currentdate + currentdate.getMilliseconds());
+				console.trace();
             } catch (e) {
                 if (element.readyState === 0 && e.code === e.INVALID_STATE_ERR) {
                     setTimeout(function(){
