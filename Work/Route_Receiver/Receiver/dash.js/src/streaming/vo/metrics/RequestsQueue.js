@@ -28,36 +28,15 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
-
-/**
- * Microsoft PlayReady Test License Server
- *
- * For testing content that uses the PlayReady test server at
- *
- * @implements MediaPlayer.dependencies.protection.servers.LicenseServer
- * @class
- */
-MediaPlayer.dependencies.protection.servers.PlayReady = function() {
+MediaPlayer.vo.metrics.RequestsQueue = function () {
     "use strict";
 
-    return {
-
-        getServerURLFromMessage: function(url /*, message, messageType*/) { return url; },
-
-        getHTTPMethod: function(/*messageType*/) { return 'POST'; },
-
-        getResponseType: function(/*keySystemStr, messageType*/) { return 'arraybuffer'; },
-
-        getLicenseMessage: function(serverResponse/*, keySystemStr, messageType*/) {
-            return serverResponse;
-        },
-
-        getErrorResponse: function(serverResponse/*, keySystemStr, messageType*/) {
-            return String.fromCharCode.apply(null, new Uint8Array(serverResponse));
-        }
-    };
+    this.pendingRequests = [];
+    this.loadingRequests = [];
+    this.executedRequests = [];
+    this.rejectedRequests = [];
 };
 
-MediaPlayer.dependencies.protection.servers.PlayReady.prototype = {
-    constructor: MediaPlayer.dependencies.protection.servers.PlayReady
+MediaPlayer.vo.metrics.RequestsQueue.prototype = {
+    constructor: MediaPlayer.vo.metrics.RequestsQueue
 };

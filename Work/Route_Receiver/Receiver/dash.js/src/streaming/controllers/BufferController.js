@@ -28,8 +28,6 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
-
- var lastAudioRequestSent = 0;
 MediaPlayer.dependencies.BufferController = function () {
     "use strict";
     var STALL_THRESHOLD = 0.5,
@@ -163,10 +161,14 @@ MediaPlayer.dependencies.BufferController = function () {
             // quality can be appended providing init fragment for a new required quality has not been
             // appended yet.
             if ((quality !== requiredQuality && isInit) || (quality !== currentQuality && !isInit)) {
+                self.log('reject request - required quality = ' + requiredQuality +
+                                        ' current quality = ' + currentQuality +
+                                        ' chunk media type = ' + chunk.mediaType +
+                                        ' chunk quality = ' + quality +
+                                        ' chunk index = ' + chunk.index);
                 onMediaRejected.call(self, quality, chunk.index);
                 return;
             }
-
             //self.log("Push bytes: " + data.byteLength);
             self.sourceBufferExt.append(buffer, chunk);
         },
@@ -197,17 +199,6 @@ MediaPlayer.dependencies.BufferController = function () {
             }
 
             updateBufferLevel.call(self);
-			if(type === "audio")
-				{
-			console.log("==============> Appended request nr: " + audioRequestSent + ", start: " + appendedBytesInfo.start);
-			console.trace();
-				//if(lastAudioRequestSent > 0 && lastAudioRequestSent == audioRequestSent)
-					//console.log("**********same?");
-
-				lastAudioRequestSent = audioRequestSent;
-
-				//audioRequestSent = audioRequestSent - 1;
-				}
 
             if (!hasEnoughSpaceToAppend.call(self)) {
                 self.notify(MediaPlayer.dependencies.BufferController.eventList.ENAME_QUOTA_EXCEEDED, {criticalBufferLevel: criticalBufferLevel});
@@ -245,10 +236,6 @@ MediaPlayer.dependencies.BufferController = function () {
             self.notify(MediaPlayer.dependencies.BufferController.eventList.ENAME_BUFFER_LEVEL_UPDATED, {bufferLevel: bufferLevel});
             checkGapBetweenBuffers.call(self);
             checkIfSufficientBuffer.call(self);
-
-            if (bufferLevel < STALL_THRESHOLD) {
-                notifyIfSufficientBufferStateChanged.call(self, false);
-            }
 
             return true;
         },
@@ -415,10 +402,7 @@ MediaPlayer.dependencies.BufferController = function () {
         },
 
         checkIfSufficientBuffer = function () {
-            var timeToEnd = this.playbackController.getTimeToStreamEnd();
-                //minLevel = this.streamProcessor.isDynamic() ? minBufferTime / 2 : minBufferTime;
-
-            if (bufferLevel < STALL_THRESHOLD && (minBufferTime < timeToEnd) || (minBufferTime >= timeToEnd && !isBufferingCompleted)) {
+            if (bufferLevel < STALL_THRESHOLD && !isBufferingCompleted) {
                 notifyIfSufficientBufferStateChanged.call(this, false);
             } else {
                 notifyIfSufficientBufferStateChanged.call(this, true);
@@ -430,7 +414,7 @@ MediaPlayer.dependencies.BufferController = function () {
         },
 
         notifyIfSufficientBufferStateChanged = function(state) {
-            if (hasSufficientBuffer === state) return;
+            if (hasSufficientBuffer === state || (type === "fragmentedText" && this.textSourceBuffer.getAllTracksAreDisabled())) return;
 
             hasSufficientBuffer = state;
 
@@ -683,6 +667,7 @@ MediaPlayer.dependencies.BufferController = function () {
         subscribe: undefined,
         unsubscribe: undefined,
         virtualBuffer: undefined,
+        textSourceBuffer:undefined,
 
         setup: function() {
             this[Dash.dependencies.RepresentationController.eventList.ENAME_DATA_UPDATE_COMPLETED] = onDataUpdateCompleted;

@@ -29,29 +29,44 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 MediaPlayer.dependencies.TextSourceBuffer = function () {
-    var currentTrackIdx = 0,
-        allTracksAreDisabled = false,
+    var allTracksAreDisabled = false,
         parser = null,
 
-        onTextTrackChange = function(evt) {
-            for (var i = 0; i < evt.srcElement.length; i++ ) {
-                var t = evt.srcElement[i],
-                    el = this.videoModel.getElement();
+        setTextTrack = function() {
+            var el = this.videoModel.getElement(),
+                tracks = el.textTracks,
+                ln = tracks.length,
+                self = this;
 
-                allTracksAreDisabled = t.mode !== "showing";
-                if (t.mode === "showing" && el.currentTime > 0) { //TODO find a better way to block function when event is triggered at startup when listener is added.  Tried to delay adding listener.
-                    if (currentTrackIdx !== i) { // do not reset track if already the current track.  This happens when all captions get turned off via UI and then turned on again.
-                        currentTrackIdx = i;
-                        this.textTrackExtensions.setCurrentTrackIdx(i);
-                        this.textTrackExtensions.deleteTrackCues(this.textTrackExtensions.getCurrentTextTrack());
-                        this.fragmentModel.cancelPendingRequests();
-                        this.fragmentModel.abortRequests();
-                        this.buffered.clear();
-                        this.mediaController.setTrack(this.allTracks[i]);
+            for (var i = 0; i < ln; i++ ) {
+                var track = tracks[i];
+                allTracksAreDisabled = track.mode !== "showing";
+                if (track.mode === "showing") {
+                    if (self.textTrackExtensions.getCurrentTrackIdx() !== i) { // do not reset track if already the current track.  This happens when all captions get turned off via UI and then turned on again and with videojs.
+                        var previousTextTrack = self.textTrackExtensions.getCurrentTextTrack(); //will be null when all tracks are disabled and turning back on.
+                        if (previousTextTrack !== null) {
+                            self.textTrackExtensions.deleteTrackCues(previousTextTrack);
+                            if (previousTextTrack.renderingType === "html") {
+                                self.textTrackExtensions.removeCueStyle();
+                                self.textTrackExtensions.clearCues();
+                            }
+                        }
+                        self.textTrackExtensions.setCurrentTrackIdx(i);
+                        if (!self.mediaController.isCurrentTrack(self.allTracks[i])){
+                            self.textTrackExtensions.deleteTrackCues(self.textTrackExtensions.getCurrentTextTrack());
+                            self.fragmentModel.cancelPendingRequests();
+                            self.fragmentModel.abortRequests();
+                            self.buffered.clear();
+                            self.mediaController.setTrack(self.allTracks[i]);
+                        }
                     }
                     break;
                 }
-             }
+            }
+
+            if (allTracksAreDisabled){
+                self.textTrackExtensions.setCurrentTrackIdx(-1);
+            }
         };
 
     return {
@@ -70,7 +85,6 @@ MediaPlayer.dependencies.TextSourceBuffer = function () {
             this.textTrackExtensions = this.system.getObject("textTrackExtensions");
             this.isFragmented = !this.manifestExt.getIsTextTrack(type);
             if (this.isFragmented){
-                // do not call following if not fragmented text....
                 this.fragmentModel = this.sp.getFragmentModel();
                 this.buffered =  this.system.getObject("customTimeRanges");
                 this.initializationSegmentReceived= false;
@@ -109,7 +123,6 @@ MediaPlayer.dependencies.TextSourceBuffer = function () {
                     for (i = 0; i < this.mediaInfos.length; i++){
                         createTextTrackFromMediaInfo(null, this.mediaInfos[i]);
                     }
-                    self.videoModel.getElement().textTracks.addEventListener('change', onTextTrackChange.bind(self));
                     this.timescale = fragmentExt.getMediaTimescaleFromMoov(bytes);
                 }else {
                     samplesInfo = fragmentExt.getSamplesInfo(bytes);
@@ -119,15 +132,8 @@ MediaPlayer.dependencies.TextSourceBuffer = function () {
                         }
                         samplesInfo[i].cts -= this.firstSubtitleStart;
                         this.buffered.add(samplesInfo[i].cts/this.timescale,(samplesInfo[i].cts+samplesInfo[i].duration)/this.timescale);
-
-                        //TODO: If do not block here captions will render even though all tracks are hidden.
-                        // If I block above this line we get errors in Virtual Buffer. Ideally I need to figure
-                        // out how to stop text fragments fom loading when they are not being rendered. But so
-                        // far all attempts to do this result in all media stopping.
-                        if (allTracksAreDisabled) return;
-
                         ccContent = window.UTF8.decode(new Uint8Array(bytes.slice(samplesInfo[i].offset,samplesInfo[i].offset+samplesInfo[i].size)));
-                        parser = parser !== null ? parser : self.getParser(mimeType); //store locally for fragmented text so we do not fetch from dijon over and over again.
+                        parser = parser !== null ? parser : self.getParser(mimeType);
                         try{
                             result = parser.parse(ccContent);
                             this.textTrackExtensions.addCaptions(this.firstSubtitleStart/this.timescale,result);
@@ -149,14 +155,15 @@ MediaPlayer.dependencies.TextSourceBuffer = function () {
         },
 
         getIsDefault:function(mediaInfo){
-            return mediaInfo.index === this.mediaInfos[0].index; //TODO How to tag default. currently same order as in manifest. Is there a way to mark a text adaptation set as the default one?
+            //TODO How to tag default. currently same order as listed in manifest.
+            // Is there a way to mark a text adaptation set as the default one? DASHIF meeting talk about using role which is being used for track KIND
+            // Eg subtitles etc. You can have multiple role tags per adaptation Not defined in the spec yet.
+            return mediaInfo.index === this.mediaInfos[0].index;
         },
 
         abort:function() {
-            this.videoModel.getElement().textTracks.removeEventListener('change', onTextTrackChange);
             this.textTrackExtensions.deleteAllTextTracks();
             allTracksAreDisabled = false;
-            currentTrackIdx = 0;
             parser = null;
         },
 
@@ -170,13 +177,19 @@ MediaPlayer.dependencies.TextSourceBuffer = function () {
             return parser;
         },
 
+        getAllTracksAreDisabled : function (){
+            return allTracksAreDisabled;
+        },
+
         addEventListener: function (type, listener, useCapture) {
             this.eventBus.addEventListener(type, listener, useCapture);
         },
 
         removeEventListener: function (type, listener, useCapture) {
             this.eventBus.removeEventListener(type, listener, useCapture);
-        }
+        },
+
+        setTextTrack: setTextTrack,
     };
 };
 

@@ -318,7 +318,8 @@ Dash.dependencies.DashHandler = function () {
                     if (nextFrag && nextFrag.hasOwnProperty("t")) {
                         repeatEndTime = nextFrag.t / fTimescale;
                     } else {
-                        repeatEndTime = self.timelineConverter.calcMediaTimeFromPresentationTime(representation.segmentAvailabilityRange.end, representation);
+                        var availabilityEnd = representation.segmentAvailabilityRange ? representation.segmentAvailabilityRange.end : (this.timelineConverter.calcSegmentAvailabilityRange(representation, isDynamic).end);
+                        repeatEndTime = self.timelineConverter.calcMediaTimeFromPresentationTime(availabilityEnd, representation);
                         representation.segmentDuration = frag.d / fTimescale;
                     }
 
@@ -825,15 +826,7 @@ Dash.dependencies.DashHandler = function () {
             //self.log("Got segments.");
             //self.log(segments);
             //self.log("Got a list of segments, so dig deeper.");
-			var currentdate = new Date();
-            self.log("Index for time " + time + " is " + index + ", Time: " + currentdate + currentdate.getMilliseconds() + " is " + index);
-			console.trace();
-
-			if(index < 0)
-				index = index;
-
-			if(time == (10.93))
-					index = index;
+            self.log("Index for time " + time + " is " + index);
 
             finished = !ignoreIsFinished ? isMediaFinished.call(self, representation) : false;
 

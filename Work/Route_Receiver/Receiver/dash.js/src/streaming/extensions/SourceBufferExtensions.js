@@ -298,9 +298,6 @@ MediaPlayer.dependencies.SourceBufferExtensions.prototype = {
 
         if (!appendMethod) return;
 
-		if(chunk.mediaInfo.type === "audio")
-			console.log("==============> Append chunk start time: " + chunk.start);
-
         try {
             self.waitForUpdateEnd(buffer, function() {
                 if (acceptsChunk) {

@@ -28,12 +28,11 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
- var audioRequestSent = 0;
 MediaPlayer.dependencies.FragmentLoader = function () {
     "use strict";
-var lastAudioDuration = 0, lastAudioStartTime = 0;
-    var RETRY_ATTEMPTS = 3,
-        RETRY_INTERVAL = 500,
+
+    var RETRY_ATTEMPTS = MediaPlayer.dependencies.FragmentLoader.RETRY_ATTEMPTS,
+        RETRY_INTERVAL = MediaPlayer.dependencies.FragmentLoader.RETRY_INTERVAL,
         xhrs = [],
 
         doLoad = function (request, remainingAttempts) {
@@ -171,18 +170,7 @@ var lastAudioDuration = 0, lastAudioStartTime = 0;
                         self.notify(MediaPlayer.dependencies.FragmentLoader.eventList.ENAME_LOADING_COMPLETED, {request: request, bytes: null}, new MediaPlayer.vo.Error(null, "failed loading fragment", null));
                     }
                 };
-			if(request.mediaType === "audio")
-				{
-			console.log("==============> Sending request for nr: " + (audioRequestSent + 1) + ", start: " + request.startTime );
-			console.trace();
-				if(lastAudioDuration !== 0 && request.startTime > (lastAudioStartTime + lastAudioDuration))
-					lastAudioStartTime = lastAudioStartTime;
 
-				audioRequestSent = audioRequestSent + 1;
-					
-				lastAudioStartTime = request.startTime;
-				lastAudioDuration = request.duration;
-				}
                 req.send();
         },
 
@@ -253,6 +241,9 @@ var lastAudioDuration = 0, lastAudioStartTime = 0;
         }
     };
 };
+
+MediaPlayer.dependencies.FragmentLoader.RETRY_ATTEMPTS = 3;
+MediaPlayer.dependencies.FragmentLoader.RETRY_INTERVAL = 500;
 
 MediaPlayer.dependencies.FragmentLoader.prototype = {
     constructor: MediaPlayer.dependencies.FragmentLoader

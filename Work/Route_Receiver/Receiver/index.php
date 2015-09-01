@@ -178,6 +178,9 @@ section {
 
     <!-- https://github.com/creynders/dijon-framework -->
     <script src="dash.js/src/lib/dijon.js"></script>
+    
+    <!-- https://github.com/madebyhiro/codem-isoboxer -->
+    <script src="dash.js/src/lib/iso_boxer.min.js"></script>
 
     <!-- http://bannister.us/weblog/2007/06/09/simple-base64-encodedecode-javascript/ -->
     <script src="dash.js/src/lib/base64.js"></script>
@@ -210,8 +213,10 @@ section {
     <script src="dash.js/src/streaming/models/VideoModel.js"></script>
     <script src="dash.js/src/streaming/vo/FragmentRequest.js"></script>
     <script src="dash.js/src/streaming/vo/TrackInfo.js"></script>
+    <script src="dash.js/src/streaming/vo/TextTrackInfo.js"></script>
     <script src="dash.js/src/streaming/vo/MediaInfo.js"></script>
     <script src="dash.js/src/streaming/vo/StreamInfo.js"></script>
+    <script src="dash.js/src/streaming/vo/TextTrackInfo.js"></script>
     <script src="dash.js/src/streaming/vo/ManifestInfo.js"></script>
     <script src="dash.js/src/streaming/vo/Event.js"></script>
     <script src="dash.js/src/streaming/vo/Error.js"></script>
@@ -230,7 +235,7 @@ section {
     <script src="dash.js/src/streaming/FragmentLoader.js"></script>
     <script src="dash.js/src/streaming/models/FragmentModel.js"></script>
     <script src="dash.js/src/streaming/controllers/StreamController.js"></script>
-	<script src="dash.js/src/streaming/controllers/MediaController.js"></script>
+    <script src="dash.js/src/streaming/controllers/MediaController.js"></script>
     <script src="dash.js/src/streaming/StreamProcessor.js"></script>
     <script src="dash.js/src/streaming/controllers/ScheduleController.js"></script>
     <script src="dash.js/src/streaming/TimeSyncController.js"></script>
@@ -317,6 +322,7 @@ section {
     <script src="dash.js/src/streaming/vo/metrics/TCPConnection.js"></script>
     <script src="dash.js/src/streaming/vo/metrics/DroppedFrames.js"></script>
     <script src="dash.js/src/streaming/vo/metrics/SchedulingInfo.js"></script>
+    <script src="dash.js/src/streaming/vo/metrics/RequestsQueue.js"></script>
     <script src="dash.js/src/streaming/vo/metrics/ManifestUpdate.js"></script>
     <script src="dash.js/src/streaming/vo/metrics/DVRInfo.js"></script>
 
@@ -343,6 +349,7 @@ section {
 
     <!-- App -->
     <script src="dash.js/samples/dash-if-reference-player/app/metrics.js"></script>
+    <script src="dash.js/contrib/akamai/controlbar/ControlBar.js"></script>
     <script src="dash.js/samples/dash-if-reference-player/app/main.js"></script>
 
 <script type="text/javascript">

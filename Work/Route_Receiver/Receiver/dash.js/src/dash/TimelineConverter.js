@@ -132,9 +132,6 @@ Dash.dependencies.TimelineConverter = function () {
 
             range = {start: start, end: end};
 
-			if(now > 10.93 && representation.adaptation.type === "audio")
-				now = now;
-
             return range;
         },
 

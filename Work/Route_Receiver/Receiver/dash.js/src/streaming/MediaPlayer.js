@@ -79,6 +79,7 @@ MediaPlayer = function (context) {
         metricsExt,
         metricsModel,
         videoModel,
+        textSourceBuffer,
         DOMStorage,
         initialized = false,
         resetting = false,
@@ -88,7 +89,7 @@ MediaPlayer = function (context) {
         bufferMax = MediaPlayer.dependencies.BufferController.BUFFER_SIZE_REQUIRED,
         useManifestDateHeaderTimeSource = true,
         UTCTimingSources = [],
-        liveDelayFragmentCount = 1,
+        liveDelayFragmentCount = 0,
         usePresentationDelay = false,
 
         isReady = function () {
@@ -245,6 +246,7 @@ MediaPlayer = function (context) {
         },
 
         resetAndPlay = function() {
+            this.adapter.reset();
             if (playing && streamController) {
                 if (!resetting) {
                     resetting = true;
@@ -278,8 +280,6 @@ MediaPlayer = function (context) {
                     doAutoPlay.call(this);
                 }
             }
-
-            this.adapter.reset();
         };
 
 
@@ -590,12 +590,47 @@ MediaPlayer = function (context) {
         },
 
         /**
+         * Sets the current quality for media type instead of letting the ABR Herstics automatically selecting it..
+         *
          * @param type
          * @param value
          * @memberof MediaPlayer#
          */
         setQualityFor: function (type, value) {
             abrController.setPlaybackQuality(type, streamController.getActiveStreamInfo(), value);
+        },
+
+
+        /**
+         * Use this method to change the current text track for both external time text files and fragmented text tracks. There is no need to
+         * set the track mode on the video object to switch a track when using this method.
+         *
+         * @param idx - Index of track based on the order of the order the tracks are added Use -1 to disable all tracks. (turn captions off).  Use MediaPlayer#MediaPlayer.events.TEXT_TRACK_ADDED.
+         * @see {@link MediaPlayer#MediaPlayer.events.TEXT_TRACK_ADDED}
+         * @memberof MediaPlayer#
+         */
+        setTextTrack: function (idx) {
+            //For external time text file,  the only action needed to change a track is marking the track mode to showing.
+            // Fragmented text tracks need the additional step of calling textSourceBuffer.setTextTrack();
+            if (textSourceBuffer === undefined){
+                textSourceBuffer = system.getObject("textSourceBuffer");
+            }
+
+            var tracks = element.textTracks,
+                ln = tracks.length;
+
+            for(var i=0; i < ln; i++ ){
+                var track = tracks[i],
+                    mode = idx === i ? "showing" : "hidden";
+
+                if (track.mode !== mode){ //checking that mode is not already set by 3rd Party player frameworks that set mode to prevent event retrigger.
+                    track.mode = mode;
+                }
+            }
+
+            if (textSourceBuffer.isFragmented) {
+                textSourceBuffer.setTextTrack();
+            }
         },
 
         /**
@@ -683,6 +718,8 @@ MediaPlayer = function (context) {
          * is following:
          * {lang: langValue,
          *  viewpoint: viewpointValue,
+         *  audioChannelConfiguration: audioChannelConfigurationValue,
+         *  accessibility: accessibilityValue,
          *  role: roleValue}
          *
          *
@@ -699,6 +736,8 @@ MediaPlayer = function (context) {
          * is following:
          * {lang: langValue,
          *  viewpoint: viewpointValue,
+         *  audioChannelConfiguration: audioChannelConfigurationValue,
+         *  accessibility: accessibilityValue,
          *  role: roleValue}
          * @param type
          * @returns {Object}
@@ -742,6 +781,33 @@ MediaPlayer = function (context) {
          */
         setTrackSwitchModeFor: function(type, mode) {
             mediaController.setSwitchMode(type, mode);
+        },
+
+        /**
+         * This method sets the selection mode for the initial track. This mode defines how the initial track will be selected
+         * if no initial media settings are set. If initial media settings are set this parameter will be ignored. Available options are:
+         *
+         * MediaPlayer.dependencies.MediaController.trackSelectionModes.HIGHEST_BITRATE
+         * this mode makes the player select the track with a highest bitrate. This mode is a default mode.
+         *
+         * MediaPlayer.dependencies.MediaController.trackSelectionModes.WIDEST_RANGE
+         * this mode makes the player select the track with a widest range of bitrates
+         *
+         * @param mode
+         * @memberof MediaPlayer#
+         */
+        setSelectionModeForInitialTrack: function(mode) {
+            mediaController.setSelectionModeForInitialTrack(mode);
+        },
+
+        /**
+         * This method returns the track selection mode.
+         *
+         * @returns mode
+         * @memberof MediaPlayer#
+         */
+        getSelectionModeForInitialTrack: function() {
+            return mediaController.getSelectionModeForInitialTrack();
         },
 
         /**
@@ -881,6 +947,7 @@ MediaPlayer = function (context) {
          * a single piece of content.
          *
          * @return {MediaPlayer.dependencies.ProtectionController} protection controller
+         * @memberof MediaPlayer#
          */
         createProtection: function() {
             return system.getObject("protectionController");
@@ -1041,6 +1108,19 @@ MediaPlayer = function (context) {
 
             // TODO : update
             resetAndPlay.call(this);
+        },
+
+        /**
+         * Use this method to attach an HTML5 div for dash.js to render rich TTML subtitles.
+         *
+         * @param div An unstyled div placed after the video element. It will be styled to match the video size and overlay z-order.
+         * @memberof MediaPlayer#
+         */
+        attachTTMLRenderingDiv: function (div) {
+            if (!videoModel) {
+                throw "Must call attachView with video element before you attach TTML Rendering Div";
+            }
+            videoModel.setTTMLRenderingDiv(div);
         },
 
         /**

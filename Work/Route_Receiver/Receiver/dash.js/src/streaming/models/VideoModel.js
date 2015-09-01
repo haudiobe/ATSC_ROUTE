@@ -32,6 +32,7 @@ MediaPlayer.models.VideoModel = function () {
     "use strict";
 
     var element,
+        TTMLRenderingDiv,
         stalledStreams = [],
         //_currentTime = 0,
 
@@ -123,9 +124,6 @@ MediaPlayer.models.VideoModel = function () {
             // setTimeout is used to workaround InvalidStateError in IE11
             try{
                 element.currentTime = currentTime;
-				var currentdate = new Date();
-				this.log("************* !!! Setting current time: " + currentTime + ", Time: " + currentdate + currentdate.getMilliseconds());
-				console.trace();
             } catch (e) {
                 if (element.readyState === 0 && e.code === e.INVALID_STATE_ERR) {
                     setTimeout(function(){
@@ -153,6 +151,22 @@ MediaPlayer.models.VideoModel = function () {
 
         setElement: function (value) {
             element = value;
+        },
+        
+        getTTMLRenderingDiv: function () {
+            return TTMLRenderingDiv;
+        },
+        
+        setTTMLRenderingDiv: function (div) {
+            TTMLRenderingDiv = div;
+            // The styling will allow the captions to match the video window size and position.
+            TTMLRenderingDiv.style.position = 'absolute';
+            TTMLRenderingDiv.style.display = 'flex';
+            TTMLRenderingDiv.style.overflow = 'hidden';
+            TTMLRenderingDiv.style.zIndex = 2147483647;
+            TTMLRenderingDiv.style.pointerEvents = 'none';
+            TTMLRenderingDiv.style.top = 0;
+            TTMLRenderingDiv.style.left = 0;
         },
 
         setSource: function (source) {

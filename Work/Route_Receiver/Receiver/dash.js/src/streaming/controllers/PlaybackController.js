@@ -96,8 +96,6 @@ MediaPlayer.dependencies.PlaybackController = function () {
             var self = this,
                 tick = function() {
                     onWallclockTime.call(self);
-					var currentdate = new Date();
-					self.log("**********tick! " + currentdate + currentdate.getMilliseconds());
                 };
 
             wallclockTimeIntervalId = setInterval(tick, WALLCLOCK_TIME_UPDATE_INTERVAL);
@@ -200,7 +198,7 @@ MediaPlayer.dependencies.PlaybackController = function () {
             var time = this.getTime();
 
             if (time === currentTime) return;
-			//console.log("*********** !! Time update: " + time);
+
             currentTime = time;
             this.notify(MediaPlayer.dependencies.PlaybackController.eventList.ENAME_PLAYBACK_TIME_UPDATED, {timeToEnd: this.getTimeToStreamEnd()});
         },
@@ -223,7 +221,6 @@ MediaPlayer.dependencies.PlaybackController = function () {
 
         onPlaybackRateChanged = function() {
             this.log("<video> ratechange: ", this.getPlaybackRate());
-			console.trace();
             this.notify(MediaPlayer.dependencies.PlaybackController.eventList.ENAME_PLAYBACK_RATE_CHANGED);
         },
 
