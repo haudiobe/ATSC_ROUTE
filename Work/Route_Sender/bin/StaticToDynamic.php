@@ -12,6 +12,8 @@ $PatchedMPD=$_GET['uMPD'];
 
 $videoFDTFile = "fdt_Video.xml";
 $audioFDTFile = "fdt_Audio.xml";
+$videoTimingFile = "FluteInput_Video.txt";
+$audioTimingFile = "FluteInput_Audio.txt";
 
 if(isset($_GET['AST']))
 {
@@ -28,6 +30,8 @@ else
     $extension_pos = strrpos($AST_SEC_W3C, '+'); // find position of the last + in W3C date to slip frac seconds
     $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//substr($AST_SEC_W3C, $extension_pos);
 }
+
+$ASTUNIX=$_GET['ASTUNIX'];
 
 $AST_SEC = new DateTime( 'now',  new DateTimeZone( 'UTC' ) );	/* initializer for availability start time */
 $AST_SEC->add(new DateInterval('PT1S'));   //????????????????? some rounding issue??
@@ -145,7 +149,7 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
             $audioSegmentTemplate->setAttribute("startNumber",$newAudioStartNumber);
         }
 		
-		generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio);
+		generateFDTAndTiming($cumulativeOriginalDuration,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio);
     }
 
     $cumulativeDurationPreceedingPeriods = $cumulativeOriginalDuration; //Save it for later use
@@ -232,9 +236,9 @@ function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$
 	return min($nearestVideoSegmentEndingTime,$nearestAudioSegmentEndingTime);
 }
 
-function generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
+function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
 {
-	global $videoFDTFile, $audioFDTFile;
+	global $videoFDTFile, $audioFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX;
 	static $firstcall = true;
 	static $videoDoc = NULL;
 	static $audioDoc = NULL;
@@ -278,6 +282,8 @@ function generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$durat
 		$audioInstance->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
 		$audioInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
 		$audioDoc->appendChild($audioInstance);
+		unlink($videoTimingFile);
+		unlink($audioTimingFile);		
 	}
 	
 	echo "deltaVideo: " . $deltaVideo . ", Duration: " . $duration . PHP_EOL;
@@ -286,6 +292,8 @@ function generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$durat
 	{
 		if((($videoIndex - $videoStartNum)*$videoSegmentDuration/$videoTimescale + $deltaVideo) >= $duration)
 			break;
+		
+		file_put_contents($videoTimingFile,$videoTOI . " " . intval($ASTUNIX + ($start + ($videoIndex - $videoStartNum - 1)*$videoSegmentDuration/$videoTimescale + $deltaVideo)*1000000) . "\n",FILE_APPEND);	
 		
 		$file = $videoDoc->createElement('File');
 		$file->setAttribute("TOI",$videoTOI);$videoTOI++;
@@ -307,6 +315,8 @@ function generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$durat
 	{
 		if((($audioIndex - $audioStartNum)*$audioSegmentDuration/$audioTimescale + $deltaAudio) >= $duration)
 			break;
+		
+		file_put_contents($audioTimingFile,$audioTOI . " " . intval($ASTUNIX + ($start + ($audioIndex - $audioStartNum - 1)*$audioSegmentDuration/$audioTimescale + $deltaAudio)*1000000) . "\n",FILE_APPEND);			
 		
 		$file = $audioDoc->createElement('File');
 		$file->setAttribute("TOI",$audioTOI);$audioTOI++;

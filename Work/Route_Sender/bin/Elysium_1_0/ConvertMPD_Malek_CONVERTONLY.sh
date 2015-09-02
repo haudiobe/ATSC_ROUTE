@@ -46,7 +46,9 @@ filename="${filename%.*}"
 
 dynamicMPDName=$filename"_Dynamic."$extension
 
-php ../StaticToDynamic.php MPD=$1 uMPD=$dynamicMPDName AST=$AST"Z"
+php ../StaticToDynamic.php MPD=$1 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z"
+
+exit;
 #a=$(awk -v startTime=$AST -v period=$period -v toPrint=$toPrint -v MPDName=$1 -v vidRepID=$2 -v audRepID=$3 'BEGIN {value="";gsub(/\./,"_Dynamic.",MPDName)} {sub(/type="static"/,"type=\"dynamic\" availabilityStartTime=\""startTime"Z\" timeShiftBufferDepth=\"PT5S\"");if ($1=="<Period") {sub(/id=""/,"start=\"PT0S\" id=\""period"\""); period++}; if (($1=="<Representation" && index($0,"id=\""vidRepID"\"") == 0 && index($0,"mimeType=\"video") > 0) ||($1=="<Representation" && index($0,"id=\""audRepID"\"") == 0 && index($0,"mimeType=\"audio") > 0)) toPrint=0;if (toPrint==1) {for (i=NF-1;i>1;i--) if (index($i,"timescale=") > 0 || index($i,"duration=") > 0) {value=$i;gsub(/[a-z,A-Z,=,"]/,"",value); print value} else if (index($i,"media=") > 0) {value=$i;gsub(/\$Number\$\.mp4/,"",value); print value};print $0 > MPDName}; if (index($0,"</Representation") > 0) toPrint=1}' $1)
 
 #Convert CurrentTime to unix time. This is to be used later to determine when to send data chunks in FLUTE receiver
