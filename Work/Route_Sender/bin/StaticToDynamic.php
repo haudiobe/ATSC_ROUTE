@@ -10,6 +10,9 @@ $adInsertionTimeRequest = 60;  //In seconds from start
 $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
 
+$videoFDTFile = "fdt_Video.xml";
+$audioFDTFile = "fdt_Audio.xml";
+
 if(isset($_GET['AST']))
 {
     $AST_W3C=$_GET['AST'];
@@ -69,7 +72,9 @@ $savedTotalDuration = 0;
 $restPeriodDuration = 0;
 $numVideoSegments = 0;
 $numAudioSegments = 0;
-echo "test here". PHP_EOL;
+$deltaAudio = 0;
+$deltaVideo = 0;
+
 for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
 {
     $durationInMPD =$periods[$periodIndex]['node']->getAttribute("duration");
@@ -122,10 +127,14 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
             // Find the smaller PTO of audio and video, set the other to the smaller
             if($newVideoPTO/$videoTimescale < $newAudioPTO/$audioTimescale)
             {
+				$deltaVideo = 0;
+				$deltaAudio = $newAudioPTO/$audioTimescale - $newVideoPTO/$videoTimescale;
               $newAudioPTO = round($newVideoPTO/$videoTimescale*$audioTimescale);
             }
             else
             {
+				$deltaAudio = 0;
+				$deltaVideo = $newVideoPTO/$videoTimescale - $newAudioPTO/$audioTimescale;				
               $newVideoPTO = round($newAudioPTO/$audioTimescale*$videoTimescale);
             }        
 
@@ -135,6 +144,8 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
             $audioSegmentTemplate->setAttribute("presentationTimeOffset",$newAudioPTO);
             $audioSegmentTemplate->setAttribute("startNumber",$newAudioStartNumber);
         }
+		
+		generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio);
     }
 
     $cumulativeDurationPreceedingPeriods = $cumulativeOriginalDuration; //Save it for later use
@@ -149,6 +160,16 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
 }
 
 $dom->save($PatchedMPD);
+
+//read the entire string
+$fileContents=file_get_contents($audioFDTFile);
+
+//replace something in the file string - this is a VERY simple example
+$fileContents=str_replace("MPDNamePlaceholder", $PatchedMPD,$fileContents);
+$fileContents=str_replace("MPDSizePlaceholder", filesize($PatchedMPD),$fileContents);
+
+//write the entire string
+file_put_contents($audioFDTFile, $fileContents);
     
 function &parseMPD($docElement)
 {
@@ -209,6 +230,107 @@ function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$
 	$nearestVideoSegmentEndingTime = round(($adInsertionTimeRequest - $initialVideoOffset)/$videoSegmentDurationInSec)*$videoSegmentDurationInSec + $initialVideoOffset;
 	$nearestAudioSegmentEndingTime = round(($nearestVideoSegmentEndingTime - $initialAudioOffset)/$audioSegmentDurationInSec)*$audioSegmentDurationInSec + $initialAudioOffset;
 	return min($nearestVideoSegmentEndingTime,$nearestAudioSegmentEndingTime);
+}
+
+function generateFDTAndTiming($videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
+{
+	global $videoFDTFile, $audioFDTFile;
+	static $firstcall = true;
+	static $videoDoc = NULL;
+	static $audioDoc = NULL;
+	static $videoInstance = NULL;
+	static $audioInstance = NULL;
+	static $videoTOI = 1;
+	static $audioTOI = 1;
+	
+	$videoTimescale = $videoSegmentTemplate->getAttribute("timescale");
+	$videoSegmentDuration = $videoSegmentTemplate->getAttribute("duration");
+	$videoStartNum = $videoSegmentTemplate->getAttribute("startNumber");
+	$videoPTO = $videoSegmentTemplate->getAttribute("presentationTimeOffset");
+	$videoMedia = $videoSegmentTemplate->getAttribute("media");
+	$videoInit = $videoSegmentTemplate->getAttribute("initialization");
+	
+	$audioTimescale = $audioSegmentTemplate->getAttribute("timescale");
+	$audioSegmentDuration = $audioSegmentTemplate->getAttribute("duration");
+	$audioStartNum = $audioSegmentTemplate->getAttribute("startNumber");
+	$audioPTO = $audioSegmentTemplate->getAttribute("presentationTimeOffset");
+	$audioMedia = $audioSegmentTemplate->getAttribute("media");
+	$audioInit = $audioSegmentTemplate->getAttribute("initialization");
+	
+	if($firstcall)
+	{
+		$videoDoc = new DOMDocument('1.0');
+		$videoDoc->formatOutput = true;
+
+		$videoInstance = $videoDoc->createElement('FDT-Instance');
+		$videoInstance->setAttribute("Expires","32511974400");
+		$videoInstance->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
+		$videoInstance->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
+		$videoInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$videoDoc->appendChild($videoInstance);
+
+		$audioDoc = new DOMDocument('1.0');
+		$audioDoc->formatOutput = true;
+
+		$audioInstance = $audioDoc->createElement('FDT-Instance');
+		$audioInstance->setAttribute("Expires","32511974400");
+		$audioInstance->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
+		$audioInstance->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
+		$audioInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$audioDoc->appendChild($audioInstance);
+	}
+	
+	echo "deltaVideo: " . $deltaVideo . ", Duration: " . $duration . PHP_EOL;
+
+	for($videoIndex = $videoStartNum ; ; $videoIndex++)
+	{
+		if((($videoIndex - $videoStartNum)*$videoSegmentDuration/$videoTimescale + $deltaVideo) >= $duration)
+			break;
+		
+		$file = $videoDoc->createElement('File');
+		$file->setAttribute("TOI",$videoTOI);$videoTOI++;
+		$file->setAttribute("Content-Location",'file:///' . $videoInit);
+		$file->setAttribute("Content-Length",filesize($videoInit));
+		$videoInstance->appendChild($file);
+		
+		$file = $videoDoc->createElement('File');
+		$file->setAttribute("TOI",$videoTOI);$videoTOI++;
+		$filename = preg_replace('/\$Number\$/', $videoIndex, $videoMedia);
+		$file->setAttribute("Content-Location",'file:///' . $filename);
+		$file->setAttribute("Content-Length",filesize($filename));
+		$videoInstance->appendChild($file);		
+	}
+
+	$videoDoc->save($videoFDTFile);
+
+	for($audioIndex = $audioStartNum ; ; $audioIndex++)
+	{
+		if((($audioIndex - $audioStartNum)*$audioSegmentDuration/$audioTimescale + $deltaAudio) >= $duration)
+			break;
+		
+		$file = $audioDoc->createElement('File');
+		$file->setAttribute("TOI",$audioTOI);$audioTOI++;
+		$file->setAttribute("Content-Location",'file:///' . "MPDNamePlaceholder");
+		$file->setAttribute("Content-Length","MPDSizePlaceholder");
+		$audioInstance->appendChild($file);
+
+		$file = $audioDoc->createElement('File');
+		$file->setAttribute("TOI",$audioTOI);$audioTOI++;
+		$file->setAttribute("Content-Location",'file:///' . $audioInit);
+		$file->setAttribute("Content-Length",filesize($audioInit));
+		$audioInstance->appendChild($file);
+		
+		$file = $audioDoc->createElement('File');
+		$file->setAttribute("TOI",$audioTOI);$audioTOI++;
+		$filename = preg_replace('/\$Number\$/', $audioIndex, $audioMedia);
+		$file->setAttribute("Content-Location",'file:///' . $filename);
+		$file->setAttribute("Content-Length",filesize($filename));
+		$audioInstance->appendChild($file);		
+	}
+
+	$audioDoc->save($audioFDTFile);
+	
+	$firstcall = false;
 }
 
 function somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durstr)
