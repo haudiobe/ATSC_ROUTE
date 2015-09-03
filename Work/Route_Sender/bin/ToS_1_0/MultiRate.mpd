@@ -8,13 +8,13 @@
  <Period id="" duration="PT0H12M13.83S">
   <AdaptationSet segmentAlignment="true" maxWidth="1920" maxHeight="1080" maxFrameRate="24" par="16:9" lang="eng">
    <Representation id="1" mimeType="video/mp4" codecs="avc1.640028" width="1920" height="1080" frameRate="24" sar="27:20" startWithSAP="1" bandwidth="7555063">
-    <SegmentTemplate timescale="12288" presentationTimeOffset="0" media="video_8M_$Number$.mp4" startNumber="1" duration="12274" initialization="video_8M_init.mp4"/>
+    <SegmentTemplate timescale="12288" presentationTimeOffset="0" media="video_8M_$Number$.mp4" startNumber="1" duration="12288" initialization="video_8M_init.mp4"/>
    </Representation>
   </AdaptationSet>
   <AdaptationSet segmentAlignment="true" lang="eng">
    <Representation id="2" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="44100" startWithSAP="1" bandwidth="66702">
     <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
-    <SegmentTemplate timescale="44100" presentationTimeOffset="0" media="audio_64k_$Number$.mp4" startNumber="1" duration="43970" initialization="audio_64k_init.mp4"/>
+    <SegmentTemplate timescale="44100" presentationTimeOffset="0" media="audio_64k_$Number$.mp4" startNumber="1" duration="44032" initialization="audio_64k_init.mp4"/>
    </Representation>
   </AdaptationSet>
  </Period>
