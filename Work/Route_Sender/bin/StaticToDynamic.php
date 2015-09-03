@@ -6,9 +6,10 @@ if (isset($argv[0])) {
     parse_str(implode('&', array_slice($argv, 1)), $_GET);
 }
 $adInsertion = TRUE;
-$adInsertionTimeRequest = 60;  //In seconds from start
+$adInsertionTimeRequest = 20;  //In seconds from start
 $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
+$AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];
 
 $videoFDTFile = "fdt_Video.xml";
 $audioFDTFile = "fdt_Audio.xml";
@@ -52,7 +53,25 @@ $dom = new DOMDocument('1.0');
 $dom_sxe = $dom->importNode($dom_sxe, true);
 $dom_sxe = $dom->appendChild($dom_sxe);
 
-$periods = parseMPD($dom->documentElement);
+if($adInsertion)
+{
+	$AdMPD = simplexml_load_file($AdMPDName);
+	if (!$AdMPD)
+		die("Failed loading Ad MPD");
+
+	$dom_sxe_ad = dom_import_simplexml($AdMPD);
+	if (!$dom_sxe_ad) 
+	{
+		echo 'Error while converting XML';
+		exit;
+	}
+
+	$domAd = new DOMDocument('1.0');
+	$dom_sxe_ad = $domAd->importNode($dom_sxe_ad, true);
+	$dom_sxe_ad = $domAd->appendChild($dom_sxe_ad);
+}
+
+$periods = parseMPD($dom, !$adInsertion ? NULL : $domAd);
 
 $cumulativeOriginalDuration = 0;    //Cumulation of period duration on source MPD
 $cumulativeUpdatedDuration = 0;    //Cumulation of period duration on updated MPD
@@ -79,7 +98,7 @@ $numAudioSegments = 0;
 $deltaAudio = 0;
 $deltaVideo = 0;
 
-for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
+for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in the (semi-processed in case of Ad-insertion) MPD
 {
     $durationInMPD =$periods[$periodIndex]['node']->getAttribute("duration");
     $duration = somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durationInMPD);
@@ -118,7 +137,11 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
             
             $restPeriodDuration = $savedTotalDuration - $duration;
         }
-        else if($periodIndex == 1)      //!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if($periodIndex == 1)
+		{
+			//Ad period
+		}
+        else if($periodIndex == 2)
         {
             $duration = $restPeriodDuration;
             
@@ -175,10 +198,23 @@ $fileContents=str_replace("MPDSizePlaceholder", filesize($PatchedMPD),$fileConte
 //write the entire string
 file_put_contents($audioFDTFile, $fileContents);
     
-function &parseMPD($docElement)
+function &parseMPD($dom,$domAd)
 {
     global $adInsertion;
     $finalPeriodInserted = FALSE;
+	
+	$docElement = $dom->documentElement;
+	$adDocElement = NULL;
+	
+	if($adInsertion)
+	{
+		$adDocElement = $domAd->documentElement;
+		foreach ($adDocElement->childNodes as $node)
+		{  
+			if($node->nodeName === 'Period')
+				$adPeriod = $node;
+		}
+	}
     
     foreach ($docElement->childNodes as $node)
     {
@@ -191,6 +227,9 @@ function &parseMPD($docElement)
         {
             if($adInsertion && !$finalPeriodInserted)
             {
+				$adNode = $dom->importNode($adPeriod, true);
+				$node->parentNode->appendChild($adNode);	//Ad
+				
                 $finalPeriod = $node->cloneNode (true);
                 $node->parentNode->appendChild($finalPeriod);
                 $finalPeriodInserted = TRUE;

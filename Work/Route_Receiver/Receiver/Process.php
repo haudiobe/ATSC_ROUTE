@@ -38,10 +38,10 @@ $OriginalMPD= "MultiRate_Dynamic.mpd";
 #    $segTemplateVideo = "ToS_720_4M_video_*.mp4";    
 #}
 
-$initAudio = "audio_64k_init.mp4";
-$initVideo = "video_8M_init.mp4";
-$segTemplateAudio = "audio_64k_*.mp4";
-$segTemplateVideo = "video_8M_*.mp4";
+$initAudio = "*audio_64k_init.mp4";
+$initVideo = "*video_8M_init.mp4";
+$segTemplateAudio = "*audio_64k_*.mp4";
+$segTemplateVideo = "*video_8M_*.mp4";
 
 #if($channel == 1)
 #{
@@ -125,8 +125,8 @@ while (!glob($DASHContent."/$OriginalMPD")) usleep(5000);
 
 while (!glob($DASHContent.'/'.$initAudio)) usleep(5000);
 while (!glob($DASHContent.'/'.$initVideo)) usleep(5000);
-while (!array_diff(glob($DASHContent.'/'.$segTemplateAudio), array($DASHContent.'/'.$initAudio))) usleep(5000);
-while (!array_diff(glob($DASHContent.'/'.$segTemplateVideo), array($DASHContent.'/'.$initVideo))) usleep(5000);
+while (count(glob($DASHContent.'/'.$segTemplateAudio)) < 2) usleep(5000);
+while (count(glob($DASHContent.'/'.$segTemplateVideo)) < 2) usleep(5000);
 
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);
@@ -191,18 +191,20 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
             $periodStart = $lastPeriodStart + $lastPeriodDuration;
         else
             $periodStart = somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($periodStart);	//Convert Duration string to number
-
-        //Set already for the next iteration
-        $lastPeriodStart = $periodStart;
-        $lastPeriodDuration = $duration;
-        
+ 
         if($deltaTimeASTTuneIn < $periodStart)   //Tune-in is before this period, it stays intact (except that its start may need an update, which is optional for subsequent periods)
         {
-            $periods[$periodIndex]['node']->setAttribute("start","PT". round($periodStart - $deltaTimeASTTuneIn,4)."S"); 
-            $lastPeriodStart = $periodStart - $deltaTimeASTTuneIn;
+            $periods[$periodIndex]['node']->setAttribute("start","PT". round($lastPeriodStart + $lastPeriodDuration,4)."S"); 
+			//Set already for the next iteration
+			$lastPeriodStart = $lastPeriodStart + $lastPeriodDuration;
+			$lastPeriodDuration = $duration;  
             continue;
         }
-        
+		
+        //Set already for the next iteration
+        $lastPeriodStart = $periodStart;
+        $lastPeriodDuration = $duration;  
+		
         if($deltaTimeASTTuneIn > $periodStart + $duration)   //This period is no more relevant and is not received, hence remove this
         {
             $dom->documentElement->removeChild ($periods[$periodIndex]['node']);
@@ -241,7 +243,7 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
         //The adjusted period start and duration governed by new audio/video offset above.
         $periods[$periodIndex]['node']->setAttribute("start","PT". round($offsetUpdate + $periodStart - $deltaTimeASTTuneIn ,4)."S");         
         
-        $remainingPeriodDuration = $duration - $offsetUpdate;
+        $remainingPeriodDuration = $duration - max($videoOffsetUpdate , $audioOffsetUpdate);
         
         $periods[$periodIndex]['node']->setAttribute("duration", "PT". round($remainingPeriodDuration,4) . "S");
         
