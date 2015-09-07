@@ -139,6 +139,19 @@ section {
     border-color: #566;
 }
 
+#image{
+    position: absolute;
+    top:10px;
+    right:100px;
+    width:35px;
+    height:35px;
+}
+#Settingslink{
+    position: absolute;
+    top:15px;
+    right:30px;  
+    color:black; text-decoration:none
+}
 </style>
 </head>
 
@@ -161,6 +174,8 @@ section {
     </div>
   </div>
  
+        <img src="SettingsIcon.png" id="image">
+        <a id="Settingslink" href="../../../ReceiverUI/index.php" target="_blank">Settings</a>
     </body>
 </html>
 
