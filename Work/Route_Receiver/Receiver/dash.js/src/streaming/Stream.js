@@ -312,7 +312,9 @@ MediaPlayer.dependencies.Stream = function () {
                 controller;
 
             isStreamActivated = false;
+
             streamInfo = updatedStreamInfo;
+
             self.log("Manifest updated... set new data on buffers.");
 
             if (eventController) {
@@ -361,6 +363,7 @@ MediaPlayer.dependencies.Stream = function () {
 
         initialize: function(strmInfo, protectionCtrl) {
             streamInfo = strmInfo;
+            
             protectionController = protectionCtrl;
 
             // Protection error handler
@@ -380,6 +383,7 @@ MediaPlayer.dependencies.Stream = function () {
          * @memberof Stream#
          */
         activate: function(mediaSource){
+
             if (!isStreamActivated) {
                 initializeMedia.call(this, mediaSource);
             } else {

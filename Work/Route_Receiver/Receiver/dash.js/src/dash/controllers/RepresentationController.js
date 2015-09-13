@@ -116,7 +116,7 @@ Dash.dependencies.RepresentationController = function () {
             var self = this,
                 reps,
                 manifest = self.manifestModel.getValue();
-
+            
             dataIndex = self.manifestExt.getIndexForAdaptation(data, manifest, adaptation.period.index);
             reps = self.manifestExt.getRepresentationsForAdaptation(manifest, adaptation);
 
@@ -130,6 +130,7 @@ Dash.dependencies.RepresentationController = function () {
             for (var i = 0, ln = availableRepresentations.length; i < ln; i +=1) {
                 rep = availableRepresentations[i];
                 rep.segmentAvailabilityRange = self.timelineConverter.calcSegmentAvailabilityRange(rep, isDynamic);
+                
             }
         },
 

@@ -28,6 +28,8 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
+ var switchOccured = false;
+ 
  MediaPlayer.dependencies.StreamController = function () {
     "use strict";
 
@@ -177,6 +179,7 @@
             var nextStream = getNextStream(),
                 isLast = e.data.streamInfo.isLast;
 
+            switchOccured = true;
             // buffering has been complted, now we can signal end of stream
             if (mediaSource && isLast) {
                 this.mediaSourceExt.signalEndOfStream(mediaSource);
@@ -191,8 +194,16 @@
             var start = activeStream.getStreamInfo().start,
                 duration = activeStream.getStreamInfo().duration;
 
+            var ret1 = function(stream)
+            {
+                var tempr1 = (Math.round(stream.getStreamInfo().start * 1000)/1000 === Math.round((start + duration)*1000)/1000);
+                return (tempr1);
+            }
+            var ret2 = streams.filter(ret1);
+            var ret3 = ret2[0];
+
             return streams.filter(function(stream){
-                return (stream.getStreamInfo().start === (start + duration));
+                return (Math.round(stream.getStreamInfo().start * 1000)/1000 === Math.round((start + duration)*1000)/1000);
             })[0];
         },
 
@@ -209,7 +220,7 @@
                 stream = streams[i];
                 duration += stream.getDuration();
 
-                if (time < duration) {
+                if (Math.round(time * 1000)/1000 < Math.round(duration * 1000)/1000) {
                     return stream;
                 }
             }

@@ -31,7 +31,7 @@
 MediaPlayer.dependencies.PlaybackController = function () {
     "use strict";
 
-    var WALLCLOCK_TIME_UPDATE_INTERVAL = 1000,
+    var WALLCLOCK_TIME_UPDATE_INTERVAL = 200,
         currentTime = 0,
         liveStartTime = NaN,
         wallclockTimeIntervalId = null,
@@ -95,6 +95,9 @@ MediaPlayer.dependencies.PlaybackController = function () {
 
             var self = this,
                 tick = function() {
+					var currentdate = new Date();
+					//self.log("**********tick! " + currentdate + currentdate.getMilliseconds());
+                
                     onWallclockTime.call(self);
                 };
 

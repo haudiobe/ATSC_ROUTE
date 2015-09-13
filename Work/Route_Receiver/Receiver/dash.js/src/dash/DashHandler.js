@@ -28,6 +28,9 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
+
+ var appstr = "";
+ 
 Dash.dependencies.DashHandler = function () {
     "use strict";
 
@@ -682,23 +685,28 @@ Dash.dependencies.DashHandler = function () {
             var segments = representation.segments,
                 ln = segments ? segments.length : null,
                 idx = -1,
-                epsilon,
+                epsilonStart,
+                epsilonEnd,
                 frag,
                 ft,
                 fd,
                 i;
+
+            appstr = "";
 
             if (segments && ln > 0) {
                 for (i = 0; i < ln; i += 1) {
                     frag = segments[i];
                     ft = frag.presentationStartTime;
                     fd = frag.duration;
-                    epsilon = (timeThreshold === undefined || timeThreshold === null) ? fd/2 : timeThreshold;
-					epsilon = 0;
+                    //epsilon = (timeThreshold === undefined || timeThreshold === null) ? fd/2 : timeThreshold;
+					epsilonStart = 1/representation.timescale;
+                    epsilonEnd = time >= (representation.adaptation.period.start + representation.adaptation.duration) ? 0 : epsilonStart; //A segment cannot be slided into a timescale worth of duration at the end of the period.
 
-                    if ((time + epsilon) >= ft &&
-                        (time - epsilon) < (ft + fd)) {
+                    if ((time + epsilonStart) >= ft &&
+                        (time - epsilonEnd) < (ft + fd)) {
                         idx = frag.availabilityIdx;
+                        appstr = ", Start Time: " + frag.presentationStartTime +  ", End Time: " + (frag.presentationStartTime + frag.duration);
                         break;
                     }
                 }
@@ -811,6 +819,8 @@ Dash.dependencies.DashHandler = function () {
             if (!representation) {
                 return null;
             }
+            if(switchOccured && representation.adaptation.period.start < 1)
+                switchOccured = switchOccured;
 
             requestedTime = time;
 
@@ -819,6 +829,7 @@ Dash.dependencies.DashHandler = function () {
             index = getIndexForSegments.call(self, time, representation, timeThreshold);
             getSegments.call(self, representation);
 
+
             if (index < 0) {
                 index = getIndexForSegments.call(self, time, representation, timeThreshold);
             }
@@ -826,7 +837,8 @@ Dash.dependencies.DashHandler = function () {
             //self.log("Got segments.");
             //self.log(segments);
             //self.log("Got a list of segments, so dig deeper.");
-            self.log("Index for time " + time + " is " + index);
+
+            self.log("Index for time " + time + " is " + index + appstr);
 
             finished = !ignoreIsFinished ? isMediaFinished.call(self, representation) : false;
 
@@ -887,6 +899,13 @@ Dash.dependencies.DashHandler = function () {
 
             finished = isMediaFinished.call(self, representation);
 
+            //Recheck if there be more segments, and then recheck if finished
+            if(!finished)
+            {
+                getSegments.call(self, representation);
+                finished = isMediaFinished.call(self, representation);
+            }
+
             //self.log("Stream finished? " + finished);
             if (finished) {
                 request = new MediaPlayer.vo.FragmentRequest();
@@ -897,7 +916,7 @@ Dash.dependencies.DashHandler = function () {
                 self.log("Signal complete.");
                 //self.log(request);
             } else {
-                getSegments.call(self, representation);
+                //getSegments.call(self, representation);   //Getting segments after checking if finished changes the state 
                 //self.log("Got segments.");
                 //self.log(segments);
                 segment = getSegmentByIndex(idx, representation);

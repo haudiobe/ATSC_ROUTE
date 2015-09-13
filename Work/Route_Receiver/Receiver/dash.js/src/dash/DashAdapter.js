@@ -28,6 +28,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
+ 
 Dash.dependencies.DashAdapter = function () {
     "use strict";
     var periods = [],
@@ -221,6 +222,8 @@ Dash.dependencies.DashAdapter = function () {
 
         getFragmentRequestForTime = function(streamProcessor, trackInfo, time, options) {
             var representation = getRepresentationForTrackInfo(trackInfo, streamProcessor.representationController);
+
+            //*** Debug for multiperiod         
 
             return streamProcessor.indexHandler.getSegmentRequestForTime(representation, time, options);
         },

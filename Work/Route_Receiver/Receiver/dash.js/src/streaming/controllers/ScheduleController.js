@@ -28,6 +28,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
+
 MediaPlayer.dependencies.ScheduleController = function () {
     "use strict";
 
@@ -88,7 +89,7 @@ MediaPlayer.dependencies.ScheduleController = function () {
             if (isStopped) return;
 
             isStopped = true;
-
+    
             this.log("stop");
             // cancel the requests that have already been created, but not loaded yet.
             if (cancelPending) {
@@ -214,6 +215,7 @@ MediaPlayer.dependencies.ScheduleController = function () {
             if (e.data.fragmentModel !== this.streamProcessor.getFragmentModel()) return;
 
             this.log("Stream is complete");
+
             clearPlayListTraceMetrics(new Date(), MediaPlayer.vo.metrics.PlayList.Trace.END_OF_CONTENT_STOP_REASON);
         },
 

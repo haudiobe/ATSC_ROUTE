@@ -14,7 +14,7 @@
   <AdaptationSet segmentAlignment="true">
    <Representation id="2" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="66964">
     <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
-    <SegmentTemplate timescale="48000" presentationTimeOffset="0" media="audio_64k_$Number$.mp4" startNumber="1" duration="47088" initialization="audio_64k_init.mp4"/>
+    <SegmentTemplate timescale="48000" presentationTimeOffset="0" media="audio_64k_$Number$.mp4" startNumber="1" duration="47104" initialization="audio_64k_init.mp4"/>
    </Representation>
   </AdaptationSet>
  </Period>

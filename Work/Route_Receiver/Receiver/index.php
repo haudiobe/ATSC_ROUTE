@@ -10,157 +10,28 @@ Start a channel before
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <title>ROUTE Demo</title>
+<link href="style.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<style>
-::selection {
-  color: #fff;
-  background: pink;
-}
-html, body {
-  overflow: hidden;
-  height: 100%;
-}
-body {
-  margin: 0;
-}
-body {
-  color: #222;
-  font-family: 'Open Sans', arial, sans-serif;
-  display: -webkit-flex;
-  -webkit-align-items: center;
-  -webkit-justify-content: center;
-  -webkit-flex-direction: column;
-  display: -ms-flex;
-  -ms-align-items: center;
-  -ms-justify-content: center;
-  -ms-flex-direction: column;
-  display: -moz-flex;
-  -moz-align-items: center;
-  -moz-justify-content: center;
-  -moz-flex-direction: column;
-  display: -o-flex;
-  -o-align-items: center;
-  -o-justify-content: center;
-  -o-flex-direction: column;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-details {
-  position: absolute;
-  top: 1em;
-  left: 1em;
-  margin: 1em 0;
-  cursor: pointer;
-  padding: 10px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.3);
-  border-radius: 5px;
-  max-width: 600px;
-  font-size: 10pt;
-  z-index: 100;
-}
-details > div {
-  margin: 10px 0;
-}
-details blockquote {
-  font-style: italic;
-}
-pre:not(#log) {
-  background: #eee;
-  border-radius: 5px;
-  padding: 3px 17px 20px 17px;
-  border: 1px solid #ccc;
-  color: navy;
-}
-#log {
-  margin: 0 1em;
-}
-code {
-  font-weight: bold;
-}
-section {
-  display: -webkit-flex;
-  display: flex;
-}
-#carousel-wrapper {
-    padding-bottom: 10px;
-    position: relative;
-}
-#carousel, #thumbs {
-    overflow: hidden;
-}
-#carousel-wrapper .caroufredsel_wrapper {
-    border-radius: 10px;
-    box-shadow: 0 0 5px #899;
-}
-
-#carousel span, #carousel img,
-#thumbs a, #thumbs img  {
-    display: block;
-    float: left;
-}
-#carousel span, #carousel a,
-#thumbs span, #thumbs a {
-    position: relative;
-}
-#carousel img,
-#thumbs img {
-    border: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-#carousel img.glare,
-#thumbs img.glare {
-    width: 102%;
-    height: auto;
-}
-#thumbs-wrapper {
-    position: relative;
-}
-#thumbs a {
-    border: 2px solid #899;
-    width: 120px;
-    height: 60px;
-    margin: 5px 10px;
-    overflow: hidden;
-    border-radius: 10px;
-
-    -webkit-transition: border-color .5s;
-    -moz-transition: border-color .5s;
-    -ms-transition: border-color .5s;
-    transition: border-color .5s;
-}
-#thumbs a:hover, #thumbs a.selected {
-    border-color: #566;
-}
-
-#image{
-    position: absolute;
-    top:10px;
-    right:100px;
-    width:35px;
-    height:35px;
-}
-#Settingslink{
-    position: absolute;
-    top:15px;
-    right:30px;  
-    color:black; text-decoration:none
-}
-</style>
 </head>
 
     <body id="demopage">
 	<h3>ROUTE Demo</h3>
 	
-<div style="background-image: url(thumbs/background.png); height: 540px; width: 960px;">
-  <video controls width="960" height="540" id="videoPlayer" onplay="playEvent()"></video>
-</div>
+	<div id="video-container" style="background-image: url(thumbs/background.png); height: 540px; width: 960px;">
+		<!-- Video -->
+		<video id="video" width="960" height="540" onplay="playEvent()">
+		  <p>
+		    Your browser doesn't support HTML5 video.
+		  </p>
+		</video>
+		<!-- Video Controls -->
+		<div id="video-controls">
+			<button type="button" id="mute" class="icon-volume-2"></button>
+			<input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+			<button type="button" id="full-screen" class="icon-fullscreen-alt"></button>
+			<img src="thumbs/Progress_bar.gif" id="progress" alt="Status" style="width:780px;height:12px;">
+		</div>
+	</div>
 <section>
   <pre id="log"></pre>
 </section>
@@ -376,20 +247,92 @@ var switchStartTime = 0;
 var totalSwitchingDuration = 0;
 var totalTuneinDuration = 0;
 var fragmentLoadErrorCount = 0;
+var video = null;
+var fullScreen = false;
+var muteButton;
+var fullScreenButton;
+var volumeValue;
 
 window.onload = function()
 {  
     fragmentLoadErrorCount = 0;
 	logger.clear();
     logger.log('Ready');
-    var videoTag = document.querySelector("#videoPlayer");
+	
+		// Video
+	video = document.getElementById("video");
     var context = new Dash.di.DashContext();
     player= new MediaPlayer(context);
     player.startup();
-    player.attachView(videoTag);
+    player.attachView(video);
+	// Buttons
+	var playButton = document.getElementById("play-pause");
+	muteButton = document.getElementById("mute");
+	fullScreenButton = document.getElementById("full-screen");
 
-    var video = document.getElementById('videoPlayer');
-         
+	// Sliders
+	var volumeBar = document.getElementById("volume-bar");
+	volumeValue = volumeBar.value;
+    var img = document.getElementById('progress');
+	img.style.visibility = 'hidden';
+
+	// Event listener for the mute button
+	muteButton.addEventListener("click", function() {
+		if (video.muted == false) {
+			// Mute the video
+			video.muted = true;
+                muteButton.classList.add('icon-volume');
+                muteButton.classList.remove('icon-volume-2');
+				video.volume = volumeBar.value = 0;				
+			// Update the button text
+			//muteButton.innerHTML = "Unmute";
+		} else {
+			// Unmute the video
+			video.muted = false;
+                muteButton.classList.add('icon-volume-2');
+                muteButton.classList.remove('icon-volume');
+				video.volume = volumeBar.value = volumeValue;
+			// Update the button text
+			//muteButton.innerHTML = "Mute";
+		}
+	});
+
+
+	// Event listener for the full-screen button
+	fullScreenButton.addEventListener("click", function() {
+		if(!fullScreen)
+		{
+			if (video.requestFullscreen) {
+				video.requestFullscreen();
+			} else if (video.mozRequestFullScreen) {
+				video.mozRequestFullScreen(); // Firefox
+			} else if (video.webkitRequestFullscreen) {
+				video.webkitRequestFullscreen(); // Chrome and Safari
+			}
+			fullScreen = true;
+                fullScreenButton.classList.remove('icon-fullscreen-alt');
+                fullScreenButton.classList.add('icon-fullscreen-exit-alt');			
+		}
+		else
+		{
+			if (video.exitFullscreen) {
+				video.exitFullscreen();
+			} else if (video.mozCancelFullScreen) {
+				video.mozCancelFullScreen(); // Firefox
+			} else if (video.webkitExitFullscreen) {
+				video.webkitExitFullscreen(); // Chrome and Safari
+			}
+			fullScreen = false;
+                fullScreenButton.classList.add('icon-fullscreen-alt');
+                fullScreenButton.classList.remove('icon-fullscreen-exit-alt');			
+		}			
+	});
+	
+	// Event listener for the volume bar
+	volumeBar.addEventListener("change", function() {
+		// Update the video volume
+		volumeValue = video.volume = volumeBar.value;
+	});
 
     function showEvent(msg) {
       //var elapsedTimeMs = Date.now() - startupTimeMs;
@@ -397,20 +340,20 @@ window.onload = function()
       //console.log("#### " + msg);
       //videoEventTag.value += msg;
     }
-    videoTag.addEventListener('loadstart', function(video, e) {showEvent("loadstart");});
-    videoTag.addEventListener('loadedmetadata', function(video, e) {showEvent("loadedmetadata");});
-    videoTag.addEventListener('loadeddata', function(video, e) {showEvent("loadeddata");});
-    videoTag.addEventListener('canplay', function(video, e) {showEvent("canplay");});
-    videoTag.addEventListener('canplaythrough', function(video, e) {showEvent("canplaythrough");});
-    videoTag.addEventListener('playing', playingNow);
-    videoTag.addEventListener('progress', function(video, e) {
+    video.addEventListener('loadstart', function(video, e) {showEvent("loadstart");});
+    video.addEventListener('loadedmetadata', function(video, e) {showEvent("loadedmetadata");});
+    video.addEventListener('loadeddata', function(video, e) {showEvent("loadeddata");});
+    video.addEventListener('canplay', function(video, e) {showEvent("canplay");});
+    video.addEventListener('canplaythrough', function(video, e) {showEvent("canplaythrough");});
+    video.addEventListener('playing', playingNow);
+    video.addEventListener('progress', function(video, e) {
       // showEvent("progress");
     });
 
     setInterval(function () {monitor404Errors()}, 200);
     //contentListTag.addEventListener('change', function () {
      // console.log("### content changed");
-     // videoTag.pause();
+     // video.pause();
    // });
    
    //start(1);
@@ -442,6 +385,8 @@ function playingNow(e)
     logger.log("Playing Channel " + udchannel);
     var timeNow = new Date();
     console.log("***************** Playback started, " + timeNow + timeNow.getMilliseconds());
+    var img = document.getElementById('progress');
+    img.style.visibility = 'visible';	
     //switchChannel();
 }
 
@@ -462,7 +407,7 @@ function switchChannel()
     else
       setTimeout(function () {start(1)}, nextChangeDelay);
 
-    //videoTag.pause();
+    //video.pause();
  }
 
 function start(channel)
@@ -470,9 +415,11 @@ function start(channel)
     var timeNow = new Date();
     switchStartTime = Date.now();
     console.log("****************************Starting Channel " + channel  + timeNow + timeNow.getMilliseconds() + " ****************************");
-    var videoTag = document.querySelector("#videoPlayer");
-    videoTag.pause();
+    var video = document.getElementById("video");
+    video.pause();
     player.attachSource(null);
+    var img = document.getElementById('progress');
+	img.style.visibility = 'hidden';
 
     udchannel = channel;
 
@@ -512,9 +459,9 @@ function start(channel)
                 var timeNow = new Date();
                 console.log("*********** Instructing to play MPD: " + mpdURL + timeNow + timeNow.getMilliseconds());
                 player.attachSource(mpdURL);
-                videoTag.play();
+                video.play();
                 
-                //setTimeout(function () {window.open("http://localhost/Work/Route_Receiver/Receiver/dash.js/samples/dash-if-reference-player/index.html?url=" + mpdURL)}, 0);
+                //setTimeout(function () {window.open("http://192.168.121.132/dash.js_waqarz/samples/dash-if-reference-player/index.html?url=" + mpdURL)}, 0);
                 ;
 
             }

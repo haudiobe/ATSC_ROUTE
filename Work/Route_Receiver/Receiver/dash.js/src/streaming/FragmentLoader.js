@@ -93,6 +93,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
                     }
                 };
 
+
                 xhrs.push(req);
                 request.requestStartDate = new Date();
 

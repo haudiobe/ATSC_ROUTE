@@ -172,6 +172,7 @@ Dash.dependencies.TimelineConverter = function () {
             // The MSEOffset is offset from AST for media. It is Period@start - presentationTimeOffset
             var presentationOffset = representation.presentationTimeOffset;
             var periodStart = representation.adaptation.period.start;
+            
             return (periodStart - presentationOffset);
         },
 

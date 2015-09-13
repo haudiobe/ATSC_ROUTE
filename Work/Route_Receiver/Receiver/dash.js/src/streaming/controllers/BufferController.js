@@ -30,7 +30,7 @@
  */
 MediaPlayer.dependencies.BufferController = function () {
     "use strict";
-    var STALL_THRESHOLD = 0.5,
+    var STALL_THRESHOLD = 0.1,
         requiredQuality = 0,
         currentQuality = -1,
         isBufferingCompleted = false,
