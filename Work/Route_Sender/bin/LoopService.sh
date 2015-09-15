@@ -1,6 +1,10 @@
 #!/bin/bash
 
 #cd /var/www/html/Work/Route_Sender/bin/
+
+sudo killall Start2.sh &> /dev/null
+sudo killall flute_sender &> /dev/null
+
 echo "" > ServiceLog.txt
 count=1;
 
