@@ -104,11 +104,11 @@ $date_array = explode(" ",$micro_date);
 $date = date("Y-m-d H:i:s",$date_array[1]);
 file_put_contents ( "timelog.txt" , "Launching FLUTE:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
 # Start first flute sender
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > logout1.txt &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; //> logout1.txt &";
 exec($cmd);
 
 # Start second flute sender
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp2 . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > logout2.txt &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp2 . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
 exec($cmd);
 
 $micro_date = microtime();

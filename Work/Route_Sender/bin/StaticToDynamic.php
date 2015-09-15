@@ -6,7 +6,7 @@ if (isset($argv[0])) {
     parse_str(implode('&', array_slice($argv, 1)), $_GET);
 }
 $adInsertion = TRUE;
-$adInsertionTimeRequest = 33;  //In seconds from start
+$adInsertionTimeRequest = intval(file_get_contents("../UIConfig.txt"));  //In seconds from start
 $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
 $AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];

@@ -9,8 +9,8 @@ header('Content-Type: text/event-stream');
 // recommended to prevent caching of event data.
 header('Cache-Control: no-cache'); 
 
-chdir("/var/www/html/ATSC_ROUTE/Work/Route_Sender/bin/");
-$command="sudo nice --20 ./Start2.sh 1000 > ServiceLog.txt &";
+chdir("../");
+$command="sudo ./LoopService.sh 1000 &";
 echo $command;
 $output=array();
 exec($command,$output);
@@ -18,5 +18,7 @@ exec($command,$output);
 
 
 echo "Done";
+
+exit;
 
 ?>

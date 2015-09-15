@@ -76,7 +76,7 @@ and open the template in the editor.
         <span id="percentage">Percentage %</span>
    
         <div class="onoffswitch">
-            <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+            <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
         <label class="onoffswitch-label" for="myonoffswitch">
         <span class="onoffswitch-inner"></span>
         <span class="onoffswitch-switch"></span>
@@ -98,13 +98,18 @@ and open the template in the editor.
   <input type="button" id="set" value="Set" onclick="Set()"><br>
   <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
   <div id="Ad">
-      Ad Time  :  <input type="number" id="AdTime" value="0" min="0" max="700" style="width:120px;" onchange="saveAdTime()">
+      Ad Time  :  <input type="number" id="AdTime" value="30" min="0" max="500" style="width:80px;" onchange="saveAdTime()">
   </div>
   <!--p id="status">Status</p-->
         <script>
             var flag=0;
               var es;
               var result;
+			  var totalTime = 750;
+			  var timeProgress = 0;
+			  var progressCallback;
+			  var restart = false;
+			  
            function onloadfunction()
            {
                $.ajax({
@@ -119,12 +124,17 @@ and open the template in the editor.
               document.getElementById("box2").value=spl[1];
               document.getElementById("box3").value=spl[2];
               document.getElementById("box4").value=spl[3];
+			  if(restart)
+				  Onfunction();
+			  restart = false;
             })
             Set();
+			saveAdTime();
            }
+		   
           function checkthis(ele){
               
-           if(!ele.checked )
+           if(ele.checked )
            {
               Onfunction();
           }
@@ -141,33 +151,40 @@ and open the template in the editor.
                       url: "sender.php",
                       data: {}
             }).done( function() {
-                 //document.getElementById("status").innerHTML="got back";   
-                 if(flag==0){
-                 Offfunction();         
-                 Onfunction();
-                 }
            
             }).fail(function() {
          
             });
-             es = new EventSource('progressTracker.php');
-      
-            //a message is received
-            es.addEventListener('message', function(e) {
-                var result = JSON.parse( e.data );
-            var pBar = document.getElementById('progressor');
-            pBar.value = result.progress/(730)*100;
-            var perc = document.getElementById('percentage');
-            perc.innerHTML   = Math.round(result.progress/730*100) + "%";
-                        
-            });
+			progressCallback = setInterval(function(){ progressFunction(); }, 1000);
           }
+		  
+		    function progressFunction() {
+				timeProgress = timeProgress + 1;
+            var pBar = document.getElementById('progressor');
+            pBar.value = timeProgress/(totalTime)*100;
+            var perc = document.getElementById('percentage');
+            perc.innerHTML   = Math.round(timeProgress/totalTime*100) + "%";
+			document.getElementById('AdTime').disabled = true;	
+			
+			if(timeProgress >= totalTime)
+			{
+				restart = true;
+				Offfunction();
+			}
+                        
+            };
        
           function Offfunction()
             {
                 flag=1;
                 onloadfunction();
-                es.close();
+				var pBar = document.getElementById('progressor');
+				pBar.value = 0;
+				var perc = document.getElementById('percentage');
+				perc.innerHTML   = "0%";
+				document.getElementById('AdTime').disabled = false;	
+				clearInterval(progressCallback);
+				timeProgress = 0;				
             }
             
             function Set()

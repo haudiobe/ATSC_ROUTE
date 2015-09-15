@@ -6,10 +6,10 @@
  * and open the template in the editor.
  */
 
-chdir("/var/www/html/ATSC_ROUTE/Work/Route_Sender/bin/");
+chdir("../");
 $txt=  json_decode($_POST["time"]);
 //$txt=$_POST("time");
 echo $txt;
-$myfile = fopen("AdTime.txt", "w");
+$myfile = fopen("UIConfig.txt", "w");
 fwrite($myfile, $txt);
 fclose($myfile);

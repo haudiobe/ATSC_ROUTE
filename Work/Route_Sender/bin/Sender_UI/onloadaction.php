@@ -5,15 +5,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ 
+
 header('Content-Type: text/event-stream');
 // recommended to prevent caching of event data.
-header('Cache-Control: no-cache'); 
+header('Cache-Control: no-cache');
 
-$command="sudo killall flute_sender";
-$output=array();
-exec($command,$output);
+exec("sudo killall flute_sender");
+exec("sudo killall Start2.sh");
+exec("sudo killall LoopService.sh");
+
  //$ip=$_SERVER['SERVER_ADDR'];
- $output2=shell_exec(ifconfig);
+ $output2=shell_exec("sudo ifconfig");
+ 
  //echo $output2;
  //echo PHP_EOL;
  $findme="inet addr";

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-chdir("/var/www/html/ATSC_ROUTE/Work/Route_Sender/bin/");
+chdir("../");
 //$session_id = json_decode($_POST['sessionid']);
 
 $ip=json_decode($_POST['ip']);;

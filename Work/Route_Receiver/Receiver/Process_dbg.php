@@ -130,6 +130,7 @@ while (count(glob($DASHContent.'/'.$segTemplateVideo)) < 2) usleep(5000);
 
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);
+$date_array[1] = $date_array[1] - 0;//400;
 $date_array[0] = round($date_array[0],4);
 $date = date("Y-m-d H:i:s",$date_array[1]);
 //file_put_contents ( "timelog.txt" , "Tuned in:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
