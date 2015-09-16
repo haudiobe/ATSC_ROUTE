@@ -92,10 +92,9 @@ and open the template in the editor.
   <!--input type=button id="On" value="ON" onclick="Onfunction()">  
   <input type=button id="Off" value="OFF" onclick="Offfunction()"-->  
   <div id="ip">
-     IP Address: <input type="text" id="box1" style="width:40px;">.<input type="text" id="box2" style="width:40px;">.
-      <input type="text" id="box3"style="width:40px;">.<input type="text" id="box4"style="width:40px;">   
+     IP Address: <select type="text" id="ipselect" onchange="Set()" />  <input type="hidden" id="box4"style="width:4px;">
   </div>
-  <input type="button" id="set" value="Set" onclick="Set()"><br>
+
   <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
   <div id="Ad">
       Ad Time  :  <input type="number" id="AdTime" value="30" min="0" max="500" style="width:80px;" onchange="saveAdTime()">
@@ -119,16 +118,22 @@ and open the template in the editor.
             }).done( function(e) {
                  //alert("Killed all"); 
               result = JSON.parse(e);
-              var spl=result.split(".");
-              document.getElementById("box1").value=spl[0];
-              document.getElementById("box2").value=spl[1];
-              document.getElementById("box3").value=spl[2];
-              document.getElementById("box4").value=spl[3];
+			  
+			  var ipselect = document.getElementById('ipselect');
+			  
+			  if(ipselect.options.length === 0)
+			  {
+				  for(var index = 0; index < result.length ; index ++)
+				  {
+					  ipselect.options[ipselect.options.length] = new Option(result[index], result[index]);
+				  }
+			  }
+			  Set();
 			  if(restart)
 				  Onfunction();
 			  restart = false;
             })
-            Set();
+
 			saveAdTime();
            }
 		   
@@ -190,11 +195,13 @@ and open the template in the editor.
             
             function Set()
             { 
-                val1=document.getElementById("box1").value;
-                val2=document.getElementById("box2").value;
-                val3=document.getElementById("box3").value;
-                val4=document.getElementById("box4").value;
-                ipaddr=val1+"."+val2+"."+val3+"."+val4;
+
+				var ipselect = document.getElementById('ipselect');
+				
+				if(ipselect.options.length <= 0)
+					return;               
+				
+				ipaddr=ipselect.options[ipselect.selectedIndex].value;
                 $.ajax({
                       type: 'POST',
                       url: "setIP.php",

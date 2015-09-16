@@ -15,22 +15,32 @@ exec("sudo killall flute_sender");
 exec("sudo killall Start2.sh");
 exec("sudo killall LoopService.sh");
 
- //$ip=$_SERVER['SERVER_ADDR'];
  $output2=shell_exec("sudo ifconfig");
  
  //echo $output2;
  //echo PHP_EOL;
- $findme="inet addr";
- $pos = strpos($output2, $findme);
- //echo $pos, PHP_EOL;
- //echo PHP_EOL;
- $startpos=$pos+10;
- $endpos=strpos($output2," ",$startpos);
- //echo $endpos;
- $ip=substr($output2,$startpos,$endpos-$startpos);
- //echo $ip;
- $temp="data: ". json_encode($ip);
- // $d = array('ip' => $ip);
+ $index = 0;
+ $ip = array();
+ $pos = 0;
+ 
+ while(true)
+ {
+	 $findme="inet addr";
+	 $pos = strpos($output2, $findme, $pos + strlen($findme));
+	 if($pos === FALSE)
+		 break;
+	 //echo $pos, PHP_EOL;
+	 //echo PHP_EOL;
+	 $startpos=$pos+10;
+	 $endpos=strpos($output2," ",$startpos);
+	 //echo $endpos;
+	 $thisIP = substr($output2,$startpos,$endpos-$startpos);
+	 if($thisIP !== "127.0.0.1")
+	 {
+		$ip[$index]=$thisIP;
+		$index = $index + 1;
+	 }
+ }
  echo json_encode($ip);
 // echo "done";
 //var_dump($output);
