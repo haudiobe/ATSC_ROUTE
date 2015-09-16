@@ -10,6 +10,7 @@ ini_set('memory_limit','-1');//remove memory limit
 /* 
 Main script for starting flure reception and MPD re-writing
  */
+$AdSource = intval(file_get_contents("RcvConfig.txt"));
 chdir('../bin/');
 $currDir=dirname(__FILE__);
 
@@ -22,6 +23,9 @@ $DASHContentBase="DASH_Content";
 $DASHContentDir=$DASHContentBase . (string)$channel;
 $DASHContent=$currDir . "/" . $DASHContentDir;
 $OriginalMPD= "MultiRate_Dynamic.mpd";
+$AdMPDName="Ad2/Ad2_MultiRate.mpd";
+
+
 
 #if($channel == 1)
 #{   
@@ -263,6 +267,15 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
     //Set the updated MPD duration
     
     $MPDNode->setAttribute("mediaPresentationDuration","PT". round($lastPeriodStart + $lastPeriodDuration ,4) . "S");
+	
+	if($AdSource == 1 && count($periods) >= 2)
+	{
+		$BaseURL = $dom->createElement( "BaseURL", "../Ad2/");
+		$TargetPeriod = $periods[count($periods) - 2];
+		$TargetAS = $TargetPeriod['adaptationSet'][0]['node'];
+		$TargetPeriodNode = $TargetPeriod['node'];
+		$TargetPeriodNode->insertBefore($BaseURL,$TargetAS);
+	}
     
     $dom->save($DASHContent . "/" . $PatchedMPD);
     

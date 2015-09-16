@@ -184,7 +184,8 @@ and open the template in the editor.
 				perc.innerHTML   = "0%";
 				document.getElementById('AdTime').disabled = false;	
 				clearInterval(progressCallback);
-				timeProgress = 0;				
+				timeProgress = 0;
+                onloadfunction();				
             }
             
             function Set()

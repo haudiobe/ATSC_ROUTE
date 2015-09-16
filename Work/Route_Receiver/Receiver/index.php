@@ -44,9 +44,8 @@ Start a channel before
       </div>
     </div>
   </div>
- 
-        <img src="SettingsIcon.png" id="image">
-        <a id="Settingslink" href="../../../ReceiverUI/index.php" target="_blank">Settings</a>
+
+		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.svg" /></a>
     </body>
 </html>
 
