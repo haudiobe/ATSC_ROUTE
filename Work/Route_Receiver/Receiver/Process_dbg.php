@@ -2,7 +2,7 @@
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);
 $date = date("Y-m-d H:i:s",$date_array[1]);
-unlink ('../bin/timelog.txt');
+//unlink ('../bin/timelog.txt');
 file_put_contents ( "timelog.txt" , "Start:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
 
 ini_set('memory_limit','-1');//remove memory limit
@@ -10,8 +10,8 @@ ini_set('memory_limit','-1');//remove memory limit
 /* 
 Main script for starting flure reception and MPD re-writing
  */
-chdir('../bin/');
-$currDir=dirname(__FILE__);
+//chdir('../bin/');
+$currDir="./";//dirname(__FILE__);
 
 $channel = $_REQUEST['channel'];
 echo "Started channel ". $channel;
