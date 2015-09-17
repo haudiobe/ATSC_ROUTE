@@ -71,7 +71,8 @@ and open the template in the editor.
       var result;
       function onloadfunc()
       {
-		document.getElementById("myonoffswitch").checked = ('<?php echo intval(file_get_contents("../RcvConfig.txt")); ?>' == 2);		  
+		document.getElementById("myonoffswitch").checked = ('<?php echo intval(file_get_contents("../RcvConfig.txt")); ?>' == 2);	
+		Configr();		
           $.ajax({
                       type: 'POST',
                       url: "onloadfunc.php",

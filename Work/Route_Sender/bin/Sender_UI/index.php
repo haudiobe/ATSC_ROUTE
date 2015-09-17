@@ -73,7 +73,7 @@ and open the template in the editor.
         }
             </style>
      <progress id='progressor' value="0" max='100'></progress>  
-        <span id="percentage">Percentage %</span>
+        <span id="percentage"></span>
    
         <div class="onoffswitch">
             <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" unchecked>
@@ -88,7 +88,7 @@ and open the template in the editor.
         <?php
         // put your code here
         ?>
-        <h1>Route Sender</h1>
+        <h1>ROUTE Sender</h1>
   <!--input type=button id="On" value="ON" onclick="Onfunction()">  
   <input type=button id="Off" value="OFF" onclick="Offfunction()"-->  
   <div id="ip">
@@ -97,7 +97,7 @@ and open the template in the editor.
 
   <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
   <div id="Ad">
-      Ad Time  :  <input type="number" id="AdTime" value="30" min="0" max="500" style="width:80px;" onchange="saveAdTime()">
+      Ad Time  :  <input type="number" id="AdTime" value="30" min="0" max="500" style="width:80px;" onchange="saveAdTime()"> sec
   </div>
   <!--p id="status">Status</p-->
         <script>
@@ -105,6 +105,7 @@ and open the template in the editor.
               var es;
               var result;
 			  var totalTime = 750;
+			  var timeOffset = 3;
 			  var timeProgress = 0;
 			  var progressCallback;
 			  var restart = false;
@@ -166,12 +167,15 @@ and open the template in the editor.
 		    function progressFunction() {
 				timeProgress = timeProgress + 1;
             var pBar = document.getElementById('progressor');
-            pBar.value = timeProgress/(totalTime)*100;
+			var adjustedTime = Math.max(timeProgress - timeOffset , 0);
+            pBar.value = adjustedTime/(totalTime)*100;
             var perc = document.getElementById('percentage');
-            perc.innerHTML   = Math.round(timeProgress/totalTime*100) + "%";
+            //perc.innerHTML   = Math.round(adjustedTime/totalTime*100) + "%";
+			var progSec = (adjustedTime - 60*Math.floor(adjustedTime/60));	//('  ' + progSec).substr(-2)
+			perc.innerHTML = Math.floor(adjustedTime/60) + " min " + progSec + " sec / " + Math.floor(totalTime/60) + " min " + (totalTime - 60*Math.floor(totalTime/60)) + " sec"; 
 			document.getElementById('AdTime').disabled = true;	
 			
-			if(timeProgress >= totalTime)
+			if(adjustedTime >= totalTime)
 			{
 				restart = true;
 				Offfunction();
@@ -186,7 +190,7 @@ and open the template in the editor.
 				var pBar = document.getElementById('progressor');
 				pBar.value = 0;
 				var perc = document.getElementById('percentage');
-				perc.innerHTML   = "0%";
+				perc.innerHTML   = "";
 				document.getElementById('AdTime').disabled = false;	
 				clearInterval(progressCallback);
 				timeProgress = 0;
