@@ -15,7 +15,9 @@ chdir('../bin/');
 $currDir=dirname(__FILE__);
 
 $channel = $_REQUEST['channel'];
-echo "Started channel ". $channel;
+$responseToSend = array();
+$responseToSend[0] = $channel;
+//echo "Started channel ". $channel;
 
 #Define Paths
 
@@ -186,6 +188,8 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
     $lastPeriodStart;   //Period start of the last period in the iteration
     $lastPeriodDuration;    //Period duration of the last period in iteration
 	
+	$responseToSend[1] = count($periods) - 1;
+	
     for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
     {
         $periodStart = $periods[$periodIndex]['node']->getAttribute("start");
@@ -201,6 +205,7 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
             $periods[$periodIndex]['node']->setAttribute("start","PT". round($lastPeriodStart + $lastPeriodDuration,4)."S"); 
 			//Set already for the next iteration
 			$lastPeriodStart = $lastPeriodStart + $lastPeriodDuration;
+			$responseToSend[] = $lastPeriodStart;
 			$lastPeriodDuration = $duration;  
             continue;
         }
@@ -212,6 +217,7 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
         if($deltaTimeASTTuneIn > $periodStart + $duration)   //This period is no more relevant and is not received, hence remove this
         {
             $dom->documentElement->removeChild ($periods[$periodIndex]['node']);
+			$responseToSend[1] = $responseToSend[1] - 1;
             continue;
         }
         
@@ -279,7 +285,7 @@ $AST_W3C = substr($AST_SEC_W3C, 0, $extension_pos) . $dateFracPart[0] . "Z" ;//s
     
     $dom->save($DASHContent . "/" . $PatchedMPD);
     
-
+echo json_encode($responseToSend);
 #file_put_contents ( "timelog.txt" , $latestFiles , FILE_APPEND );
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);

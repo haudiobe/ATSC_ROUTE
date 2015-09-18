@@ -268,6 +268,15 @@ window.onload = function()
 	  alternateServerIP = JSON.parse(e);
 	  alternateLocation1 = "http://" + alternateServerIP + alternateLocation1;
 	  alternateLocation2 = "http://" + alternateServerIP + alternateLocation2;
+	  $.ajax({
+                      type: 'POST',
+                      url: "ReceiverConfig/setIP.php",
+                       datatype: "json",
+                      data: {ip: JSON.stringify(alternateServerIP)},
+            }).done( function(e) {
+               console.log("**** Setting IP Address and process, result: " + e);
+                
+            })
 	});
 	
 		// Video
@@ -426,6 +435,8 @@ var monitoringWindowSize = 6;
 var monitoringTime = 0;
 var monitorProcess = null;
 var fragmentErrorRegistry = [];
+var reTuneAtAd = false;
+var reTuneProcess = [];
 
 function start(channel)
 {
@@ -439,6 +450,14 @@ function start(channel)
 	img.style.visibility = 'hidden';
 
     udchannel = channel;
+	
+	
+	for(var index = 0 ; index < reTuneProcess.length ; index++)
+	{
+		 clearTimeout(reTuneProcess[index]);
+	}
+	
+	reTuneProcess = [];
 
   //Make sure no flute process is running
   $.post(
@@ -457,10 +476,10 @@ function start(channel)
             function(response)
             {
                 totalTuneinDuration += (Date.now() - switchStartTime);
-                if(response == "Started channel 1")
-                  var localChannel = 1;
-                else
-                  var localChannel = 2;
+				result = JSON.parse(response);
+                
+				var localChannel = result[0];
+
                 var DASHContentBase="DASH_Content";
                 var DASHContentDir= DASHContentBase + localChannel;
                 var patchedMPD="MultiRate_Dynamic_Patched.mpd";
@@ -482,6 +501,18 @@ function start(channel)
 				monitorProcess = setInterval(function () {monitor404Errors()}, monitoringInterval);
 				fragmentErrorRegistry = [];
 				fragmentLoadErrorCount = 0;
+				
+				if(reTuneAtAd && result[1] > 0)
+				{
+					for(var index = 0, processStarted = 0 ; index < (result.length - 2) ; index++)
+					{
+						if(result[index+2] == 0)
+							continue;
+						
+						reTuneProcess[processStarted] = setTimeout(function () {replay(mpdURL)}, result[index+2]*1000);
+						processStarted = processStarted + 1;
+					}
+				}
 
             }
           );
@@ -510,7 +541,17 @@ function start(channel)
 	 }
      
  }
-
+ function replay(mpdURL)
+ {
+    var video = document.getElementById("video");
+    video.pause();
+    player.attachSource(null);	
+	var timeNow = new Date();
+	console.log("*********** Replaying MPD: " + mpdURL + timeNow + timeNow.getMilliseconds());
+	player.attachSource(mpdURL);
+	video.play();	
+ }
+ 
  function Logger(id) {
   this.el = document.getElementById('log');
 }

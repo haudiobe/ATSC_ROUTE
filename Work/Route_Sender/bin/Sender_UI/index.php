@@ -97,7 +97,7 @@ and open the template in the editor.
 
   <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
   <div id="Ad">
-      Ad Time  :  <input type="number" id="AdTime" value="70" min="0" max="500" style="width:80px;" onchange="saveAdTime()"> sec
+      Ad Time  :  <input type="number" id="AdTime" value="60" min="0" max="500" style="width:80px;" onchange="saveAdTime()"> sec
   </div>
   <!--p id="status">Status</p-->
         <script>
@@ -133,7 +133,16 @@ and open the template in the editor.
 			  if(restart)
 				  Onfunction();
 			  restart = false;
-            })
+            });
+			
+               $.ajax({
+                      //type: 'POST',
+                      url: "trafficFilter.php",
+                      datatype: "json",
+            }).done( function(e) {
+				console.log("Ran trafficFilter.php, result: " + e);
+            });			
+			
 
 			saveAdTime();
            }
