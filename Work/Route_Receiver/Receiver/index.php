@@ -45,7 +45,7 @@ Start a channel before
     </div>
   </div>
 
-		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.svg" /></a>
+		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.jpg" /></a>
     </body>
 </html>
 
@@ -252,11 +252,23 @@ var muteButton;
 var fullScreenButton;
 var volumeValue;
 
+
 window.onload = function()
 {  
     fragmentLoadErrorCount = 0;
 	logger.clear();
     logger.log('Ready');
+	
+	//Get IP
+	  $.ajax({
+			  type: 'POST',
+			  url: "ReceiverConfig/onloadfunc.php",
+			  datatype: "json",
+	}).done( function(e) {
+	  alternateServerIP = JSON.parse(e);
+	  alternateLocation1 = "http://" + alternateServerIP + alternateLocation1;
+	  alternateLocation2 = "http://" + alternateServerIP + alternateLocation2;
+	});
 	
 		// Video
 	video = document.getElementById("video");
@@ -349,7 +361,6 @@ window.onload = function()
       // showEvent("progress");
     });
 
-    setInterval(function () {monitor404Errors()}, 200);
     //contentListTag.addEventListener('change', function () {
      // console.log("### content changed");
      // video.pause();
@@ -358,12 +369,10 @@ window.onload = function()
    //start(1);
    
 }
- var waitStarted = 0;
- 
+
 function playEvent()
 {
-    fragmentLoadErrorCount = 0;
-    waitStarted = 0;
+    ;//fragmentLoadErrorCount = 0;
 }
 
 window.onbeforeunload = function (e) {
@@ -408,6 +417,15 @@ function switchChannel()
 
     //video.pause();
  }
+ 
+var alternateServerIP = "";
+var alternateLocation1 = "/Work/Route_Sender/bin/ToS_1_0";
+var alternateLocation2 = "/Work/Route_Sender/bin/Elysium_1_0";
+var monitoringInterval = 200;
+var monitoringWindowSize = 6;
+var monitoringTime = 0;
+var monitorProcess = null;
+var fragmentErrorRegistry = [];
 
 function start(channel)
 {
@@ -459,9 +477,11 @@ function start(channel)
                 console.log("*********** Instructing to play MPD: " + mpdURL + timeNow + timeNow.getMilliseconds());
                 player.attachSource(mpdURL);
                 video.play();
-                
-                //setTimeout(function () {window.open("http://192.168.121.132/dash.js_waqarz/samples/dash-if-reference-player/index.html?url=" + mpdURL)}, 0);
-                ;
+                //setTimeout(function () {window.open("dash.js/samples/dash-if-reference-player/index.html?url=" + mpdURL)}, 0);
+				monitoringTime = 0;
+				monitorProcess = setInterval(function () {monitor404Errors()}, monitoringInterval);
+				fragmentErrorRegistry = [];
+				fragmentLoadErrorCount = 0;
 
             }
           );
@@ -472,17 +492,23 @@ function start(channel)
  
  function monitor404Errors()
  {
-     if(fragmentLoadErrorCount > 0 && waitStarted == 0)
-     {
-         //setTimeout(function () {start(udchannel)}, 500);
-         waitStarted = waitStarted +1;
-     }
+	 monitoringTime += monitoringInterval;
+	 fragmentErrorRegistry.push(fragmentLoadErrorCount);
+	 fragmentLoadErrorCount = 0;
+	 var maxWindowLength = monitoringWindowSize*(1000/monitoringInterval);
+	 if(fragmentErrorRegistry.length > maxWindowLength)
+		fragmentErrorRegistry.shift();
+	var ErrorTH = 1;
+	if(((monitoringTime/2000) - Math.floor(monitoringTime/2000))  < 0.1)
+		console.log("*** Time: " + (monitoringTime/1000) + ", Errors: " + fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) + ", TH: " + monitoringWindowSize*ErrorTH + ", Result: " + (fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) > monitoringWindowSize*ErrorTH));
+	if(fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) > monitoringWindowSize*ErrorTH) 
+	 {
+		 setTimeout(function () {start(udchannel)}, 0);
+		 monitoringTime = 0;
+		 clearInterval(monitorProcess);
+		 console.log("************************ Triggering Re-tunein");
+	 }
      
-     if(waitStarted > 0)
-         waitStarted = waitStarted +1;
-     
-     if(waitStarted > (6/0.2))
-         waitStarted = 0;
  }
 
  function Logger(id) {

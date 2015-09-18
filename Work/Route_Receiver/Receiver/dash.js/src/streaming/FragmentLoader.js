@@ -161,6 +161,16 @@ MediaPlayer.dependencies.FragmentLoader = function () {
 
                     if (remainingAttempts > 0) {
                         self.log("Failed loading fragment: " + request.mediaType + ":" + request.type + ":" + request.startTime + ", retry in " + RETRY_INTERVAL + "ms" + " attempts: " + remainingAttempts);
+
+                        var Path = request.url.substring(0,request.url.lastIndexOf("/"));
+                        var SegmentName = request.url.substring(request.url.lastIndexOf("/"));
+                        var Folder = Path.substring(Path.lastIndexOf("/"));
+
+                        var newPath = (Folder === "/DASH_Content1") ? alternateLocation1 : alternateLocation2;
+                        request.url = newPath + SegmentName;
+
+                        fragmentLoadErrorCount = fragmentLoadErrorCount + 1;
+                        
                         remainingAttempts--;
                         setTimeout(function() {
                             doLoad.call(self, request, remainingAttempts);
