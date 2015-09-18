@@ -87,7 +87,7 @@ $profiles=$periods[0]['node']->parentNode->getAttribute("profiles");
 $periods[0]['node']->parentNode->removeAttribute("profiles");
 
 $periods[0]['node']->parentNode->setAttribute("availabilityStartTime",$AST_W3C);    //Set AST to tune-in time
-$periods[0]['node']->parentNode->setAttribute("timeShiftBufferDepth","PT5S");
+$periods[0]['node']->parentNode->setAttribute("timeShiftBufferDepth","PT60S");
 $periods[0]['node']->parentNode->setAttribute("mediaPresentationDuration",$mediaPresentationDuration);
 $periods[0]['node']->parentNode->setAttribute("profiles",$profiles);
 
