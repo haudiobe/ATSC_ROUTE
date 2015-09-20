@@ -276,7 +276,7 @@ window.onload = function()
             }).done( function(e) {
                console.log("**** Setting IP Address and process, result: " + e);
                 
-            })
+            });
 	});
 	
 		// Video
@@ -388,6 +388,15 @@ window.onbeforeunload = function (e) {
     // Cleanup on exit
     $.post(
             "Cleanup.php",
+            {channel:"1"},
+            function(response)
+            {
+                console.log(response);
+            }
+           );
+		   
+    $.post(
+            "ReceiverConfig/Cleanup.php",
             {channel:"1"},
             function(response)
             {
