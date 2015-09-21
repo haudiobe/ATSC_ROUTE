@@ -11,7 +11,7 @@ chdir("../../bin/");
 
 $ip=json_decode($_POST['ip']);
 echo $ip;
-$command= "sudo sh ../../Config/gensdp.sh ".$ip;
+$command= "sh ../../Config/gensdp.sh ".$ip;
 $output=array();
 exec($command,$output);
 //var_dump($output);

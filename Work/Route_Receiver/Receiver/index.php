@@ -538,15 +538,18 @@ function start(channel)
 	 var maxWindowLength = monitoringWindowSize*(1000/monitoringInterval);
 	 if(fragmentErrorRegistry.length > maxWindowLength)
 		fragmentErrorRegistry.shift();
-	var ErrorTH = 1;
+	var ErrorTH = 0.666;
 	if(((monitoringTime/2000) - Math.floor(monitoringTime/2000))  < 0.1)
 		console.log("*** Time: " + (monitoringTime/1000) + ", Errors: " + fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) + ", TH: " + monitoringWindowSize*ErrorTH + ", Result: " + (fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) > monitoringWindowSize*ErrorTH));
 	if(fragmentErrorRegistry.reduce(function(pv, cv) { return pv + cv; }, 0) > monitoringWindowSize*ErrorTH) 
 	 {
-		 setTimeout(function () {start(udchannel)}, 0);
+		 //setTimeout(function () {start(udchannel)}, 0);
+		var video = document.getElementById("video");
+		video.pause();
+		player.attachSource(null);
 		 monitoringTime = 0;
 		 clearInterval(monitorProcess);
-		 console.log("************************ Triggering Re-tunein");
+		 //console.log("************************ Triggering Re-tunein");
 	 }
      
  }

@@ -48,8 +48,9 @@ MediaPlayer.rules.ThroughputRule = function () {
         getAverageThroughput = function (type,  isDynamic) {
             var averageThroughput = 0,
                 sampleAmount = isDynamic ? AVERAGE_THROUGHPUT_SAMPLE_AMOUNT_LIVE: AVERAGE_THROUGHPUT_SAMPLE_AMOUNT_VOD,
-                arr = throughputArray[type],
-                len = arr.length;
+                arr = throughputArray[type];
+				if (typeof arr == 'undefined')arr = [];
+                var len = arr.length;
 
             sampleAmount = len < sampleAmount ? len : sampleAmount;
 
