@@ -1,14 +1,14 @@
-CC = gcc
+CC = /opt/android-toolchain/arm-linux-androideabi/bin/gcc --sysroot=/opt/android-toolchain/sysroot
 #CC = ccmalloc g++
 
 CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE \
 	-I../flutelib \
-	-I/usr/local/ssl/include \
-	-I/usr/include
+	-I/opt/android-toolchain/sysroot/usr/include
+	
 
 LFLAGS += -L../lib -lflutelib -lalc -lsdp \
-	-lexpat -lpthread -lm -lz -lcurl -L../libwebsockets-master/build/lib -lwebsockets \
-	-L/usr/local/ssl/lib -lcrypto -lssl
+	-lexpat -lm -lz -lcurl -L../libwebsockets-master/build/lib -lwebsockets \
+	-L/opt/android-toolchain/sysroot/usr/lib -lcrypto -lssl
 
 SOURCES = main.c
 

@@ -72,7 +72,7 @@ char* file_md5(const char *filename) {
 #ifdef _MSC_VER
 	fp = fopen(filename, "rb");
 #else
-	fp = fopen64(filename, "rb");
+	fp = fopen(filename, "rb");
 #endif
 
 	if(fp == NULL) {

@@ -1,4 +1,4 @@
-CC = gcc
+CC = /opt/android-toolchain/arm-linux-androideabi/bin/gcc --sysroot=/opt/android-toolchain/sysroot
 
 CFLAGS += -Wall -O3 -g -fPIC -DLINUX -DSTDC_HEADERS -DHAVE_CTYPE_H -DHAVE_STRING_H \
 	-DHAVE_SYS_TYPES_H -DHAVE_SYS_TIME_H -DHAVE_TIME_H -DHAVE_FCNTL_H \

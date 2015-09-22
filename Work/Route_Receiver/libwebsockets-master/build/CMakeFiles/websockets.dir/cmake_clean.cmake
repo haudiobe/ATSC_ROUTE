@@ -1,4 +1,4 @@
-FILE(REMOVE_RECURSE
+file(REMOVE_RECURSE
   "CMakeFiles/websockets.dir/lib/base64-decode.c.o"
   "CMakeFiles/websockets.dir/lib/handshake.c.o"
   "CMakeFiles/websockets.dir/lib/libwebsockets.c.o"
@@ -20,11 +20,12 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/websockets.dir/lib/extension.c.o"
   "CMakeFiles/websockets.dir/lib/extension-deflate-frame.c.o"
   "CMakeFiles/websockets.dir/lib/extension-deflate-stream.c.o"
+  "CMakeFiles/websockets.dir/lib/getifaddrs.c.o"
   "lib/libwebsockets.pdb"
   "lib/libwebsockets.a"
 )
 
 # Per-language clean rules from dependency scanning.
-FOREACH(lang C)
-  INCLUDE(CMakeFiles/websockets.dir/cmake_clean_${lang}.cmake OPTIONAL)
-ENDFOREACH(lang)
+foreach(lang C)
+  include(CMakeFiles/websockets.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
