@@ -259,7 +259,7 @@ int send_file(char *tx_file, int s_id, int tx_mode, unsigned short es_len, unsig
 #ifdef _MSC_VER
 	if((fp = fopen(tx_file, "rb")) == NULL) {
 #else
-	if((fp = fopen64(tx_file, "rb")) == NULL) {
+	if((fp = fopen(tx_file, "rb")) == NULL) {
 #endif
 	  printf("Error: unable to open tx_file %s\n", tx_file);
 	  fflush(stdout);

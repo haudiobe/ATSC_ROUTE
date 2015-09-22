@@ -55,6 +55,9 @@
 #if (defined(MSDOS) || defined(_MSC_VER))       /* but also for others, e.g. sun... */
 #define NEED_BCOPY
 #define bcmp(a,b,n) memcmp(a,b,n)
+#else
+#define NEED_BCOPY
+#define bcmp(a,b,n) memcmp(a,b,n)
 #endif
 
 #ifdef NEED_BCOPY

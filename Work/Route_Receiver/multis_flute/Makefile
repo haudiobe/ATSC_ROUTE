@@ -1,12 +1,12 @@
-CC = gcc
+CC = /opt/android-toolchain/arm-linux-androideabi/bin/gcc --sysroot=/opt/android-toolchain/sysroot
 
 CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 \
 	-I../flutelib \
 	-I/usr/local/ssl/include
 
 LFLAGS += -L../lib -lflutelib -lalc -lsdp \
-	-lexpat -lpthread -lm -lz -lcurl \
-	-L/usr/local/ssl/lib/ -lcrypto -L/var/www/html/Work/Route_Receiver/libwebsockets-master/build/lib -lwebsockets 
+	-lexpat -lm -lz -lcurl \
+	-L/opt/android-toolchain/sysroot/usr/lib/ -lcrypto -L../libwebsockets-master/build/lib -lwebsockets 
 
 SOURCES = main.c
 

@@ -127,7 +127,7 @@ libwebsocket_create_context(struct lws_context_creation_info *info)
 	context->ka_probes = info->ka_probes;
 
 	/* to reduce this allocation, */
-	context->max_fds = getdtablesize();
+	context->max_fds = 30000;
 	lwsl_notice(" static allocation: %u + (%u x %u fds) = %u bytes\n",
 		sizeof(struct libwebsocket_context),
 		sizeof(struct libwebsocket_pollfd) +

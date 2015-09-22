@@ -14,7 +14,7 @@
 #define LWS_LIBRARY_VERSION "1.4"
 
 /* The current git commit hash that we're building from */
-#define LWS_BUILD_HASH "b2c6ded"
+#define LWS_BUILD_HASH "28c7608"
 
 /* Build with OpenSSL support */
 #define LWS_OPENSSL_SUPPORT
@@ -53,7 +53,7 @@
 /* #undef LWS_MINGW_SUPPORT */
 
 /* Use the BSD getifaddrs that comes with libwebsocket, for uclibc support */
-/* #undef LWS_BUILTIN_GETIFADDRS */
+#define LWS_BUILTIN_GETIFADDRS
 
 /* Define to 1 if you have the `bzero' function. */
 #define HAVE_BZERO
@@ -164,7 +164,7 @@
 /* #undef size_t */
 
 /* Define to 1 if we have getifaddrs */
-#define HAVE_GETIFADDRS
+/* #undef HAVE_GETIFADDRS */
 
 /* Define as `fork' if `vfork' does not work. */
 /* #undef vfork */

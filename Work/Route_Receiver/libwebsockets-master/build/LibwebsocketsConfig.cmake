@@ -7,7 +7,7 @@
 get_filename_component(LWS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 # Set the include directories.
-set(LIBWEBSOCKETS_INCLUDE_DIRS "/var/www/html/Work/Route_Receiver/libwebsockets-master/lib;/var/www/html/Work/Route_Receiver/libwebsockets-master/build")
+set(LIBWEBSOCKETS_INCLUDE_DIRS "/var/www/html/android/ATSC_ROUTE/Work/Route_Receiver/libwebsockets-master/lib;/var/www/html/android/ATSC_ROUTE/Work/Route_Receiver/libwebsockets-master/build")
 
 # Include the project Targets file, this contains definitions for IMPORTED targets.
 include(${LWS_CMAKE_DIR}/LibwebsocketsTargets.cmake)

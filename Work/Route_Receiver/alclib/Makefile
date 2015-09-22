@@ -1,4 +1,4 @@
-CC = gcc
+CC = /opt/android-toolchain/arm-linux-androideabi/bin/gcc --sysroot=/opt/android-toolchain/sysroot
 
 CFLAGS += -Wall -O3 -g -fPIC -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE \
 	-D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE

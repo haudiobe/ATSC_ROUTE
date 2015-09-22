@@ -56,7 +56,7 @@ extern "C" {
  * If you want to compile the code in a system where SSM is not supported
  * undefine SSM. For example in Windows 2000 SSM is not supported. */
 
-#define SSM
+//#define SSM
 
 #define USE_ZLIB /**< Use ZLIB compression library */
 #define USE_RETRIEVE_UNIT /**< Use retrieve_unit() function */
