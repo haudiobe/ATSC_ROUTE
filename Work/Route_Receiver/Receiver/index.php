@@ -29,7 +29,8 @@ Start a channel before
 			<button type="button" id="mute" class="icon-volume-2"></button>
 			<input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
 			<button type="button" id="full-screen" class="icon-fullscreen-alt"></button>
-			<img src="thumbs/Progress_bar.gif" id="progress" alt="Status" style="width:780px;height:12px;">
+                        <img id="settingsbtn" src="thumbs/settingsSmall.png" onclick="settingsPlayer()">
+			<img src="thumbs/Progress_bar.gif" id="progress" alt="Status" style="width:720px;height:12px;position:absolute;left: 215px;top: 10px;">
 		</div>
 	</div>
 <section>
@@ -46,6 +47,15 @@ Start a channel before
   </div>
 
 		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.jpg" /></a>
+     <p id="AdSel">Ad Selection</p> 
+        <div class="onoffswitch">
+            <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+        <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+       </label>
+      </div>
+     <div id="settingsDiv"></div>
     </body>
 </html>
 
@@ -251,10 +261,13 @@ var fullScreen = false;
 var muteButton;
 var fullScreenButton;
 var volumeValue;
+var audiotrackflag=0;
+var audio_num_list_entries=3; // Change for different number of audio tracks.
 
 
 window.onload = function()
 {  
+    document.getElementById("myonoffswitch").checked = ('<?php echo intval(file_get_contents("RcvConfig.txt")); ?>' == 2);	
     fragmentLoadErrorCount = 0;
 	logger.clear();
     logger.log('Ready');
@@ -569,5 +582,118 @@ Logger.prototype.clear = function() {
 var logger = new Logger('log');
 
 logger.log('');
+
+   //Function for the Ad selection checkbox.
+   function checkthis(ele)
+           {   
+                if(!ele.checked )
+                {
+                       audiotrackflag=0;
+                       if(!(document.getElementById('button1')== null))
+                       {  document.getElementById('button1').remove();
+                          $('#settingsDiv').hide();
+                       }
+                       $.ajax({
+                          type: 'POST',
+                          url: "ReceiverConfig/writeAdSelFile.php",
+                          datatype: "json",
+                          data: {num: 1},// 1 for Broadband
+                          }).done( function() {       
+                       });
+                }
+                else
+                {
+                       audiotrackflag=0;
+                          $('#settingsDiv').hide();
+                          for(var i=1;i<=audio_num_list_entries;i++){
+                                if(!(document.getElementById('button'+i)== null))                         
+                                    document.getElementById('button'+i).remove();
+                          }
+                       $.ajax({
+                          type: 'POST',
+                          url: "ReceiverConfig/writeAdSelFile.php",
+                          datatype: "json",
+                          data: {num: 2},// 2 for Broadcast
+                          }).done( function() {           
+                       });
+                }
+           }
+       
+     $('#video-container').append(document.getElementById('settingsDiv'));  
+     
+     //Function for the player settings button.
+     function settingsPlayer()
+     {
+       // var audio_num_list_entries=3;
+         var audiotrack=["English","German","Italian"];
+         if($('#settingsDiv').css('display') == 'none')
+         { 
+            $('#settingsDiv').show();
+            var height=40;
+            if(audiotrackflag == 0)
+            {
+              if(document.getElementById("myonoffswitch").checked) // In case of Broadcast
+              {
+                document.getElementById('settingsDiv').style.height=height+'px';
+                btn = document.createElement('input');
+                btn.setAttribute('type', 'button');
+                btn.setAttribute('id', 'button1');
+                btn.setAttribute('value', 'English');
+                btn.style.height='40px';
+                btn.style.width='85px';
+                btn.style.float='right';
+                btn.style.background='#00537D';
+                $('#settingsDiv').append(btn);
+                btn.onclick = function () {
+                  btn.style.color='gray';
+                  audioTrackSelect(document.getElementById('button1').value);
+                };
+                audiotrackflag=1;
+              }
+              else                                                // In case of Broadband
+              {
+                for(var i=1;i<=audio_num_list_entries;i++)
+                {
+                  document.getElementById('settingsDiv').style.height=height+'px';
+                  height=height+40;
+                  btn = document.createElement('input');
+                  btn.setAttribute('type', 'button');
+                  btn.setAttribute('id', 'button'+i);
+                  btn.setAttribute('value', audiotrack[i-1]);
+                  btn.style.height='40px';
+                  btn.style.width='85px';
+                  btn.style.float='right';
+                  btn.style.background='#00537D';
+                  $('#settingsDiv').append(btn);
+                  trackName=audiotrack[i-1];
+                  (function(trackName){
+                    btn.onclick = function () {
+                      for(var j=1;j<=audio_num_list_entries;j++)
+                      {
+                         document.getElementById('button'+j).style.color='black';
+                      }
+                      this.style.color='gray';
+                      audioTrackSelect(trackName);
+                      };
+                  })(trackName);
+                
+                }
+                audiotrackflag=1;
+              }
+            }
+         }
+         else
+            $('#settingsDiv').hide();
+      
+     }
+    
+    $('#settingsDiv').on("mouseleave",function(){
+        $('#settingsDiv').hide();
+    });
+     
+     function audioTrackSelect(input)
+     {
+         console.log(input);
+     }
 
 </script>
