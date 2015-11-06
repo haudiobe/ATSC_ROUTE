@@ -47,7 +47,7 @@ Start a channel before
   </div>
 
 		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.jpg" /></a>
-     <p id="AdSel">Ad Selection</p> 
+     <p id="AdSel">Unicast</p> 
         <div class="onoffswitch">
             <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
         <label class="onoffswitch-label" for="myonoffswitch">
@@ -262,7 +262,7 @@ var muteButton;
 var fullScreenButton;
 var volumeValue;
 var audiotrackflag=0;
-var audio_num_list_entries=3; // Change for different number of audio tracks.
+var audio_num_list_entries=2; // Change for different number of audio tracks.
 
 
 window.onload = function()
@@ -281,6 +281,8 @@ window.onload = function()
 	  alternateServerIP = JSON.parse(e);
 	  alternateLocation1 = "http://" + alternateServerIP + alternateLocation1;
 	  alternateLocation2 = "http://" + alternateServerIP + alternateLocation2;
+	  alternateLocationK = "http://" + alternateServerIP + alternateLocationK;
+	  
 	  $.ajax({
                       type: 'POST',
                       url: "ReceiverConfig/setIP.php",
@@ -307,6 +309,9 @@ window.onload = function()
 	var volumeBar = document.getElementById("volume-bar");
 	volumeValue = volumeBar.value;
     var img = document.getElementById('progress');
+	img.style.visibility = 'hidden';
+	
+    img = document.getElementById('settingsbtn');
 	img.style.visibility = 'hidden';
 
 	// Event listener for the mute button
@@ -416,6 +421,9 @@ function playingNow(e)
     var timeNow = new Date();
     console.log("***************** Playback started, " + timeNow + timeNow.getMilliseconds());
     var img = document.getElementById('progress');
+    img.style.visibility = 'visible';
+    
+	img = document.getElementById('settingsbtn');
     img.style.visibility = 'visible';	
     //switchChannel();
 }
@@ -443,6 +451,8 @@ function switchChannel()
 var alternateServerIP = "";
 var alternateLocation1 = "/Work/Route_Sender/bin/ToS_1_0";
 var alternateLocation2 = "/Work/Route_Sender/bin/Elysium_1_0";
+var alternateLocationK = "/Work/Route_Sender/bin/K_ToS_1_0";
+var switchAudio = false;
 var monitoringInterval = 200;
 var monitoringWindowSize = 6;
 var monitoringTime = 0;
@@ -471,7 +481,15 @@ function start(channel)
 	}
 	
 	reTuneProcess = [];
-
+	
+	if(channel === 1)
+		audio_num_list_entries = 2;
+	else
+		audio_num_list_entries = 1;
+	
+	switchAudio = false;
+	//Todo: re-init the lists
+  
   //Make sure no flute process is running
   $.post(
           "Cleanup.php",
@@ -625,11 +643,12 @@ logger.log('');
      function settingsPlayer()
      {
        // var audio_num_list_entries=3;
-         var audiotrack=["English","German","Italian"];
+         var audiotrack=["English","Italian"];
          if($('#settingsDiv').css('display') == 'none')
          { 
             $('#settingsDiv').show();
             var height=40;
+
             if(audiotrackflag == 0)
             {
               if(document.getElementById("myonoffswitch").checked) // In case of Broadcast
@@ -694,6 +713,10 @@ logger.log('');
      function audioTrackSelect(input)
      {
          console.log(input);
+		 if(input === "Italian")
+			 switchAudio = true;
+		 else
+			 switchAudio = false;
      }
 
 </script>
