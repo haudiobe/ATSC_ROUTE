@@ -19,24 +19,15 @@ and open the template in the editor.
             top: 20px;
             color: #A0522D;
         }
-        #AdSel{
-             position: absolute;
-            left: 100px;
-            top: 93px;
-        }
-        .onoffswitch {
-            position: absolute; width: 130px;left: 200px;top: 100px;
-           -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-       }
        #ip{
            position: absolute;
             left: 100px;
-            top: 180px;
+            top: 140px;
        }
        #set{
             position: absolute;
             left: 380px;
-            top: 180px;
+            top: 140px;
             width: 55px;
        }
        #initial{
@@ -51,14 +42,7 @@ and open the template in the editor.
         // put your code here
         ?>
         <h1> Receiver Settings </h1>
-        <p id="AdSel">Ad Selection</p> 
-        <div class="onoffswitch">
-            <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-        <label class="onoffswitch-label" for="myonoffswitch">
-        <span class="onoffswitch-inner"></span>
-        <span class="onoffswitch-switch"></span>
-       </label>
-      </div>
+        
     <div id="ip">
      IP Address: <input type="text" id="box1" style="width:40px;">.<input type="text" id="box2" style="width:40px;">.
       <input type="text" id="box3"style="width:40px;">.<input type="text" id="box4"style="width:40px;">   
@@ -71,7 +55,7 @@ and open the template in the editor.
       var result;
       function onloadfunc()
       {
-		document.getElementById("myonoffswitch").checked = ('<?php echo intval(file_get_contents("../RcvConfig.txt")); ?>' == 2);	
+		//document.getElementById("myonoffswitch").checked = ('<?php echo intval(file_get_contents("../RcvConfig.txt")); ?>' == 2);	
 		Configr();		
           $.ajax({
                       type: 'POST',
@@ -115,29 +99,7 @@ and open the template in the editor.
                 
                   });
             }
-           function checkthis(ele)
-           {   
-                if(!ele.checked )
-                {
-                 $.ajax({
-                      type: 'POST',
-                      url: "writeAdSelFile.php",
-                       datatype: "json",
-                      data: {num: 1},// 1 for Broadcast
-                  }).done( function() {       
-                  });
-               }
-               else
-               {
-                   $.ajax({
-                      type: 'POST',
-                      url: "writeAdSelFile.php",
-                       datatype: "json",
-                      data: {num: 2},// 2 for Broadband
-                  }).done( function() {           
-                  });
-               }
-           }
+           
       
   </script>
     </body>
