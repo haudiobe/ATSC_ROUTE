@@ -1078,7 +1078,7 @@ video::-webkit-media-controls-enclosure {
   display:none !important;
 }
 .onoffswitch {
-    position: absolute; width: 130px;right: 180px;top: 13px;
+    position: absolute; width: 80px;right: 180px;top: 13px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {
@@ -1098,21 +1098,21 @@ video::-webkit-media-controls-enclosure {
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "Broadcast";
+    content: "Off";
     padding-left: 10px;
-    background-color: #34A7C1; color: #FFFFFF;
+    background-color: #EEEEEE; color: #999999;
 }
 .onoffswitch-inner:after {
-    content: "Broadband";
+    content: "On";
     padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
+    background-color: #34A7C1; color: #FFFFFF;
     text-align: right;
 }
 .onoffswitch-switch {
     display: block; width: 18px; margin: 6px;
     background: #FFFFFF;
     position: absolute; top: 0; bottom: 0;
-    right: 95px;
+    right: 50px;
     border: 2px solid #999999; border-radius: 20px;
     transition: all 0.3s ease-in 0s; 
 }
@@ -1125,14 +1125,14 @@ video::-webkit-media-controls-enclosure {
 #AdSel{
     position: absolute; 
     width: 130px;
-    right: 270px;
+    right: 180px;
     top: 8px;
 }
 
 #settingsbtn{
     position: absolute;
     height: 19px;
-    width: 25px;
+    width: 19px;
     left: 170px;
     top: 8px;
 }

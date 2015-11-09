@@ -28,7 +28,6 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
- var triggerCnt = 0;
 MediaPlayer.dependencies.FragmentLoader = function () {
     "use strict";
 
@@ -95,20 +94,18 @@ MediaPlayer.dependencies.FragmentLoader = function () {
                 };
 
                 if(request.mediaType == "audio")
-                {
-                    triggerCnt=triggerCnt+1;
-                    //console.log("*********** triggerCnt: " + triggerCnt);
-                    
-                    if(switchAudio)//triggerCnt > 20 && triggerCnt < 200)
+                {                    
+                    if(switchAudio)
                     {
-                            //console.log("*********** Here !!!!!!!!!!!!!: " + triggerCnt);                    
-                            var Path = request.url.substring(0,request.url.lastIndexOf("/"));
-                            var SegmentName = request.url.substring(request.url.lastIndexOf("/"));
-                            var Folder = Path.substring(Path.lastIndexOf("/"));
-
+                        var Path = request.url.substring(0,request.url.lastIndexOf("/"));
+                        var SegmentName = request.url.substring(request.url.lastIndexOf("/"));
+                        var Folder = Path.substring(Path.lastIndexOf("/"));
+                        
+                        if(Folder === "/DASH_Content1" && SegmentName.substring(1,6) === "audio")
+                        {
                             var newPath = alternateLocationK;
                             request.url = newPath + SegmentName;
-                            
+                        }
                     }
                 }
                 xhrs.push(req);
@@ -184,9 +181,9 @@ MediaPlayer.dependencies.FragmentLoader = function () {
                         var Folder = Path.substring(Path.lastIndexOf("/"));
 
                         var newPath = (Folder === "/DASH_Content1") ? alternateLocation1 : alternateLocation2;
-                        //request.url = newPath + SegmentName;
+                        request.url = newPath + SegmentName;
 
-                        //fragmentLoadErrorCount = fragmentLoadErrorCount + 1;
+                        fragmentLoadErrorCount = fragmentLoadErrorCount + 1;
                         
                         remainingAttempts--;
                         setTimeout(function() {
