@@ -482,13 +482,21 @@ function start(channel)
 	
 	reTuneProcess = [];
 	
+        //Re-init the lists
+        audiotrackflag=0;
+        $('#settingsDiv').hide();
+        for(var i=1;i<=audio_num_list_entries;i++){
+            if(!(document.getElementById('button'+i)== null))                         
+                document.getElementById('button'+i).remove();
+        }
+        
 	if(channel === 1)
 		audio_num_list_entries = 2;
 	else
 		audio_num_list_entries = 1;
 	
 	switchAudio = false;
-	//Todo: re-init the lists
+	
   
   //Make sure no flute process is running
   $.post(
@@ -663,6 +671,8 @@ logger.log('');
                 btn.style.float='right';
                 btn.style.background='#00537D';
                 $('#settingsDiv').append(btn);
+                btn.style.color='gray'; // To set English as default track. 
+                audioTrackSelect(document.getElementById('button1').value); //Calling once for default setting.
                 btn.onclick = function () {
                   btn.style.color='gray';
                   audioTrackSelect(document.getElementById('button1').value);
@@ -673,30 +683,34 @@ logger.log('');
               {
                 for(var i=1;i<=audio_num_list_entries;i++)
                 {
-                  document.getElementById('settingsDiv').style.height=height+'px';
-                  height=height+40;
-                  btn = document.createElement('input');
-                  btn.setAttribute('type', 'button');
-                  btn.setAttribute('id', 'button'+i);
-                  btn.setAttribute('value', audiotrack[i-1]);
-                  btn.style.height='40px';
-                  btn.style.width='85px';
-                  btn.style.float='right';
-                  btn.style.background='#00537D';
-                  $('#settingsDiv').append(btn);
-                  trackName=audiotrack[i-1];
-                  (function(trackName){
-                    btn.onclick = function () {
-                      for(var j=1;j<=audio_num_list_entries;j++)
-                      {
-                         document.getElementById('button'+j).style.color='black';
-                      }
-                      this.style.color='gray';
-                      audioTrackSelect(trackName);
-                      };
-                  })(trackName);
-                
+                  if(udchannel===1 || (udchannel === 2 && i === 1))
+                  {
+                    document.getElementById('settingsDiv').style.height=height+'px';
+                    height=height+40;
+                    btn = document.createElement('input');
+                    btn.setAttribute('type', 'button');
+                    btn.setAttribute('id', 'button'+i);
+                    btn.setAttribute('value', audiotrack[i-1]);
+                    btn.style.height='40px';
+                    btn.style.width='85px';
+                    btn.style.float='right';
+                    btn.style.background='#00537D';
+                    $('#settingsDiv').append(btn);  
+                    trackName=audiotrack[i-1];
+                    (function(trackName){
+                      btn.onclick = function () {
+                       for(var j=1;j<=audio_num_list_entries;j++)
+                       {
+                          document.getElementById('button'+j).style.color='black';
+                       }
+                       this.style.color='gray';
+                       audioTrackSelect(trackName);
+                       };
+                    })(trackName);
+                  }
                 }
+                document.getElementById('button'+1).style.color='gray'; // To set English as default track. 
+                audioTrackSelect(document.getElementById('button'+1).value); //Calling once for default setting.
                 audiotrackflag=1;
               }
             }
