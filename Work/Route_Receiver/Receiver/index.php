@@ -29,7 +29,7 @@ Start a channel before
 			<button type="button" id="mute" class="icon-volume-2"></button>
 			<input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
 			<button type="button" id="full-screen" class="icon-fullscreen-alt"></button>
-                        <img id="settingsbtn" src="thumbs/settingsSmall.png" onclick="settingsPlayer()">
+                        <img id="settingsbtn" src="thumbs/settingsSmall.jpg" onclick="settingsPlayer()">
 			<img src="thumbs/Progress_bar.gif" id="progress" alt="Status" style="width:720px;height:12px;position:absolute;left: 215px;top: 10px;">
 		</div>
 	</div>
@@ -45,7 +45,11 @@ Start a channel before
       </div>
     </div>
   </div>
-
+  <div>
+    <div style="vertical-align: right;">
+	  <img src="thumbs/ToS.jpg" id="ToSAudio" style="height:20px">
+    </div>
+  </div>
 		<a alt="Settings" id="image" href="ReceiverConfig/index.php"><img height="42" width="42" src="thumbs/settings.jpg" /></a>
      <p id="AdSel">Unicast</p> 
         <div class="onoffswitch">
@@ -313,6 +317,9 @@ window.onload = function()
 	
     img = document.getElementById('settingsbtn');
 	img.style.visibility = 'hidden';
+	
+	img = document.getElementById('ToSAudio');
+	img.style.visibility = 'hidden';	
 
 	// Event listener for the mute button
 	muteButton.addEventListener("click", function() {
@@ -643,6 +650,9 @@ logger.log('');
                           }).done( function() {           
                        });
                 }
+				
+				if(document.getElementById('settingsbtn').style.visibility !== 'hidden')
+					start(udchannel);
            }
        
      $('#video-container').append(document.getElementById('settingsDiv'));  
@@ -728,7 +738,11 @@ logger.log('');
      {
          console.log(input);
 		 if(input === "Italian")
+		 {
 			 switchAudio = true;
+			 var img = document.getElementById('ToSAudio');
+			 img.style.visibility = 'visible';
+		 }
 		 else
 			 switchAudio = false;
      }
