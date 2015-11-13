@@ -35,7 +35,7 @@ exec("sudo killall LoopService.sh");
 	 $endpos=strpos($output2," ",$startpos);
 	 //echo $endpos;
 	 $thisIP = substr($output2,$startpos,$endpos-$startpos);
-	 if($thisIP !== "127.0.0.1")
+	 if($thisIP === "127.0.0.1")
 	 {
 		$ip[$index]=$thisIP;
 		$index = $index + 1;

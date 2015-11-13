@@ -283,9 +283,12 @@ window.onload = function()
 			  datatype: "json",
 	}).done( function(e) {
 	  alternateServerIP = JSON.parse(e);
-	  alternateLocation1 = "http://" + alternateServerIP + alternateLocation1;
-	  alternateLocation2 = "http://" + alternateServerIP + alternateLocation2;
-	  alternateLocationK = "http://" + alternateServerIP + alternateLocationK;
+	var cacheIP = alternateServerIP;
+	if(cacheIP === "0.0.0.0")
+			cacheIP = "127.0.0.1"
+	  alternateLocation1 = "http://" + cacheIP + alternateLocation1;
+	  alternateLocation2 = "http://" + cacheIP + alternateLocation2;
+	  alternateLocationK = "http://" + cacheIP + alternateLocationK;
 	  
 	  $.ajax({
                       type: 'POST',

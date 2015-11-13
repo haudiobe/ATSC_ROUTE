@@ -7,8 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+         <script src="../jquery-1.11.1.min.js"></script>
           <link rel="stylesheet" type="text/css" href="SenderUIstyle.css">
         <title></title>
     </head>
