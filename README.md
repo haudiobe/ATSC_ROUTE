@@ -20,6 +20,8 @@ Simply start the service from sender side, and tune into a channel in the receiv
 
 For any issues, report in the issues section.
 
+Further usage guides under /Doc folder
+
 Note: The code is provided as-is, and currently, it does not provide reference implementation of any of the standards involved.
 
 Licensing: All the content herein is based on Creative Commons Attribution. The source code is based on other Open-Source licensed repositories.
