@@ -6,7 +6,7 @@ CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99
 
 LFLAGS += -L../lib -lflutelib -lalc -lsdp \
 	-lexpat -lpthread -lm -lz -lcurl \
-	-L/usr/local/ssl/lib/ -lcrypto -L../libwebsockets-master/build/lib -lwebsockets 
+	-L/usr/local/ssl/lib/ -lcrypto -L/var/www/html/Work/Route_Receiver/libwebsockets-master/build/lib -lwebsockets 
 
 SOURCES = main.c
 

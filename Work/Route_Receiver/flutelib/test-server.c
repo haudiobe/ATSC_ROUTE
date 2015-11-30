@@ -25,16 +25,12 @@ static int callback_http(struct libwebsocket_context * this,
 // what comes there, libwebsockets will do everything for you. For more info see
 // http://git.warmcat.com/cgi-bin/cgit/libwebsockets/tree/lib/libwebsockets.h#n597
 unsigned char *respBuf = NULL;
-size_t dataLenVideo = 100000;
-unsigned long dataOffsetVideo = 0;
+size_t dataLenVideo = 32000;
 uint32_t mcounter = 1;
-double lastSendTimeVideo = 0, periodVideo = 0.01;
 
 unsigned char *respBufAudio = NULL;
-size_t dataLenAudio = 10000;
-unsigned long dataOffsetAudio = 0;
+size_t dataLenAudio = 3200;
 uint32_t mcounterAudio = 1;
-double lastSendTimeAudio = 0, periodAudio = 0.01;
 
 struct libwebsocket *wsiSave[2];//1 :video, 2 audio
 static int fileCounter = 1;
@@ -62,6 +58,19 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
            
             int i;
 			
+			//respBuf[LWS_SEND_BUFFER_PRE_PADDING + dataLenVideo - 1] = '\0';
+			//savelen = len;
+           
+            // pointer to `void *in` holds the incomming request
+            // we're just going to put it in reverse order and put it in `respBuf` with
+            // correct offset. `len` holds length of the request.
+            //for (i=0; i < len; i++) {
+            //    respBuf[LWS_SEND_BUFFER_PRE_PADDING + (len - 1) - i ] = ((char *) in)[i];
+            //}
+           
+            // log what we recieved and what we're going to send as a response.
+            // that disco syntax `%.*s` is used to print just a part of our buffer
+            // http://stackoverflow.com/questions/5189071/print-part-of-char-array
             printf("received data: %s: %x, %x\n", (char *) in, this, wsi);
 
 			if(strncmp((char *) in, "video",10) == 0)
@@ -69,7 +78,7 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 				respBuf = (unsigned char*) malloc(LWS_SEND_BUFFER_PRE_PADDING + dataLenVideo +
 															 LWS_SEND_BUFFER_POST_PADDING);
 				
-				memset(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],0,dataLenVideo);
+				memset(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],44,dataLenVideo);
 				wsiSave[0] = wsi;
 			}
 			
@@ -78,10 +87,19 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 				respBufAudio = (unsigned char*) malloc(LWS_SEND_BUFFER_PRE_PADDING + dataLenAudio+
 															 LWS_SEND_BUFFER_POST_PADDING);
 				
-				memset(&respBufAudio[LWS_SEND_BUFFER_PRE_PADDING],0,dataLenAudio);
+				memset(&respBufAudio[LWS_SEND_BUFFER_PRE_PADDING],44,dataLenAudio);
 				wsiSave[1] = wsi;
 			}
            
+            // send response
+            // just notice that we have to tell where exactly our response starts. That's
+            // why there's `respBuf[LWS_SEND_BUFFER_PRE_PADDING]` and how long it is.
+            // we know that our response has the same length as request because
+            // it's the same message in reverse order.
+            //libwebsocket_write(wsi, &respBuf[LWS_SEND_BUFFER_PRE_PADDING], len, LWS_WRITE_TEXT);
+           
+            // release memory back into the wild
+            //free(buf);
             break;
         }
 		
@@ -97,35 +115,17 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
                 struct packetBuffer toSend = newReadFromBuffer();
                 if(toSend.length != 0)
                 {
-					struct timeval timeNow;
-					double timeNowDouble; 
                     char packetFileName[1000];
-					
-				    memcpy(&respBuf[LWS_SEND_BUFFER_PRE_PADDING + dataOffsetVideo],toSend.buffer,toSend.length);
-
+				    memcpy(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],toSend.buffer,toSend.length);
 				    // send our asynchronous message LWS_WRITE_BINARY or LWS_WRITE_TEXT
-
-					gettimeofday(&timeNow, NULL);
-
-					timeNowDouble = timeNow.tv_sec + (0.000001f * timeNow.tv_usec);
-                    
-					if(lastSendTimeVideo == 0)
-						lastSendTimeVideo = timeNowDouble;
-
-					if(timeNowDouble - lastSendTimeVideo > periodVideo || (dataOffsetVideo + toSend.length) > 60000)
-					{
-				    	libwebsocket_write(wsi, &respBuf[LWS_SEND_BUFFER_PRE_PADDING], dataOffsetVideo + toSend.length, LWS_WRITE_BINARY);
-                        FILE * tempff = fopen("mergedFile.mp4","a");
-                        
-                        fwrite(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],1,dataOffsetVideo + toSend.length, tempff);
-                        fclose(tempff);
-                        lastSendTimeVideo = timeNowDouble;
-                        dataOffsetVideo = 0;
-					}
-                    else
-                        dataOffsetVideo += toSend.length;
+				    libwebsocket_write(wsi, &respBuf[LWS_SEND_BUFFER_PRE_PADDING], toSend.length, LWS_WRITE_BINARY);
 
                     free(toSend.buffer);
+                    //FILE * tempff = fopen("mergedFile.mp4","a");
+                    
+                    //fwrite(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],1,toSend.length, tempff);
+                    //fclose(tempff);
+
                     
                     sprintf(packetFileName,"packet%3d.mp4",fileCounter);
                     fileCounter++;
@@ -152,32 +152,13 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 					libwebsocket_callback_on_writable(this, wsi);
 					return 0;
 				}
-                
 				uint32_t nwC = htonl (mcounterAudio);
                 struct packetBuffer toSend = newReadFromBuffer();
                 if(toSend.length != 0)
                 {
-					struct timeval timeNow;
-					double timeNowDouble; 
-                    
-				    memcpy(&respBufAudio[LWS_SEND_BUFFER_PRE_PADDING + dataOffsetAudio],toSend.buffer,toSend.length);
+				    memcpy(&respBufAudio[LWS_SEND_BUFFER_PRE_PADDING],toSend.buffer,toSend.length);
 				    // send our asynchronous message LWS_WRITE_BINARY or LWS_WRITE_TEXT
-				    
-					gettimeofday(&timeNow, NULL);
-
-					timeNowDouble = timeNow.tv_sec + (0.000001f * timeNow.tv_usec);
-
-					if(lastSendTimeAudio == 0)
-						lastSendTimeAudio = timeNowDouble;
-
-					if(timeNowDouble - lastSendTimeAudio > periodAudio || (dataOffsetAudio + toSend.length) > 10000)
-					{
-    				    libwebsocket_write(wsi, &respBufAudio[LWS_SEND_BUFFER_PRE_PADDING], dataOffsetAudio + toSend.length, LWS_WRITE_BINARY);
-                        lastSendTimeAudio = timeNowDouble;
-                        dataOffsetAudio = 0;
-					}
-                    else
-                        dataOffsetAudio += toSend.length;
+				    libwebsocket_write(wsi, &respBufAudio[LWS_SEND_BUFFER_PRE_PADDING], toSend.length, LWS_WRITE_BINARY);
 
                     free(toSend.buffer);
                 }
