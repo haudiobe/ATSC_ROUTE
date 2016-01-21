@@ -76,6 +76,7 @@ $periods = parseMPD($dom, !$adInsertion ? NULL : $domAd);
 $cumulativeOriginalDuration = 0;    //Cumulation of period duration on source MPD
 $cumulativeUpdatedDuration = 0;    //Cumulation of period duration on updated MPD
 
+date_default_timezone_set("UTC");
 $originalAST = new DateTime($periods[0]['node']->parentNode->getAttribute("availabilityStartTime"));   
 
 $periods[0]['node']->parentNode->setAttribute("type","dynamic");
