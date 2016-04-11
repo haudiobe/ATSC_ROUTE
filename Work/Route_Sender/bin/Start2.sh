@@ -10,11 +10,11 @@
 DASHContent=ToSLC_0_5
 DASHContent2=ElysiumLC_0_5
 
-if [ "$#" -gt 0 ] && [ "$1" -eq 1000 ]
-then
-  DASHContent=ToS_1_0
-  DASHContent2=Elysium_1_0
-fi
+#if [ "$#" -gt 0 ] && [ "$1" -eq 1000 ]
+#then
+  DASHContent=Hotel
+  DASHContent2=Wave
+#fi
 
 FLUTESender=.
 
@@ -34,21 +34,7 @@ sdp=SDP1.sdp
 sdp2=SDP2.sdp					#SDP to be used by sender
 
 sdp3=SDP3.sdp
-sdp4=SDP4.sdp					#SDP to be used by sender
-
-#Extract segment durations from SegDurations.txt files in the respective directory
-a=$(awk '{print $2} ' $DASHContent/SegDurations)
-DUR=($a);			
-videoSegDur=${DUR[0]}		
-audioSegDur=${DUR[1]}
-echo $videoSegDur $audioSegDur
-
-b=$(awk '{print $2} ' $DASHContent2/SegDurations)
-DUR2=($b);
-video2SegDur=${DUR2[0]}		
-audio2SegDur=${DUR2[1]}
-
-echo $video2SegDur $audio2SegDur	
+sdp4=SDP4.sdp					#SDP to be used by sender	
 
 encodingSymbolsPerPacket=1		#A value of zero indicates that different chunks of segment have different delay
 								#and maximum transmission unit size is used (e.g. 1500 bytes per packet)
@@ -65,8 +51,8 @@ Log4=Send_Log_Audio2.txt			#Log containing delays corresponding to FLUTE server
 echo "Converting MPD"
 
 #Brackets are used to temporarilSimAdminy change working directory
-(cd $DASHContent && ./ConvertMPD_Malek_CONVERTONLY.sh MultiRate.mpd 1 2 $Delay $encodingSymbolsPerPacket $videoSegDur $audioSegDur $FLUTEVideoInput $FLUTEAudioInput)
-(cd $DASHContent2 && ./ConvertMPD_Malek_CONVERTONLY.sh MultiRate.mpd 1 2 $Delay2 $encodingSymbolsPerPacket $video2SegDur $audio2SegDur $FLUTEVideoInput $FLUTEAudioInput)
+./ConvertMPD.sh $DASHContent MultiRate.mpd $Delay
+./ConvertMPD.sh $DASHContent2 MultiRate.mpd $Delay
 
 chmod 777 $DASHContent/*
 chmod 777 $DASHContent2/*
