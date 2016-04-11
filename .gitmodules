@@ -1,0 +1,3 @@
+[submodule "Work/Route_Sender/bin/Hotel"]
+	path = Work/Route_Sender/bin/Hotel
+	url = https://github.com/waqarz/Hotel
