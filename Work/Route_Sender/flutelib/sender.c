@@ -1591,9 +1591,11 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 				  //printf("Current field is %llu\n",fileValue); //Malek El Khatib 19.08.2014 Commented this
 				  getNextLine = TRUE;
 				  gettimeofday(&currentTime, NULL);
-				  elapsedTime = fileValue - (unsigned long long)currentTime.tv_sec*1000000 - (unsigned long long)currentTime.tv_usec;
-				  if (elapsedTime >0)
-					  usleep (elapsedTime);
+				  if(fileValue > ((unsigned long long)currentTime.tv_sec*1000000 + (unsigned long long)currentTime.tv_usec))
+				  {
+				  		elapsedTime = fileValue - (unsigned long long)currentTime.tv_sec*1000000 - (unsigned long long)currentTime.tv_usec;
+					  	usleep (elapsedTime);
+				  }
 			  }
 			  else
 				  getNextLine = FALSE;
