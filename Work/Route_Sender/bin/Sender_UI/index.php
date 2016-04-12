@@ -96,14 +96,14 @@ and open the template in the editor.
 
   <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
   <div id="Ad">
-      Ad Time  :  <input type="number" id="AdTime" value="60" min="0" max="500" style="width:80px;" onchange="saveAdTime()"> sec
+      Ad Time  :  <input type="number" id="AdTime" value="60" min="0" max="800" style="width:80px;" onchange="saveAdTime()"> sec
   </div>
   <!--p id="status">Status</p-->
         <script>
             var flag=0;
               var es;
               var result;
-			  var totalTime = 750;
+			  var totalTime = 900;
 			  var timeOffset = 3;
 			  var timeProgress = 0;
 			  var progressCallback;
@@ -194,7 +194,7 @@ and open the template in the editor.
           function Offfunction()
             {
                 flag=1;
-                onloadfunction();
+                //onloadfunction();
 				var pBar = document.getElementById('progressor');
 				pBar.value = 0;
 				var perc = document.getElementById('percentage');
