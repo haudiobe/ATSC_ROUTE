@@ -11,9 +11,8 @@ header('Content-Type: text/event-stream');
 // recommended to prevent caching of event data.
 header('Cache-Control: no-cache');
 
-exec("sudo killall flute_sender");
 exec("sudo killall Start2.sh");
-exec("sudo killall LoopService.sh");
+exec("sudo killall flute_sender");
 
  $output2=shell_exec("sudo ifconfig");
  

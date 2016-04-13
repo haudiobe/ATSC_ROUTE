@@ -10,7 +10,7 @@ header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache'); 
 
 chdir("../");
-$command="sudo ./LoopService.sh 1000 &";
+$command="sudo nice --20 ./Start2.sh 1000 &>> ServiceLog.txt &";
 echo $command;
 $output=array();
 exec($command,$output);

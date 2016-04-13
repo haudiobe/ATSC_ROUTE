@@ -16,6 +16,13 @@ $audioFDTFile = "fdt_Audio.xml";
 $videoTimingFile = "FluteInput_Video.txt";
 $audioTimingFile = "FluteInput_Audio.txt";
 
+$videoDoc = NULL;
+$audioDoc = NULL;
+$videoInstance = NULL;
+$audioInstance = NULL;
+$videoTOI = 1;
+$audioTOI = 1;
+
 if(isset($_GET['AST']))
 {
     $AST_W3C=$_GET['AST'];
@@ -173,7 +180,7 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
             $audioSegmentTemplate->setAttribute("startNumber",$newAudioStartNumber);
         }
 		
-		generateFDTAndTiming($cumulativeOriginalDuration,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio);
+		generateFDTAndTiming($periodIndex == 0, $cumulativeOriginalDuration,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio);
     }
 
     $cumulativeDurationPreceedingPeriods = $cumulativeOriginalDuration; //Save it for later use
@@ -276,16 +283,9 @@ function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$
 	return min($nearestVideoSegmentEndingTime,$nearestAudioSegmentEndingTime);
 }
 
-function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
+function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
 {
-	global $videoFDTFile, $audioFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX;
-	static $firstcall = true;
-	static $videoDoc = NULL;
-	static $audioDoc = NULL;
-	static $videoInstance = NULL;
-	static $audioInstance = NULL;
-	static $videoTOI = 1;
-	static $audioTOI = 1;
+	global $videoFDTFile, $audioFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX, $videoDoc, $audioDoc, $videoInstance, $audioInstance, $videoTOI, $audioTOI;
 	
 	$videoTimescale = $videoSegmentTemplate->getAttribute("timescale");
 	$videoSegmentDuration = $videoSegmentTemplate->getAttribute("duration");
@@ -301,7 +301,7 @@ function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate
 	$audioMedia = $audioSegmentTemplate->getAttribute("media");
 	$audioInit = $audioSegmentTemplate->getAttribute("initialization");
 	
-	if($firstcall)
+	if($initialize)
 	{
 		$videoDoc = new DOMDocument('1.0');
 		$videoDoc->formatOutput = true;
@@ -323,7 +323,7 @@ function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate
 		$audioInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
 		$audioDoc->appendChild($audioInstance);
 		unlink($videoTimingFile);
-		unlink($audioTimingFile);		
+		unlink($audioTimingFile);
 	}
 	
 	echo "deltaVideo: " . $deltaVideo . ", Duration: " . $duration . PHP_EOL;
@@ -350,6 +350,8 @@ function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate
 	}
 
 	$videoDoc->save($videoFDTFile);
+	
+	//file_put_contents("ddbbgg.txt","Processing audio times with start TOI: " . $audioTOI . "\n",FILE_APPEND);
 
 	for($audioIndex = $audioStartNum ; ; $audioIndex++)
 	{
@@ -379,8 +381,6 @@ function generateFDTAndTiming($start,$videoSegmentTemplate,$audioSegmentTemplate
 	}
 
 	$audioDoc->save($audioFDTFile);
-	
-	$firstcall = false;
 }
 
 function somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durstr)

@@ -52,7 +52,7 @@ echo "Converting MPD"
 
 #Brackets are used to temporarilSimAdminy change working directory
 ./ConvertMPD.sh $DASHContent MultiRate.mpd $Delay
-./ConvertMPD.sh $DASHContent2 MultiRate.mpd $Delay
+./ConvertMPD.sh $DASHContent2 MultiRate.mpd $Delay2
 
 chmod 777 $DASHContent/*
 chmod 777 $DASHContent2/*

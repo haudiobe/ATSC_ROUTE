@@ -202,7 +202,19 @@ and open the template in the editor.
 				document.getElementById('AdTime').disabled = false;	
 				clearInterval(progressCallback);
 				timeProgress = 0;
-                onloadfunction();				
+				$.ajax({
+					//type: 'POST',
+					url: "onloadaction.php",
+					datatype: "json",
+				}).done( function(e) {
+					console.log("Completed Off job.");
+					if(restart == true)
+					{
+						Onfunction();
+						console.log("Asked restart.");
+						restart = false;
+					}
+				});			
             }
             
             function Set()
