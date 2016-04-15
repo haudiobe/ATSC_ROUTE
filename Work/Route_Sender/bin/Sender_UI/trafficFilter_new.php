@@ -1,17 +1,21 @@
 <?php
 
-$output=shell_exec("sudo ifconfig");
-$findme="eth";
-$pos = strpos($output, $findme);
-if ($pos === false) {
-    echo "The string '$findme' was not found in the string '$output'";
-}else {
-    $startpos=$pos;
-    $endpos=strpos($output," ",$startpos);
-    //echo $endpos;
-    $netname = substr($output,$startpos,$endpos-$startpos);
-    echo $netname;
-} 
+//$output=shell_exec("sudo ifconfig");
+//
+//$findme="eth";
+//$pos = strpos($output, $findme);
+//if ($pos === false) {
+//    echo "The string '$findme' was not found in the string '$output'";
+//}else {
+//    $startpos=$pos;
+//    $endpos=strpos($output," ",$startpos);
+//    //echo $endpos;
+//    $netname = substr($output,$startpos,$endpos-$startpos);
+//    echo $netname;
+//}
+
+$netname=json_decode($_POST['netname']);;
+echo $netname;
 
 ini_set('memory_limit','-1');//remove memory limit
 exec("sudo tc qdisc delete dev $netname root");

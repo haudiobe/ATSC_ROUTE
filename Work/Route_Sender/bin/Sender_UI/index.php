@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Route Sender</title>
         <script src="jquery-1.11.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="SenderUIstyle.css">
         <style>
@@ -89,6 +89,7 @@ and open the template in the editor.
         <input type=button id="Off" value="OFF" onclick="Offfunction()"-->  
         <div id="ip">
             IP Address: <select type="text" id="ipselect" onchange="Set()" />  <input type="hidden" id="box4"style="width:4px;">
+            <input type="checkbox" id="trafficFilter" onchange="applyFilter()" unchecked> Apply Traffic Filter<br>
         </div>
 
         <input type="button" id="initial" value="Initial Configuration" onclick="Configr()">
@@ -115,7 +116,6 @@ and open the template in the editor.
                 }).done( function(e) {
                      //alert("Killed all"); 
                     result = JSON.parse(e);
-
                     var ipselect = document.getElementById('ipselect');
 
                     if(ipselect.options.length === 0)
@@ -130,17 +130,35 @@ and open the template in the editor.
                         Onfunction();
                     restart = false;
                 });
-
-                $.ajax({
-                     //type: 'POST',
-                     url: "trafficFilter.php",
-                     datatype: "json",
-                }).done( function(e) {
-                    console.log("Ran trafficFilter.php, result: " + e);
-                });
+                
+                applyFilter();
                 loadAdTime();
             }
-           
+            
+            function applyFilter()
+            {
+                if (document.getElementById('trafficFilter').checked) {
+                    //do traffic filtering only when the checkbox is checked
+                    var ipselect = document.getElementById('ipselect');
+                    if(ipselect.options.length <= 0)
+                    {
+                        console.log("WARNING: IP not set!\n");
+                        return;
+                    }
+                    var ipstr = ipselect.options[ipselect.selectedIndex].value;
+                    var netname = ipstr.split(" ")[1].slice(1,-1);
+                    console.log(netname);
+                    $.ajax({
+                        type: 'POST',
+                        url: "trafficFilter.php",
+                        datatype: "json",
+                        data: {netname: JSON.stringify(netname)},
+                    }).done( function(e) {
+                       console.log("Ran trafficFilter.php, result: " + e);
+                    });
+                }
+            }
+            
             function checkthis(ele)
             {
                 if(ele.checked)
@@ -216,7 +234,9 @@ and open the template in the editor.
                 if(ipselect.options.length <= 0)
                     return;
                 
-                ipaddr=ipselect.options[ipselect.selectedIndex].value;
+                var ipstr = ipselect.options[ipselect.selectedIndex].value;
+                var ipaddr = ipstr.split(" ")[0];
+                console.log(ipaddr);
                 $.ajax({
                     type: 'POST',
                     url: "setIP.php",
