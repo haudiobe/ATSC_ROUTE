@@ -14,31 +14,43 @@ header('Cache-Control: no-cache');
 exec("sudo killall Start2.sh");
 exec("sudo killall flute_sender");
 
- $output2=shell_exec("sudo ifconfig");
- 
- //echo $output2;
- //echo PHP_EOL;
- $index = 0;
- $ip = array();
- $pos = 0;
+$output=shell_exec("sudo ifconfig");
+
+//echo $output;
+//echo PHP_EOL;
+$index = 0;
+$ip = array();
+$pos = 0;
  
  while(true)
  {
-	 $findme="inet addr";
-	 $pos = strpos($output2, $findme, $pos + strlen($findme));
-	 if($pos === FALSE)
-		 break;
-	 //echo $pos, PHP_EOL;
-	 //echo PHP_EOL;
-	 $startpos=$pos+10;
-	 $endpos=strpos($output2," ",$startpos);
-	 //echo $endpos;
-	 $thisIP = substr($output2,$startpos,$endpos-$startpos);
-	 if($thisIP !== "127.0.0.1")
-	 {
-		$ip[$index]=$thisIP;
-		$index = $index + 1;
-	 }
+    $findme="inet addr";
+    $pos = strpos($output, $findme, $pos + strlen($findme));
+    if($pos === FALSE)
+        break;
+    //echo $pos, PHP_EOL;
+    //echo PHP_EOL;
+    $startpos=$pos+10;
+    $endpos=strpos($output," ",$startpos);
+    //echo $endpos;
+    $thisIP = substr($output,$startpos,$endpos-$startpos);
+    if($thisIP !== "127.0.0.1")
+    {
+        // find the corresponding network interface name
+        $posETH=strrpos($output, "eth", $pos - strlen($output));
+        $posWLAN=strrpos($output, "wlan", $pos - strlen($output));
+        if ($posETH !== FALSE && $posWLAN !== FALSE){
+            $posIntf = max($posETH, $posETH);
+        }  else {
+            $posIntf = $posETH || $posWLAN;
+        }
+        $endpos=strpos($output," ",$posIntf);
+        $netname = substr($output,$posIntf,$endpos-$posIntf);
+//        echo $netname;
+    
+        $ip[$index]=$thisIP." (".$netname.")";
+        $index = $index + 1;
+    }
  }
  echo json_encode($ip);
 // echo "done";
