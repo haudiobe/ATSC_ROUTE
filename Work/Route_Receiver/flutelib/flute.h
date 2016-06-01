@@ -42,6 +42,7 @@
 #include "../alclib/alc_session.h"
 #include "parse_args.h"
 #include "fdt.h"
+#include "efdt.h"
 
 /**
  * The following file is included so that
@@ -65,6 +66,7 @@ extern "C" {
 typedef struct flute_sender {
   int s_id;			/**< session identifer */
   fdt_t *fdt;		/**< FDT structure */
+  efdt_t *efdt;         /**< EFDT structure*/
 } flute_sender_t;
 
 /**
@@ -75,6 +77,7 @@ typedef struct flute_sender {
 typedef struct flute_receiver {
   int s_id;										/**< session identifer */
   fdt_t *fdt;									/**< FDT structure */
+  efdt_t *efdt;									/**< EFDT structure*/
   int rx_automatic;								/**< download files defined in the FDT automatically */
   char *file_uri_table[FILE_URI_TABLE_SIZE];    /**< file URIs for wanted files */
   char *wildcard_token;                         /**< wild card token */

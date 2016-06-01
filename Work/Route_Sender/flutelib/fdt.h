@@ -185,8 +185,8 @@ void PrintFDT(fdt_t *fdt, int s_id);
  * @param file pointer to file structure
  *
  */
-
-void free_file(file_t *file);
+/*
+void free_file(file_t *file);*/
 
 #ifdef __cplusplus
 }; //extern "C"

@@ -459,9 +459,9 @@ function switchChannel()
  }
  
 var alternateServerIP = "";
-var alternateLocation1 = "/Work/Route_Sender/bin/ToS_1_0";
-var alternateLocation2 = "/Work/Route_Sender/bin/Elysium_1_0";
-var alternateLocationK = "/Work/Route_Sender/bin/Ita_ToS_1_0";
+var alternateLocation1 = "/ATSC_ROUTE/Work/Route_Sender/bin/ToS_1_0";
+var alternateLocation2 = "/ATSC_ROUTE/Work/Route_Sender/bin/Elysium_1_0";
+var alternateLocationK = "/ATSC_ROUTE/Work/Route_Sender/bin/Ita_ToS_1_0";
 var switchAudio = false;
 var monitoringInterval = 200;
 var monitoringWindowSize = 6;
