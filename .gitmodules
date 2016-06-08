@@ -7,3 +7,6 @@
 [submodule "Work/Route_Sender/bin/ToS"]
 	path = Work/Route_Sender/bin/ToS
 	url = https://github.com/waqarz/ToS
+[submodule "Work/Route_Sender/bin/Sintel"]
+	path = Work/Route_Sender/bin/Sintel
+	url = ../Sintel

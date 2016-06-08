@@ -7,14 +7,22 @@
 #Define Directories
 #DASHContent=ToS720p_0_5
 #DASHContent2=Elysium720p_0_5
-DASHContent=ToSLC_0_5
-DASHContent2=ElysiumLC_0_5
+#DASHContent=ToSLC_0_5
+#DASHContent2=ElysiumLC_0_5
 
-#if [ "$#" -gt 0 ] && [ "$1" -eq 1000 ]
-#then
-  DASHContent=Hotel
-  DASHContent2=Wave
-#fi
+if [ -f "Hotel/MultiRate.mpd" ]
+then
+	DASHContent=Hotel
+else
+	DASHContent=ToS
+fi
+
+if [ -f "Wave/MultiRate.mpd" ]
+then
+	DASHContent2=Wave
+else
+	DASHContent2=Sintel
+fi
 
 FLUTESender=.
 
