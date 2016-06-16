@@ -1,5 +1,6 @@
 <?php
-
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
 if (isset($argv[0])) {
     echo $argv[0]. PHP_EOL;
@@ -11,17 +12,34 @@ $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
 $AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];
 
-$videoFDTFile = "fdt_Video.xml";
-$audioFDTFile = "fdt_Audio.xml";
+
+$s_tsidFile = "S-TSID.xml";
+$usbdFile = "usbd.xml";
+// Name of the three .xml files that will be stored
+//$videoFDTFile = "fdt_Video.xml";
+//$audioFDTFile = "fdt_Audio.xml";
+$videoEFDTFile = "efdt_Video.xml";
+$audioEFDTFile = "efdt_Audio.xml";
+$mpdEFDTFile   = "efdt_MPD.xml";
+
+// Timing file that specifies which segment have to be sent when
 $videoTimingFile = "FluteInput_Video.txt";
 $audioTimingFile = "FluteInput_Audio.txt";
 
+// Create three DOC, each one corresponding to the three .xml files that have to be sent
 $videoDoc = NULL;
 $audioDoc = NULL;
+$mpdDoc   = NULL;
+
+// The three instances that shall be instantiated corresponding to the Docs
 $videoInstance = NULL;
 $audioInstance = NULL;
+$mpdInstance = NULL;
+
+// The TOI that shall be put for the three respective .xml files 
 $videoTOI = 1;
 $audioTOI = 1;
+$mpdTOI   = 1;
 
 if(isset($_GET['AST']))
 {
@@ -46,6 +64,7 @@ $AST_SEC->add(new DateInterval('PT1S'));   //????????????????? some rounding iss
 $AST_SEC_W3C = $AST_SEC->format(DATE_W3C);
 
 $MPD = simplexml_load_file($OriginalMPD);
+
 if (!$MPD)
         die("Failed loading XML file");
 
@@ -110,6 +129,8 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
 {
     $durationInMPD =$periods[$periodIndex]['node']->getAttribute("duration");
     $duration = somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durationInMPD);
+    echo $duration . PHP_EOL;
+
     
     if($adInsertion)
     {
@@ -196,16 +217,19 @@ for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop o
 
 $dom->save($PatchedMPD);
 
+//MPD Size and Name replace, S-TSID Size replace
 //read the entire string
-$fileContents=file_get_contents($audioFDTFile);
+$fileContents=file_get_contents($mpdEFDTFile);
 
 //replace something in the file string - this is a VERY simple example
 $fileContents=str_replace("MPDNamePlaceholder", $PatchedMPD,$fileContents);
 $fileContents=str_replace("MPDSizePlaceholder", filesize($PatchedMPD),$fileContents);
+$fileContents=str_replace("S_TSIDSizePlaceholder", filesize($s_tsidFile),$fileContents);
+$fileContents=str_replace("USBDSizePlaceholder", filesize($usbdFile),$fileContents);
 
 //write the entire string
-file_put_contents($audioFDTFile, $fileContents);
-    
+file_put_contents($mpdEFDTFile, $fileContents);
+   
 function &parseMPD($dom,$domAd)
 {
     global $adInsertion;
@@ -285,7 +309,7 @@ function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$
 
 function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
 {
-	global $videoFDTFile, $audioFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX, $videoDoc, $audioDoc, $videoInstance, $audioInstance, $videoTOI, $audioTOI;
+	global $videoEFDTFile, $audioEFDTFile, $mpdEFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX, $videoDoc, $audioDoc, $mpdDoc, $videoInstance, $audioInstance, $mpdInstance,  $videoTOI, $audioTOI, $mpdTOI;
 	
 	$videoTimescale = $videoSegmentTemplate->getAttribute("timescale");
 	$videoSegmentDuration = $videoSegmentTemplate->getAttribute("duration");
@@ -303,25 +327,57 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 	
 	if($initialize)
 	{
+		// Create the intial root element for the three files.
+		// Also, intialize with FDT-Parameters as a child element, for 
+		// the all three .xml files. The attributes for the FDT-
+		// Parameters file is also being approriately written.
+		
+		// TODO : TSI for the each instance is hardcoded, but this will
+		// change depending upon the channels too. Hence, remove hard-co
+		// -ded TSI later.				
+		
 		$videoDoc = new DOMDocument('1.0');
 		$videoDoc->formatOutput = true;
+		$videoInstance = $videoDoc->createElement('EFDT-Instance');
+		$videoInstance->setAttribute("TSI","1");
+		$videoInstance->setAttribute("IDRef","file:///efdt_Video.xml");
+		$videoDoc->appendChild($videoInstance);	
 
-		$videoInstance = $videoDoc->createElement('FDT-Instance');
-		$videoInstance->setAttribute("Expires","32511974400");
-		$videoInstance->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
-		$videoInstance->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
-		$videoInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
-		$videoDoc->appendChild($videoInstance);
-
+		$fdtparametersVideo = $videoDoc->createElement('FDT-Parameters');
+		$fdtparametersVideo->setAttribute("Expires","32511974400");
+		$fdtparametersVideo->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
+		$fdtparametersVideo->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
+		$fdtparametersVideo->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$videoInstance->appendChild($fdtparametersVideo);
+		
 		$audioDoc = new DOMDocument('1.0');
 		$audioDoc->formatOutput = true;
-
-		$audioInstance = $audioDoc->createElement('FDT-Instance');
-		$audioInstance->setAttribute("Expires","32511974400");
-		$audioInstance->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
-		$audioInstance->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
-		$audioInstance->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$audioInstance = $audioDoc->createElement('EFDT-Instance');
+		$audioInstance->setAttribute("TSI","2");
+		$audioInstance->setAttribute("IDRef","file:///efdt_Audio.xml");		
 		$audioDoc->appendChild($audioInstance);
+
+		$fdtparametersAudio = $audioDoc->createElement('FDT-Parameters');
+		$fdtparametersAudio->setAttribute("Expires","32511974400");
+		$fdtparametersAudio->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
+		$fdtparametersAudio->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
+		$fdtparametersAudio->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$audioInstance->appendChild($fdtparametersAudio);
+
+		$mpdDoc = new DOMDocument('1.0');
+		$mpdDoc->formatOutput = true;
+		$mpdInstance = $mpdDoc->createElement('EFDT-Instance');
+		$mpdInstance->setAttribute("TSI","0");
+		$mpdInstance->setAttribute("IDRef","file:///efdt_MPD.xml");
+		$mpdDoc->appendChild($mpdInstance);
+
+		$fdtparametersMpd = $mpdDoc->createElement('FDT-Parameters');
+		$fdtparametersMpd->setAttribute("Expires","32511974400");
+		$fdtparametersMpd->setAttribute("FEC-OTI-FEC-Encoding-ID","0");
+		$fdtparametersMpd->setAttribute("FEC-OTI-Maximum-Source-Block-Length","5000");
+		$fdtparametersMpd->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
+		$mpdInstance->appendChild($fdtparametersMpd);
+
 		unlink($videoTimingFile);
 		unlink($audioTimingFile);
 	}
@@ -349,7 +405,7 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 		$videoInstance->appendChild($file);		
 	}
 
-	$videoDoc->save($videoFDTFile);
+	$videoDoc->save($videoEFDTFile);
 	
 	//file_put_contents("ddbbgg.txt","Processing audio times with start TOI: " . $audioTOI . "\n",FILE_APPEND);
 
@@ -357,14 +413,29 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 	{
 		if((($audioIndex - $audioStartNum)*$audioSegmentDuration/$audioTimescale + $deltaAudio) >= $duration)
 			break;
-		
+		// Write out into the timing file.
 		file_put_contents($audioTimingFile,$audioTOI . " " . intval($ASTUNIX + ($start + ($audioIndex - $audioStartNum - 1)*$audioSegmentDuration/$audioTimescale + $deltaAudio)*1000000) . "\n",FILE_APPEND);			
 		
-		$file = $audioDoc->createElement('File');
-		$file->setAttribute("TOI",$audioTOI);$audioTOI++;
+		// In the same audio loop we will be writing out two files, 
+		// efdt_Audio.xml and efdt_MPD.xml
+
+		$file = $mpdDoc->createElement('File');
+		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
+		$file->setAttribute("Content-Location",'file:///usbd.xml');
+		$file->setAttribute("Content-Length","USBDSizePlaceholder");
+		$mpdInstance->appendChild($file);
+		
+		$file = $mpdDoc->createElement('File');
+		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
 		$file->setAttribute("Content-Location",'file:///' . "MPDNamePlaceholder");
 		$file->setAttribute("Content-Length","MPDSizePlaceholder");
-		$audioInstance->appendChild($file);
+		$mpdInstance->appendChild($file);
+
+		$file = $mpdDoc->createElement('File');
+		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
+		$file->setAttribute("Content-Location",'file:///S-TSID.xml');
+		$file->setAttribute("Content-Length","S_TSIDSizePlaceholder");
+		$mpdInstance->appendChild($file);
 
 		$file = $audioDoc->createElement('File');
 		$file->setAttribute("TOI",$audioTOI);$audioTOI++;
@@ -380,7 +451,8 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 		$audioInstance->appendChild($file);		
 	}
 
-	$audioDoc->save($audioFDTFile);
+	$audioDoc->save($audioEFDTFile);
+	$mpdDoc->save($mpdEFDTFile);
 }
 
 function somehowPleaseGetDurationInFractionalSecondsBecuasePHPHasABug($durstr)

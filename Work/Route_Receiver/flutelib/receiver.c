@@ -58,7 +58,7 @@
 #include "padding_encoding.h"
 #include "uri.h"
 #include "fdt.h"
-
+#include "efdt.h"
 
 /**
  * This is a private function which checks if all wanted files are received.
@@ -156,7 +156,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
   int point;
   int ch = '/';
   int i = 0;
-  
+  FILE *fabcd;
 #ifdef USE_OPENSSL
   char *md5_digest = NULL;
 #endif
@@ -193,9 +193,10 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
   }
 
   if(toi == FDT_TOI) {
-    
+
+			
     buf = fdt_recv(s_id, &recvbytes, &retcode, &fdt_cont_enc_algo, &fdt_instance_id);
-    
+
     if(buf == NULL) {
       return retcode;
     }
@@ -570,13 +571,13 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
   int point;
   int ch = '/';
   uri_t *uri = NULL;
-
+FILE *fabcd;
   //Malek El Khatib 07.05.2014
   //Start
   unsigned long long timeInUsec = 0L;		//Used later for timing purposes
   struct timeval processing_time;
   //End
-
+ 
 #ifdef USE_OPENSSL
   char *md5= NULL;
 #endif
@@ -1474,10 +1475,12 @@ void* fdt_thread(void *s) {
   int updated;
   
   fdt_t *fdt_instance;
+  efdt_t *efdt_instance;
   time_t systime;
   file_t *file;
   file_t *next_file;
   int retval;
+  FILE *fabcd;
   
   unsigned long long curr_time;
   
@@ -1493,19 +1496,23 @@ void* fdt_thread(void *s) {
   int fdt_instance_id = 0;
   
   receiver = (flute_receiver_t*)s;
- 
+  
   while(get_session_state(receiver->s_id) == SActive) {
     
     time(&systime);
     curr_time = systime + 2208988800U;
 
     /* Get initial fdt */
-    if(receiver->fdt == NULL) {
-
+    if(receiver->efdt == NULL) {
+ 
       buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo, &fdt_instance_id);
-      
+       
+ 
+		
       if(buf == NULL) {
+
 	
+		
 	    if(retval == -1) {
 	      continue;
 	    }
@@ -1525,43 +1532,64 @@ void* fdt_thread(void *s) {
 	      free(buf);
 	      continue;
 	    }
-	    fdt_instance = decode_fdt_payload(uncompr_buf);
+	    efdt_instance = decode_efdt_payload(uncompr_buf);
 	      free(uncompr_buf);
         }
         else {
-	     fdt_instance = decode_fdt_payload(buf);
+	     efdt_instance = decode_efdt_payload(buf);
+	      
         }
 #else 
-      fdt_instance = decode_fdt_payload(buf);
+      efdt_instance = decode_efdt_payload(buf);
+       
 #endif
+  
       
-      if(fdt_instance == NULL) {
+      if(efdt_instance == NULL) {
+		
 	free(buf);
 	continue;
       }
       
-      if(fdt_instance->expires < curr_time) {
+      if(efdt_instance->expires < curr_time) {
 	
 	if(!receiver->accept_expired_fdt_inst) {
 	  
 	  if(receiver->verbosity == 4) {
-	    printf("Expired FDT Instance received, discarding\n");
+	    printf("Expired EFDT Instance received, discarding\n");
 	    fflush(stdout);
 	  }
 	  
 	  free(buf);
-	  FreeFDT(fdt_instance);
+	  FreeFDT(efdt_instance);
 	  continue;
 	}
 	else {
 	  if(receiver->verbosity == 4) {
-	    printf("Expired FDT Instance received, using it anyway\n");
+	    printf("Expired EFDT Instance received, using it anyway\n");
 	    fflush(stdout);
 	  }
 	}
       }
-
+      
+ /*Copy efdt to fdt accordingly */
+  fdt_instance= calloc(1, sizeof(fdt_t));
+  fdt_instance->expires=              efdt_instance->expires;
+  fdt_instance->file_list=            efdt_instance->file_list;
+  fdt_instance->nb_of_files=          efdt_instance->nb_of_files;
+  fdt_instance->type=                 efdt_instance->type;
+  fdt_instance->encoding=             efdt_instance->encoding;
+  fdt_instance->fec_enc_id=           efdt_instance->fec_enc_id;
+  fdt_instance->fec_inst_id=          efdt_instance->fec_inst_id;
+  fdt_instance->finite_field=         efdt_instance->finite_field;
+  fdt_instance->nb_of_es_per_group=   efdt_instance->nb_of_es_per_group;
+  fdt_instance->max_sb_len=           efdt_instance->max_sb_len;
+  fdt_instance->es_len=               efdt_instance->es_len;
+  fdt_instance->max_nb_of_es=         efdt_instance->max_nb_of_es;
+  //fdt_instance->complete =            efdt_instance->complete;;
+  
       receiver->fdt = fdt_instance;
+      receiver->efdt = efdt_instance;
       
       if(receiver->verbosity == 4) {
 	printf("FDT Instance received (ID=%i)\n", fdt_instance_id);
@@ -1678,7 +1706,7 @@ void* fdt_thread(void *s) {
       updated = 0;
 
       buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo, &fdt_instance_id);
-      
+   	
       if(buf == NULL) {
 	
 	if(retval == -1) {
@@ -1700,28 +1728,29 @@ void* fdt_thread(void *s) {
 	  free(buf);
 	  continue;
 	}
-	fdt_instance = decode_fdt_payload(uncompr_buf);
+	efdt_instance = decode_efdt_payload(uncompr_buf);
 	free(uncompr_buf);
       }
       else {
-	fdt_instance = decode_fdt_payload(buf);
+	efdt_instance = decode_efdt_payload(buf);
+	 
       }
 #else 
-      fdt_instance = decode_fdt_payload(buf);
+      efdt_instance = decode_efdt_payload(buf);
 #endif
-      
-      if(fdt_instance == NULL) {
+       
+      if(efdt_instance == NULL) {
 	free(buf);
 	continue;
       }
       
-      if(fdt_instance->expires < curr_time) {
+      if(efdt_instance->expires < curr_time) {
 	if(!receiver->accept_expired_fdt_inst) {
 	  if(receiver->verbosity == 4) {
 	    printf("Expired FDT Instance received, discarding\n");
 	    fflush(stdout);
 	  }
-	  FreeFDT(fdt_instance);
+	  FreeFDT(efdt_instance);
 	  free(buf);
 	  continue;
 	}
@@ -1740,12 +1769,36 @@ void* fdt_thread(void *s) {
 
       free(buf);
       
-      if((fdt_instance->complete == TRUE)&&(receiver->fdt->complete == FALSE)&&(fdt_instance_id == 0)) {
+      if((efdt_instance->complete == TRUE)&&(receiver->efdt->complete == FALSE)&&(fdt_instance_id == 0)) {
 	receiver->fdt->complete = TRUE;
       }
       
-      updated = update_fdt(receiver->fdt, fdt_instance);
-      
+      //updated = update_efdt(receiver->efdt, efdt_instance);
+      /*Copy efdt to fdt accordingly*/
+  fdt_instance= calloc(1, sizeof(fdt_t));
+  fdt_instance->expires=              efdt_instance->expires;
+  fdt_instance->file_list=            efdt_instance->file_list;
+  fdt_instance->nb_of_files=          efdt_instance->nb_of_files;
+  fdt_instance->type=                 efdt_instance->type;
+  fdt_instance->encoding=             efdt_instance->encoding;
+  fdt_instance->fec_enc_id=           efdt_instance->fec_enc_id;
+  fdt_instance->fec_inst_id=          efdt_instance->fec_inst_id;
+  fdt_instance->finite_field=         efdt_instance->finite_field;
+  fdt_instance->nb_of_es_per_group=   efdt_instance->nb_of_es_per_group;
+  fdt_instance->max_sb_len=           efdt_instance->max_sb_len;
+  fdt_instance->es_len=               efdt_instance->es_len;
+  fdt_instance->max_nb_of_es=         efdt_instance->max_nb_of_es;
+  //fdt_instance->complete =            efdt_instance->complete;
+  updated = update_fdt(receiver->fdt, fdt_instance);
+      //receiver->fdt = fdt_instance;
+      //receiver->efdt= efdt_instance;
+      FILE *fabcd;
+   fabcd=fopen("ErrorDebugging.txt", "w");
+			 
+		
+			//  fprintf(fabcd, "%llu\n", tmp->toi);
+			  fprintf(fabcd, fdt_instance->file_list);
+			  fclose(fabcd);
       if(updated < 0) {
 	continue;
       }

@@ -40,5 +40,7 @@ filename="${filename%.*}"
 dynamicMPDName=$filename"_Dynamic."$extension
 
 php ../StaticToDynamic.php MPD=$2 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z"
+#Copy this in case you want to run only in the command line
+#php ../StaticToDynamic.php MPD=MultiRate.mpd uMPD=MultiRate_Dynamic.mpd ASTUNIX=0 AST=0
 
 cd -
