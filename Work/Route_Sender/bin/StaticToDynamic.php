@@ -14,6 +14,7 @@ $AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];
 
 
 $s_tsidFile = "S-TSID.xml";
+$usbdFile = "usbd.xml";
 // Name of the three .xml files that will be stored
 //$videoFDTFile = "fdt_Video.xml";
 //$audioFDTFile = "fdt_Audio.xml";
@@ -224,6 +225,7 @@ $fileContents=file_get_contents($mpdEFDTFile);
 $fileContents=str_replace("MPDNamePlaceholder", $PatchedMPD,$fileContents);
 $fileContents=str_replace("MPDSizePlaceholder", filesize($PatchedMPD),$fileContents);
 $fileContents=str_replace("S_TSIDSizePlaceholder", filesize($s_tsidFile),$fileContents);
+$fileContents=str_replace("USBDSizePlaceholder", filesize($usbdFile),$fileContents);
 
 //write the entire string
 file_put_contents($mpdEFDTFile, $fileContents);
@@ -416,6 +418,12 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 		
 		// In the same audio loop we will be writing out two files, 
 		// efdt_Audio.xml and efdt_MPD.xml
+
+		$file = $mpdDoc->createElement('File');
+		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
+		$file->setAttribute("Content-Location",'file:///usbd.xml');
+		$file->setAttribute("Content-Length","USBDSizePlaceholder");
+		$mpdInstance->appendChild($file);
 		
 		$file = $mpdDoc->createElement('File');
 		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;

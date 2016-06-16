@@ -24,7 +24,7 @@ $responseToSend[0] = $channel;
 $DASHContentBase="DASH_Content";
 $DASHContentDir=$DASHContentBase . (string)$channel;
 $DASHContent=$currDir . "/" . $DASHContentDir;
-$OriginalMPD= "MultiRate_Dynamic.mpd";
+#$OriginalMPD= "MultiRate_Dynamic.mpd";
 $AdMPDName="Ad2/Ad2_MultiRate.mpd";
 
 
@@ -116,9 +116,22 @@ file_put_contents ( "timelog.txt" , "Launching FLUTE:" . $date . $date_array[0] 
 #Start MPD receiving session followed by Audio and Video sessions.
 $cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
 exec($cmd);
+
+
+# This part is related to USBD signalling. 
+# We first read the contents of the USBD file and from that file 
+# we extract the information (names) of MPD and S-TSID.
+# Then this is parsed and the contents are fetched. 
+while (!glob($DASHContent."/usbd.xml")) usleep(5000);
+#Adi start - Read the content form the usbd.xml file
+$bundleDescription = simplexml_load_file($DASHContent."/usbd.xml");
+$fullMPDUri = $bundleDescription->userServiceDescription[0]['fullMPDUri'];
+$sTSIDUri = $bundleDescription->userServiceDescription[0]['sTSIDUri'];
+$OriginalMPD= $fullMPDUri;
+
 // After receive SLS fragments ,i.e S-TSID and MPD. Extract info from S-TSID and start Video and Audio LCT sessions.
-while (!glob($DASHContent."/S-TSID.xml")) usleep(5000);
-$s_tsid= simplexml_load_file($DASHContent."/S-TSID.xml");
+while (!glob($DASHContent."/".$sTSIDUri)) usleep(5000);
+$s_tsid= simplexml_load_file($DASHContent."/".$sTSIDUri);
 $sourceIP=$s_tsid->RS[0]['sIpAddr'];
 $tsi_v=$s_tsid->RS[0]->LS[0]['tsi'];
 $tsi_a=$s_tsid->RS[0]->LS[1]['tsi'];
