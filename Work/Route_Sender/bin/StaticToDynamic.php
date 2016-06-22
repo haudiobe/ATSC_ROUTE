@@ -10,8 +10,11 @@ $adInsertion = TRUE;
 $adInsertionTimeRequest = intval(file_get_contents("../UIConfig.txt"));  //In seconds from start
 $OriginalMPD=$_GET['MPD'];
 $PatchedMPD=$_GET['uMPD'];
-$AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];
 
+$sltFrequencyDuration=$_GET['sltFrequencyDuration'] / 1000;
+//echo "The SLT frequncy duration-1 is".PHP_EOL;
+//echo $sltFrequencyDuration.PHP_EOL;
+$AdMPDName="Ad1_MultiRate.mpd";//$_GET['AdMPD'];
 
 $s_tsidFile = "S-TSID.xml";
 $usbdFile = "usbd.xml";
@@ -25,6 +28,7 @@ $mpdEFDTFile   = "efdt_MPD.xml";
 // Timing file that specifies which segment have to be sent when
 $videoTimingFile = "FluteInput_Video.txt";
 $audioTimingFile = "FluteInput_Audio.txt";
+$mpdTimingFile   = "FluteInput_MPD.txt";
 
 // Create three DOC, each one corresponding to the three .xml files that have to be sent
 $videoDoc = NULL;
@@ -309,7 +313,7 @@ function getadInsertionTime($adInsertionTimeRequest,$videoSegmentDurationInSec,$
 
 function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSegmentTemplate,$duration,$deltaVideo,$deltaAudio)
 {
-	global $videoEFDTFile, $audioEFDTFile, $mpdEFDTFile, $videoTimingFile, $audioTimingFile, $ASTUNIX, $videoDoc, $audioDoc, $mpdDoc, $videoInstance, $audioInstance, $mpdInstance,  $videoTOI, $audioTOI, $mpdTOI;
+	global $videoEFDTFile, $audioEFDTFile, $mpdEFDTFile, $videoTimingFile, $audioTimingFile, $mpdTimingFile, $ASTUNIX, $videoDoc, $audioDoc, $mpdDoc, $videoInstance, $audioInstance, $mpdInstance,  $videoTOI, $audioTOI, $mpdTOI, $sltFrequencyDuration;
 	
 	$videoTimescale = $videoSegmentTemplate->getAttribute("timescale");
 	$videoSegmentDuration = $videoSegmentTemplate->getAttribute("duration");
@@ -380,6 +384,7 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 
 		unlink($videoTimingFile);
 		unlink($audioTimingFile);
+		unlink($mpdTimingFile);
 	}
 	
 	echo "deltaVideo: " . $deltaVideo . ", Duration: " . $duration . PHP_EOL;
@@ -396,7 +401,7 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 		$file->setAttribute("Content-Location",'file:///' . $videoInit);
 		$file->setAttribute("Content-Length",filesize($videoInit));
 		$videoInstance->appendChild($file);
-		
+
 		$file = $videoDoc->createElement('File');
 		$file->setAttribute("TOI",$videoTOI);$videoTOI++;
 		$filename = preg_replace('/\$Number\$/', $videoIndex, $videoMedia);
@@ -406,19 +411,41 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 	}
 
 	$videoDoc->save($videoEFDTFile);
-	
-	//file_put_contents("ddbbgg.txt","Processing audio times with start TOI: " . $audioTOI . "\n",FILE_APPEND);
 
+	//file_put_contents("ddbbgg.txt","Processing audio times with start TOI: " . $audioTOI . "\n",FILE_APPEND);
+	
+	#$sltFrequencyDuration = 0.1;
+	// How often to send the SLT segments in seconds 
+	// 0.1s means, for every 100ms we will send S-TSID, USBD (also, maybe the .mpd) segments.
+	// In the SLT segments, we send .mpd related information as often as the smallest of audio or video segment.			
+
+	if (($videoSegmentDuration/$videoTimescale) > ($audioSegmentDuration/$audioTimescale)){
+		$mpdFrequencyDuration = round($audioSegmentDuration/$audioTimescale,1) ;		
+		// We have set to one degree of precision.
+	} else {
+		$mpdFrequencyDuration = round($videoSegmentDuration/$videoTimescale,1);		// We have set to one degree of precision.
+	}
+
+	$mpdFrequency = $mpdFrequencyDuration / $sltFrequencyDuration; 
+	//$mpdFrequency = 1; Set this to send .mpd all the time.
+	// The mpd frequency in relative SLT frequency duration.
+	// For example, mpdFrequency = 10 will imply that => for every 10 S-TSID and USBD segments we will send one MPD segment. 
+
+	//echo "The mpd frequency duration is ".$mpdFrequencyDuration.PHP_EOL;
+	//echo "The mpd frequency is ".$mpdFrequency.PHP_EOL;
+	
+	$sltObjectsSent = 0;
 	for($audioIndex = $audioStartNum ; ; $audioIndex++)
 	{
 		if((($audioIndex - $audioStartNum)*$audioSegmentDuration/$audioTimescale + $deltaAudio) >= $duration)
 			break;
 		// Write out into the timing file.
 		file_put_contents($audioTimingFile,$audioTOI . " " . intval($ASTUNIX + ($start + ($audioIndex - $audioStartNum - 1)*$audioSegmentDuration/$audioTimescale + $deltaAudio)*1000000) . "\n",FILE_APPEND);			
+		file_put_contents($mpdTimingFile  ,$mpdTOI   . " " . intval($ASTUNIX + ($start + ($audioIndex - $audioStartNum - 1)*$sltFrequencyDuration				  )*1000000) . "\n",FILE_APPEND);				
 		
 		// In the same audio loop we will be writing out two files, 
 		// efdt_Audio.xml and efdt_MPD.xml
-
+		
 		$file = $mpdDoc->createElement('File');
 		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
 		$file->setAttribute("Content-Location",'file:///usbd.xml');
@@ -427,15 +454,19 @@ function generateFDTAndTiming($initialize,$start,$videoSegmentTemplate,$audioSeg
 		
 		$file = $mpdDoc->createElement('File');
 		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
-		$file->setAttribute("Content-Location",'file:///' . "MPDNamePlaceholder");
-		$file->setAttribute("Content-Length","MPDSizePlaceholder");
-		$mpdInstance->appendChild($file);
-
-		$file = $mpdDoc->createElement('File');
-		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
 		$file->setAttribute("Content-Location",'file:///S-TSID.xml');
 		$file->setAttribute("Content-Length","S_TSIDSizePlaceholder");
 		$mpdInstance->appendChild($file);
+		
+		$sltObjectsSent++;
+		
+		if ( $sltObjectsSent % $mpdFrequency == 0) {
+		$file = $mpdDoc->createElement('File');
+		$file->setAttribute("TOI",$mpdTOI);$mpdTOI++;
+		$file->setAttribute("Content-Location",'file:///' . "MPDNamePlaceholder");
+		$file->setAttribute("Content-Length","MPDSizePlaceholder");
+		$mpdInstance->appendChild($file);
+		}
 
 		$file = $audioDoc->createElement('File');
 		$file->setAttribute("TOI",$audioTOI);$audioTOI++;

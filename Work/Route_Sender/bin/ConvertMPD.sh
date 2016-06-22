@@ -5,9 +5,9 @@
 #2- Add availabilityStartTime at MPD level
 #3- Set Period ids incrementally in case they are empty
 
-if [ $# -ne 3 ]
+if [ $# -ne 4 ]
 then
-	echo "Usage: ./ConvertMPD.sh ContentDirectory MPDName ASTDelayFromNow #EncodingSymbolsPerPacket VideoSegmentDuration AudioSegmentDuration VideoOutputFile AudioOutputFile"
+	echo "Usage: ./ConvertMPD.sh ContentDirectory MPDName ASTDelayFromNow sltFrequencyDuration #EncodingSymbolsPerPacket VideoSegmentDuration AudioSegmentDuration VideoOutputFile AudioOutputFile"
 	exit
 fi 
 
@@ -39,8 +39,8 @@ filename="${filename%.*}"
 
 dynamicMPDName=$filename"_Dynamic."$extension
 
-php ../StaticToDynamic.php MPD=$2 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z"
+php ../StaticToDynamic.php MPD=$2 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z" sltFrequencyDuration=$4
 #Copy this in case you want to run only in the command line
-#php ../StaticToDynamic.php MPD=MultiRate.mpd uMPD=MultiRate_Dynamic.mpd ASTUNIX=0 AST=0
+#php ../StaticToDynamic.php MPD=MultiRate.mpd uMPD=MultiRate_Dynamic.mpd ASTUNIX=0 AST=0 sltFrequencyDuration=100
 
 cd -
