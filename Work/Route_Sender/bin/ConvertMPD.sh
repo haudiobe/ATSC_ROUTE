@@ -7,7 +7,7 @@
 
 if [ $# -ne 4 ]
 then
-	echo "Usage: ./ConvertMPD.sh ContentDirectory MPDName ASTDelayFromNow sltFrequencyDuration #EncodingSymbolsPerPacket VideoSegmentDuration AudioSegmentDuration VideoOutputFile AudioOutputFile"
+	echo "Usage: ./ConvertMPD.sh ContentDirectory MPDName ASTDelayFromNow slsFrequencyDuration #EncodingSymbolsPerPacket VideoSegmentDuration AudioSegmentDuration VideoOutputFile AudioOutputFile"
 	exit
 fi 
 
@@ -39,8 +39,8 @@ filename="${filename%.*}"
 
 dynamicMPDName=$filename"_Dynamic."$extension
 
-php ../StaticToDynamic.php MPD=$2 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z" sltFrequencyDuration=$4
+php ../StaticToDynamic.php MPD=$2 uMPD=$dynamicMPDName ASTUNIX=$ast AST=$AST"Z" slsFrequencyDuration=$4
 #Copy this in case you want to run only in the command line
-#php ../StaticToDynamic.php MPD=MultiRate.mpd uMPD=MultiRate_Dynamic.mpd ASTUNIX=0 AST=0 sltFrequencyDuration=100
+#php ../StaticToDynamic.php MPD=MultiRate.mpd uMPD=MultiRate_Dynamic.mpd ASTUNIX=0 AST=0 slsFrequencyDuration=100
 
 cd -

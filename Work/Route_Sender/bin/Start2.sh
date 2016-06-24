@@ -56,14 +56,14 @@ echo "Converting MPD"
 
 #Brackets are used to temporarilSimAdminy change working directory
 
-sltFrequencyDuration=200
+slsFrequencyDuration=100
 
 #The duration of how often the SLT segments are sent in ms
 #For example, 100ms will imply every 100ms S-TSID, USBD (and maybe .mpd) segment will be sent
 #MPD segment according to the audio/video segment duration
 
-./ConvertMPD.sh $DASHContent  MultiRate.mpd $Delay  $sltFrequencyDuration
-./ConvertMPD.sh $DASHContent2 MultiRate.mpd $Delay2 $sltFrequencyDuration
+./ConvertMPD.sh $DASHContent  MultiRate.mpd $Delay  $slsFrequencyDuration
+./ConvertMPD.sh $DASHContent2 MultiRate.mpd $Delay2 $slsFrequencyDuration
 
 chmod 777 $DASHContent/*
 chmod 777 $DASHContent2/*
