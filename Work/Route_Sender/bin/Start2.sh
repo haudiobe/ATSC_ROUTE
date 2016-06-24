@@ -82,10 +82,10 @@ echo "Done"
 killall flute_sender
 
 #(cd $FLUTESender && ./flute -S -r:$bitRate -B:$DASHContent -Q -f:$fdtVid -m:224.1.1.1 -p:4000 -t:1 -v:4 -y:$videoSegDur -Y:$videoSegDur -J:$Log)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtMPD -d:$sdp1 -y:$DASHContent/$FLUTEMPDInput   -Y:$encodingSymbolsPerPacket -J:$Log1 -C&)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtVid -d:$sdp2 -y:$DASHContent/$FLUTEVideoInput -Y:$encodingSymbolsPerPacket -J:$Log2&)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtAud -d:$sdp3 -y:$DASHContent/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log3&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtMPD -d:$sdp5 -y:$DASHContent/$FLUTEMPDInput   -Y:$encodingSymbolsPerPacket -J:$Log1 -C&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtVid -d:$sdp1 -y:$DASHContent/$FLUTEVideoInput -Y:$encodingSymbolsPerPacket -J:$Log2&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent -f:$DASHContent/$fdtAud -d:$sdp2 -y:$DASHContent/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log3&)
 
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtMPD -d:$sdp4 -y:$DASHContent2/$FLUTEMPDInput   -Y:$encodingSymbolsPerPacket -J:$Log4 -C&)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtVid -d:$sdp5 -y:$DASHContent2/$FLUTEVideoInput -Y:$encodingSymbolsPerPacket -J:$Log5&)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtAud -d:$sdp6 -y:$DASHContent2/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log6 && fg)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtMPD -d:$sdp6 -y:$DASHContent2/$FLUTEMPDInput   -Y:$encodingSymbolsPerPacket -J:$Log4 -C&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtVid -d:$sdp3 -y:$DASHContent2/$FLUTEVideoInput -Y:$encodingSymbolsPerPacket -J:$Log5&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtAud -d:$sdp4 -y:$DASHContent2/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log6 && fg)

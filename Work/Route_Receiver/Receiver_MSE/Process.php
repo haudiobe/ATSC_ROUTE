@@ -26,12 +26,14 @@ $FLUTEReceiver="./";
 
 unlink('../bin/socketServerReady.trig');
 
-$index=($channel - 1)*3 + 1;
+$index=$channel + 4;
 $sdp="SDP" . (string)$index . ".sdp";			#SDP to be used by sender
-$index=$index + 1;
-$sdp2="SDP" . (string)$index . ".sdp";			#SDP to be used by sender
-$index=$index + 1;
-$sdp3="SDP" . (string)$index . ".sdp";
+
+//$index=$index + 1;
+//$sdp2="SDP" . (string)$index . ".sdp";			#SDP to be used by sender
+//$index=$index + 1;
+//$sdp3="SDP" . (string)$index . ".sdp";
+
 $Log="Rcv_Log_MPD" . (string)$channel . ".txt";			#Log containing delays corresponding to FLUTE receiver
 $Log2="Rcv_Log_Video" . (string)$channel . ".txt";
 $Log3="Rcv_Log_Audio" . (string)$channel . ".txt";
