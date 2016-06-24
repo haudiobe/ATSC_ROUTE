@@ -88,4 +88,4 @@ killall flute_sender
 
 (cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtMPD -d:$sdp4 -y:$DASHContent2/$FLUTEMPDInput   -Y:$encodingSymbolsPerPacket -J:$Log4 -C&)
 (cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtVid -d:$sdp5 -y:$DASHContent2/$FLUTEVideoInput -Y:$encodingSymbolsPerPacket -J:$Log5&)
-(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtAud -d:$sdp6 -y:$DASHContent2/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log6&)
+(cd $FLUTESender && ./flute_sender -S -r:$bitRate -B:$DASHContent2 -f:$DASHContent2/$fdtAud -d:$sdp6 -y:$DASHContent2/$FLUTEAudioInput -Y:$encodingSymbolsPerPacket -J:$Log6 && fg)
