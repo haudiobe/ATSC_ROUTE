@@ -117,9 +117,12 @@ $date = date("Y-m-d H:i:s",$date_array[1]);
 file_put_contents ( "timelog.txt" , "Launching FLUTE:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
 # Start first flute sender
 #Start MPD receiving session followed by Audio and Video sessions.
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
+chdir('../Receiver/SLT_signalling');
+$result = json_decode(exec('sudo python readFromSLT.py ' . $channel), true);
+chdir('../../bin');
+#$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:". $result[0] ." -s:". $result[1] ." -p:". $result[2] ." -t:". $result[3] ." -Q -Y:". $encodingSymbolsPerPacket ." -J:". $Log ." > /dev/null &"; // > logout2.txt &";
 exec($cmd);
-
 
 # This part is related to USBD signalling. 
 # We first read the contents of the USBD file and from that file 

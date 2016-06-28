@@ -10,6 +10,9 @@ header('Content-Type: text/event-stream');
 // recommended to prevent caching of event data.
 header('Cache-Control: no-cache'); 
 //$myfile=fopen("/var/www/html/ATSC_ROUTE/Work/Route_Receiver/bin/SDP1.sdp", "r");
+exec("sudo python ../SLT_signalling/receiver.py");
+
+// Have to modify the file to get the IP from the SLT.xml file itself.
 $contents = file_get_contents("../../bin/SDP1.sdp") ;
 
 $findme="IP4";
