@@ -54,10 +54,11 @@
 #include "mad_zlib.h"
 #include "flute.h"
 #include "fdt.h"
+#include "efdt.h"
 
 //Malek El Khatib 14.08.2014
 //The below variables need to retain value when going between sender.c and alc_tx.c (i.e. while sending the different segments
-  FILE * FLUTEInputFile;
+  FILE * FLUTEInputFile, *fabcd;
   char str[1000];
   char * tok;
   unsigned long long fileValue;
@@ -94,7 +95,7 @@ int send_fdt_instance(char *fdt_instance, unsigned long long fdt_inst_len, int s
   int retval = 0;
   unsigned int sbn = 0;
   char *buf = NULL;
-
+FILE *fabcd;
   blocking_struct_t *bs;                
                                                                                                                           
   transfer_len = fdt_inst_len;
@@ -156,12 +157,15 @@ int send_fdt_instance(char *fdt_instance, unsigned long long fdt_inst_len, int s
     sbn++;
   }
 
-  free(bs);
 
   if(tx_mode != TX_THREAD) {
+     
     if(verbosity == 4) {
+      
       printf("FDT Instance sent (ID=%i)\n", get_fdt_instance_id(s_id));
       fflush(stdout);
+     
+  free(bs);
     }
   }
   else {
@@ -204,7 +208,7 @@ int send_file(char *tx_file, int s_id, int tx_mode, unsigned short es_len, unsig
 	double print_percent;
 
 	FILE *fp;	
-
+ 
 #ifdef _MSC_VER
 	struct __stat64 file_stats;
 #else
@@ -411,6 +415,7 @@ int send_file(char *tx_file, int s_id, int tx_mode, unsigned short es_len, unsig
 				retval = send_fdt_instance(fdt_inst_buf, fdt_inst_len, s_id, tx_mode, s->def_eslen,
 							   s->def_max_sblen, s->def_fec_enc_id, s->def_fec_inst_id,
 							   verbosity);
+				 
 					
 				if(retval == -1) {
 					free(bs);
@@ -1268,6 +1273,860 @@ char *create_fdt_instance(file_t *file, int nb_of_files, fdt_t *fdt, int s_id,
 	return fdt_inst_payload;
 }
 
+/**
+ * This is a private function which creates EFDT Instance string buffer from file structure(s).
+ *
+ * @param file pointer to first file structure to be defined in an EFDT Instance
+ * @param nb_of_files number of files to be defined in an EFDT Instance
+ * @param efdt pointer to Complete EFDT to be splitted to EFDT Instances
+ * @param s_id session identifier
+ * @param efdt_inst_len stores length of created EFDT Instance
+ *
+ * @return pointer to created EFDT Instance string buffer, NULL in error cases
+ *
+ */
+
+char *create_efdt_instance(file_t *file, int nb_of_files, efdt_t *efdt, int s_id,
+						  unsigned long long *efdt_inst_len) {
+
+  file_t *tmp_file;
+  char *efdt_inst_payload = NULL;
+  char tmp_line[MAX_PATH_LENGTH];
+  int i;
+  int print_help = 0;
+  
+  unsigned long long size = 0;
+  unsigned long long position = 0;
+  
+  alc_session_t *s;
+  
+  s = get_alc_session(s_id);
+  
+  tmp_file = file;
+  
+  memset(tmp_line, 0, MAX_PATH_LENGTH);
+  sprintf(tmp_line, "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
+  size = strlen(tmp_line);
+  
+  /* Allocate memory for efdt_inst_payload */
+  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+    return NULL;
+  }
+  
+  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+  position += strlen(tmp_line);
+  
+  memset(tmp_line, 0, MAX_PATH_LENGTH);
+  
+  /* Adding efdt elements.*/
+  #ifdef _MSC_VER
+  sprintf(tmp_line, "<EFDT-Instance TSI=\"%d\"", efdt->tsi);
+#else
+  sprintf(tmp_line, "<EFDT-Instance TSI=\"%d\"", efdt->tsi);
+#endif
+  size += strlen(tmp_line);
+  
+    /* Reallocate memory for efdt_inst_payload */
+  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+    return NULL;
+  }
+  
+  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+  position += strlen(tmp_line);
+  
+  
+    if(efdt->idRef != NULL) {
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\tIDRef=\"%s\"", efdt->idRef);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+      
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+  }
+  
+  memset(tmp_line, 0, MAX_PATH_LENGTH);
+  sprintf(tmp_line, ">\n");
+  size += strlen(tmp_line);
+  
+    /* Reallocate memory for efdt_inst_payload */
+  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+    return NULL;
+  }
+  
+  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+  position += strlen(tmp_line);
+  
+  memset(tmp_line, 0, MAX_PATH_LENGTH);
+  /*  EFDT elements added. */
+  
+#ifdef _MSC_VER
+  sprintf(tmp_line, "<FDT-Parameters Expires=\"%I64u\"", efdt->expires);
+#else
+  sprintf(tmp_line, "<FDT-Parameters Expires=\"%llu\"", efdt->expires);
+#endif
+  size += strlen(tmp_line);
+  
+  /* Reallocate memory for efdt_inst_payload */
+  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+    return NULL;
+  }
+  
+  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+  position += strlen(tmp_line);
+  
+  if(efdt->complete) {
+
+    if(nb_of_files == efdt->nb_of_files) {
+      memset(tmp_line, 0, MAX_PATH_LENGTH);
+      sprintf(tmp_line, "\n\tComplete=\"true\"");
+      size += strlen(tmp_line);
+      
+      /* Reallocate memory for efdt_inst_payload */
+      if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+	printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+	printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+	return NULL;
+      }
+      
+      memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+      position += strlen(tmp_line);
+    }
+  }
+
+  if(efdt->type != NULL) {
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\tContent-Type=\"%s\"", efdt->type);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+      
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+  }
+  
+  if(efdt->encoding != NULL) {
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\tContent-Encoding=\"%s\"", efdt->encoding);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+      
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+  }
+  
+#ifdef FDT_INST_FEC_OTI_COMMON
+  if(s->use_fec_oti_ext_hdr == 0) {
+	  /**** FEC-OTI parameters ****/
+   
+		  memset(tmp_line, 0, MAX_PATH_LENGTH);
+		  sprintf(tmp_line, "\n\tFEC-OTI-FEC-Encoding-ID=\"%u\"", efdt->fec_enc_id);
+		  size += strlen(tmp_line);
+		  
+		  /* Reallocate memory for efdt_inst_payload */
+		  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			  printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			  printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			  return NULL;
+		  }
+		  
+		  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+		  position += strlen(tmp_line);
+		  
+		  if(efdt->fec_enc_id >= 128) {
+			  memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\tFEC-OTI-FEC-Instance-ID=\"%u\"", efdt->fec_inst_id);
+			size += strlen(tmp_line);
+		  
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			  printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			  printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			  return NULL;
+			}
+		  
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+		 }
+    
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\tFEC-OTI-Maximum-Source-Block-Length=\"%u\"",
+	    efdt->max_sb_len);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+    
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\tFEC-OTI-Encoding-Symbol-Length=\"%u\"",
+	    efdt->es_len);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+    
+	if(efdt->fec_enc_id == RS_FEC_ENC_ID || efdt->fec_enc_id == SB_SYS_FEC_ENC_ID) {
+
+		memset(tmp_line, 0, MAX_PATH_LENGTH);
+		sprintf(tmp_line, "\n\tFEC-OTI-Max-Number-of-Encoding-Symbols=\"%u\"",
+			efdt->max_nb_of_es);
+		size += strlen(tmp_line);
+
+		/* Reallocate memory for efdt_inst_payload */
+		if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			return NULL;
+		}
+
+		memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+		position += strlen(tmp_line);
+	}
+
+	if(efdt->fec_enc_id == RS_FEC_ENC_ID) {
+
+		memset(tmp_line, 0, MAX_PATH_LENGTH);
+		sprintf(tmp_line, "\n\tFEC-OTI-Number-of-Encoding-Symbols-per-Group=\"%u\"",
+			efdt->nb_of_es_per_group);
+		size += strlen(tmp_line);
+
+		/* Reallocate memory for efdt_inst_payload */
+		if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			return NULL;
+		}
+
+		memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+		position += strlen(tmp_line);
+
+		memset(tmp_line, 0, MAX_PATH_LENGTH);
+		sprintf(tmp_line, "\n\tFEC-OTI-Finite-Field-Parameter=\"%u\"", efdt->finite_field);
+		size += strlen(tmp_line);
+
+		/* Reallocate memory for efdt_inst_payload */
+		if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			return NULL;
+		}
+
+		memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+		position += strlen(tmp_line);
+	}
+  }
+#endif
+
+  memset(tmp_line, 0, MAX_PATH_LENGTH);
+  sprintf(tmp_line, "/>\n");
+  size += strlen(tmp_line);
+  
+  /* Reallocate memory for efdt_inst_payload */
+  if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+    printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+    return NULL;
+  }
+  
+  memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+  position += strlen(tmp_line);
+  
+  for(i = 0; i < nb_of_files; i++) {
+    
+    if(tmp_file == NULL) {
+      break;
+    }
+    
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    
+#ifdef _MSC_VER
+    sprintf(tmp_line, "\t<File TOI=\"%I64u\"", tmp_file->toi);
+#else
+    sprintf(tmp_line, "\t<File TOI=\"%llu\"", tmp_file->toi);
+#endif
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+    
+    
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "\n\t\tContent-Location=\"%s\"", tmp_file->location);
+    size += strlen(tmp_line);
+    
+    /* Reallocate memory for efdt_inst_payload */
+    if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+      printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+      return NULL;
+    }
+    
+    memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+    position += strlen(tmp_line);
+    
+    memset(tmp_line, 0, MAX_PATH_LENGTH);
+#ifdef _MSC_VER
+        sprintf(tmp_line, "\n\t\tContent-Length=\"%I64u\"", tmp_file->content_len);
+#else
+		sprintf(tmp_line, "\n\t\tContent-Length=\"%llu\"", tmp_file->content_len);
+#endif
+		size += strlen(tmp_line);
+
+		/* Reallocate memory for efdt_inst_payload */
+		if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			return NULL;
+		}
+
+        memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+		position += strlen(tmp_line);
+
+		print_help = 0;
+
+		if(tmp_file->type != NULL) {
+			if(efdt->type != NULL) {
+				if(strcmp(tmp_file->type, efdt->type) != 0) {
+					print_help = 1;
+				}
+			}
+			else {
+				print_help = 1;
+			}
+		}	
+		if(print_help) {
+			memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\t\tContent-Type=\"%s\"", tmp_file->type);
+			size += strlen(tmp_line);
+	
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+
+			}
+
+        	memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+		}
+
+        if(tmp_file->md5 != NULL) {
+            memset(tmp_line, 0, MAX_PATH_LENGTH);
+            sprintf(tmp_line, "\n\t\tContent-MD5=\"%s\"", tmp_file->md5);
+			size += strlen(tmp_line);
+	
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+			}
+
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+        }
+			
+		print_help = 0;
+
+		if(tmp_file->encoding != NULL) {
+			if(efdt->encoding != NULL) {
+				if(strcmp(tmp_file->encoding, efdt->encoding) != 0) {
+					print_help = 1;
+				}
+			}
+			else {
+				print_help = 1;
+			}
+		}	
+		if(print_help) {
+			memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\t\tContent-Encoding=\"%s\"", tmp_file->encoding);
+			size += strlen(tmp_line);
+
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+			}
+
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+		}
+		if(tmp_file->encoding != NULL || efdt->encoding != NULL) {
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+	#ifdef _MSC_VER
+				sprintf(tmp_line, "\n\t\tFEC-OTI-Transfer-Length=\"%I64u\"", tmp_file->transfer_len);
+	#else
+				sprintf(tmp_line, "\n\t\tTransfer-Length=\"%llu\"", tmp_file->transfer_len);
+	#endif
+				size += strlen(tmp_line);
+
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+	#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+	#else	
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+	#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+		}
+
+		if(s->use_fec_oti_ext_hdr == 0) {
+			/**** FEC-OTI parameters ****/
+
+#ifdef FDT_INST_FEC_OTI_FILE
+
+			memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\t\tFEC-OTI-FEC-Encoding-ID=\"%u\"", tmp_file->fec_enc_id);
+			size += strlen(tmp_line);
+	
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+			}
+
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+
+			if(tmp_file->fec_encoding_id >= 128) {
+		
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\t\tFEC-OTI-FEC-Instance-ID=\"%u\"", tmp_file->fec_inst_id);
+				size += strlen(tmp_line);
+	
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+		
+			memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\t\tFEC-OTI-Maximum-Source-Block-Length=\"%u\"",
+					tmp_file->max_sblen);
+			size += strlen(tmp_line);
+	
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+			}
+
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+		
+			memset(tmp_line, 0, MAX_PATH_LENGTH);
+			sprintf(tmp_line, "\n\t\tFEC-OTI-Encoding-Symbol-Length=\"%u\"",
+					tmp_file->es_len);
+			size += strlen(tmp_line);
+	
+			/* Reallocate memory for efdt_inst_payload */
+			if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+				printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+				return NULL;
+			}
+
+			memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+			position += strlen(tmp_line);
+	
+			
+			if(tmp_file->fec_enc_id == RS_FEC_ENC_ID || tmp_file->fec_enc_id == SB_SYS_FEC_ENC_ID) {
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\t\tFEC-OTI-Max-Number-of-Encoding-Symbols=\"%u\"",
+						tmp_file->max_nb_of_es);
+				size += strlen(tmp_line);
+	
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+
+			if(tmp_file->fec_enc_id == RS_FEC_ENC_ID) {
+
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\tFEC-OTI-Number-of-Encoding-Symbols-per-Group=\"%u\"",
+						tmp_file->nb_es_per_group);
+				size += strlen(tmp_line);
+
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\tFEC-OTI-Finite-Field-Parameter=\"%u\"", tmp_file->finite_field);
+				size += strlen(tmp_line);
+
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+
+#elif defined(FDT_INST_FEC_OTI_COMMON)
+			
+			if(tmp_file->fec_enc_id != efdt->fec_enc_id) {
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\t\tFEC-OTI-FEC-Encoding-ID=\"%u\"", tmp_file->fec_enc_id);
+				size += strlen(tmp_line);
+		
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+			
+			if(tmp_file->fec_enc_id >= 128) {
+
+				if(tmp_file->fec_inst_id != efdt->fec_inst_id) {
+					memset(tmp_line, 0, MAX_PATH_LENGTH);
+					sprintf(tmp_line, "\n\t\tFEC-OTI-FEC-Instance-ID=\"%u\"", tmp_file->fec_inst_id);
+					size += strlen(tmp_line);
+		
+					/* Reallocate memory for efdt_inst_payload */
+					if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+						return NULL;
+					}
+
+					memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+					position += strlen(tmp_line);
+				}
+			}
+
+			if(tmp_file->max_sb_len != efdt->max_sb_len) {
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\t\tFEC-OTI-Maximum-Source-Block-Length=\"%u\"",
+						tmp_file->max_sb_len);
+				size += strlen(tmp_line);
+		
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+			if(tmp_file->es_len != efdt->es_len) {
+				memset(tmp_line, 0, MAX_PATH_LENGTH);
+				sprintf(tmp_line, "\n\t\tFEC-OTI-Encoding-Symbol-Length=\"%u\"",
+						tmp_file->es_len);
+				size += strlen(tmp_line);
+		
+				/* Reallocate memory for efdt_inst_payload */
+				if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+					printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+					return NULL;
+				}
+
+				memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+				position += strlen(tmp_line);
+			}
+        
+			if(tmp_file->fec_enc_id == RS_FEC_ENC_ID || tmp_file->fec_enc_id == SB_SYS_FEC_ENC_ID) {
+				if(tmp_file->max_nb_of_es != efdt->max_nb_of_es) {
+					memset(tmp_line, 0, MAX_PATH_LENGTH);
+					sprintf(tmp_line, "\n\t\tFEC-OTI-Max-Number-of-Encoding-Symbols=\"%u\"",
+							tmp_file->max_nb_of_es);
+					size += strlen(tmp_line);
+			
+					/* Reallocate memory for efdt_inst_payload */
+					if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+						return NULL;
+					}
+
+					memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+					position += strlen(tmp_line);
+				}
+			}
+
+			if(tmp_file->fec_enc_id == RS_FEC_ENC_ID) {
+				if(tmp_file->nb_of_es_per_group != efdt->nb_of_es_per_group) {
+					memset(tmp_line, 0, MAX_PATH_LENGTH);
+					sprintf(tmp_line, "\n\tFEC-OTI-Number-of-Encoding-Symbols-per-Group=\"%u\"", tmp_file->nb_of_es_per_group);
+					size += strlen(tmp_line);
+
+					/* Reallocate memory for efdt_inst_payload */
+					if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+						return NULL;
+					}
+
+					memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+					position += strlen(tmp_line);
+				}
+	
+				if(tmp_file->finite_field != efdt->finite_field) {
+					
+					memset(tmp_line, 0, MAX_PATH_LENGTH);
+					sprintf(tmp_line, "\n\tFEC-OTI-Finite-Field-Parameter=\"%u\"", tmp_file->finite_field);
+					size += strlen(tmp_line);
+
+					/* Reallocate memory for efdt_inst_payload */
+					if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+						printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+						return NULL;
+					}
+
+					memcpy((efdt_inst_payload + (unsigned int)position), tmp_line, strlen(tmp_line));
+					position += strlen(tmp_line);
+				}
+			}
+#endif
+		}
+		
+		memset(tmp_line, 0, MAX_PATH_LENGTH);
+        sprintf(tmp_line, "/>\n");
+		size += strlen(tmp_line);
+	
+		/* Reallocate memory for efdt_inst_payload */
+		if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+			printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+			return NULL;
+		}
+
+		memcpy((efdt_inst_payload + position), tmp_line, strlen(tmp_line));
+		position += strlen(tmp_line);
+
+		if(tmp_file->next == NULL) {
+			break;
+		}
+
+		tmp_file = tmp_file->next;
+	}
+ 
+	memset(tmp_line, 0, MAX_PATH_LENGTH);
+    sprintf(tmp_line, "</EFDT-Instance>\n");
+	size += strlen(tmp_line);
+
+	size++;
+	
+	/* Reallocate memory for efdt_inst_payload */
+	if(!(efdt_inst_payload = (char*)realloc(efdt_inst_payload, ((unsigned int)size * sizeof(char))))) {
+#ifdef _MSC_VER
+		printf("Could not (re)alloc memory for efdt_inst_payload, size: %I64u!\n", size);
+#else
+		printf("Could not (re)alloc memory for efdt_inst_payload, size: %llu!\n", size);
+#endif
+		return NULL;
+	}
+
+    memcpy((efdt_inst_payload + position), tmp_line, strlen(tmp_line));
+	position += strlen(tmp_line);
+	
+	*(efdt_inst_payload + position) = '\0';
+
+	*efdt_inst_len = size - 1;
+
+	return efdt_inst_payload;
+}
+/*End of EFDT instance.*/
+
 #ifdef USE_ZLIB
 
 /**
@@ -1388,12 +2247,16 @@ int remove_gz_files(char *fdt_file, char *base_dir, char *file_path) {
 int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
   
   char *fdt_inst_buf = NULL;
+  char *efdt_inst_buf = NULL;
   unsigned long long fdt_inst_len = 0; 
+  unsigned long long efdt_inst_len = 0; 
 
 #ifdef USE_ZLIB
   char *compr_fdt_inst_buf = NULL;
+  char *compr_efdt_inst_buf = NULL;
   unsigned long long compr_fdt_inst_buf_len = 0;
-#endif
+  unsigned long long compr_efdt_inst_buf_len = 0;
+  #endif
   
 #ifdef _MSC_VER
   int j;
@@ -1416,7 +2279,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
   unsigned long long curr_time;
   
   
-  int sent = 0;
+  int sent = 0 ,z;
   BOOL incomplete_fdt = FALSE;
   
   time(&systime);
@@ -1438,13 +2301,18 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
      
     if(!sender->fdt->complete) {
       sender->fdt->complete = TRUE;
+      sender->efdt->complete = TRUE;
     }
     
     /* Send "Complete FDT" with all File definitions at the beginning of the carousel */
     
     file = sender->fdt->file_list;
-    
+   //for(z=0;z<25;z++){
+    efdt_inst_buf = create_efdt_instance(file, sender->efdt->nb_of_files, sender->efdt, sender->s_id, &efdt_inst_len);
     fdt_inst_buf = create_fdt_instance(file, sender->fdt->nb_of_files, sender->fdt, sender->s_id, &fdt_inst_len);
+  
+			  
+	
 
     if(fdt_inst_buf == NULL) {
       return -1;
@@ -1453,6 +2321,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 #ifdef USE_ZLIB
     if(a->alc_a.encode_content == ZLIB_FDT || a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
       
+      compr_efdt_inst_buf = buffer_zlib_compress(efdt_inst_buf, efdt_inst_len, &compr_efdt_inst_buf_len);
       compr_fdt_inst_buf = buffer_zlib_compress(fdt_inst_buf, fdt_inst_len, &compr_fdt_inst_buf_len);
       
       if(compr_fdt_inst_buf == NULL) {
@@ -1462,18 +2331,26 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 	}
 #endif
     
+			  
 #ifdef USE_ZLIB
     if(a->alc_a.encode_content == ZLIB_FDT || a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
-      sent = send_fdt_instance(compr_fdt_inst_buf, compr_fdt_inst_buf_len, sender->s_id, tx_mode, a->alc_a.es_len,
+      sent = send_fdt_instance(compr_efdt_inst_buf, compr_efdt_inst_buf_len, sender->s_id, tx_mode, a->alc_a.es_len,
 			       a->alc_a.max_sb_len, a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+      
     }
     else {
-      sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
+      sent = send_fdt_instance(efdt_inst_buf, efdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
 			       a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+      
+			
+		
+      
     }
 #else
-    sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
+    sent = send_fdt_instance(efdt_inst_buf, efdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
 			     a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+
+    
 #endif
 
     if(a->complete_fdt != 2) {
@@ -1499,7 +2376,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 	  return -2;
     }
   }
-  
+  //}
   file = sender->fdt->file_list;
   
   //Malek El Khatib 16.04.2014
@@ -1699,7 +2576,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 	  //If sendFDTAfterObj is false then we send the FDT before sending object; hence, same code is replicated below after file sending
 	  if (!sendFDTAfterObj) {
       //END  
-
+  
 		  //Malek El Khatib 06.05.2014
 		  //Start
 		  //Check time needed to generate FDT Instance. NOTE THAT THIS IS APPLICABLE ONLY IF COMPLETE_FDT_SENT = FALSE	  
@@ -1713,20 +2590,28 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
  
 		  if(a->complete_fdt != 2) {  
 			  /* Send FDT Instance with next File definition before the file is sent */
-			  fdt_inst_buf = create_fdt_instance(file, 1, sender->fdt, sender->s_id, &fdt_inst_len);
-			  
-			  if(fdt_inst_buf == NULL) {
+			  //fdt_inst_buf = create_fdt_instance(file, 1, sender->fdt, sender->s_id, &fdt_inst_len);
+			  efdt_inst_buf = create_efdt_instance(file, 1, sender->efdt, sender->s_id, &efdt_inst_len);
+			 //  efdt_inst_buf = create_efdt_instance(file, sender->efdt->nb_of_files, sender->efdt, sender->s_id, &efdt_inst_len);
+			      FILE *fabcd;
+   fabcd=fopen("ErrorDebugging.txt", "w");
+			 
+		
+			//  fprintf(fabcd, "%llu\n", tmp->toi);
+			  fprintf(fabcd, efdt_inst_buf);
+			  fclose(fabcd);
+			  if(efdt_inst_buf == NULL) {
 				  free_uri(uri);
 				  return -1;
 			  }
       
 #ifdef USE_ZLIB
 			  if(a->alc_a.encode_content == ZLIB_FDT || a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
-				  compr_fdt_inst_buf = buffer_zlib_compress(fdt_inst_buf, fdt_inst_len, &compr_fdt_inst_buf_len);
+				  compr_efdt_inst_buf = buffer_zlib_compress(efdt_inst_buf, efdt_inst_len, &compr_efdt_inst_buf_len);
 	
-				  if(compr_fdt_inst_buf == NULL) {
+				  if(compr_efdt_inst_buf == NULL) {
 					  free_uri(uri);
-					  free(fdt_inst_buf);
+					  free(efdt_inst_buf);
 					  return -1;
 				  }	
 			  }
@@ -1742,18 +2627,22 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 
 #ifdef USE_ZLIB
 			  if(a->alc_a.encode_content == ZLIB_FDT || a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
-				  sent = send_fdt_instance(compr_fdt_inst_buf, compr_fdt_inst_buf_len, sender->s_id, tx_mode, a->alc_a.es_len,
+				  sent = send_fdt_instance(compr_efdt_inst_buf, compr_efdt_inst_buf_len, sender->s_id, tx_mode, a->alc_a.es_len,
 					  a->alc_a.max_sb_len, a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+				  
 			  }
 			  else {
-				  sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
+				  sent = send_fdt_instance(efdt_inst_buf, efdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
 					  a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+				  
+				
 			  }
 #else
-			  sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
+			  sent = send_fdt_instance(efdt_inst_buf, efdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
 				  a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+			  
 #endif
-	  
+	
 			  //Malek El Khatib 06.05.2014
 			  //Start
 			  //End of FDT instance sending
@@ -1810,16 +2699,18 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 #ifdef USE_ZLIB
       if(a->alc_a.encode_content == ZLIB_FDT || a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
 			sent = send_file(path, sender->s_id, tx_mode, file_es_len, file_max_sb_len, file_fec_enc_id,
-			 file_fec_inst_id, file, compr_fdt_inst_buf_len, compr_fdt_inst_buf,
+			 file_fec_inst_id, file, compr_efdt_inst_buf_len, compr_efdt_inst_buf,
 			 a->alc_a.verbosity);
       }
       else {
 			sent = send_file(path, sender->s_id, tx_mode, file_es_len, file_max_sb_len, file_fec_enc_id,
-			 file_fec_inst_id, file, fdt_inst_len, fdt_inst_buf, a->alc_a.verbosity);	
+			 file_fec_inst_id, file, efdt_inst_len, efdt_inst_buf, a->alc_a.verbosity);
+			
+			
       }
 #else
       sent = send_file(path, sender->s_id, tx_mode, file_es_len, file_max_sb_len, file_fec_enc_id,
-		       file_fec_inst_id, file, fdt_inst_len, fdt_inst_buf, a->alc_a.verbosity);	
+		       file_fec_inst_id, file, efdt_inst_len, efdt_inst_buf, a->alc_a.verbosity);	
 #endif
 
 	  //Malek El Khatib 06.05.2014
@@ -1852,7 +2743,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 		  
 		  if(a->complete_fdt != 2) {
 			  /* Send FDT Instance with next File definition before the file is sent */
-			  fdt_inst_buf = create_fdt_instance(file, 1, sender->fdt, sender->s_id, &fdt_inst_len);
+			 /*fdt_inst_buf = create_fdt_instance(file, 1, sender->fdt, sender->s_id, &fdt_inst_len);
 			  if(fdt_inst_buf == NULL) {
 				  free_uri(uri);
 				  return -1;
@@ -1885,6 +2776,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 			  else {
 				  sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
 					  a->alc_a.fec_enc_id, a->alc_a.fec_inst_id, a->alc_a.verbosity);
+				    
 			  }
 #else
 			  sent = send_fdt_instance(fdt_inst_buf, fdt_inst_len, sender->s_id, tx_mode, a->alc_a.es_len, a->alc_a.max_sb_len,
@@ -1916,7 +2808,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 				  free(fdt_inst_buf);
 				  free_uri(uri);
 				  return -2;
-			  }
+			  }*/
 		  }
 	  }
 	  //END
@@ -2019,13 +2911,14 @@ int sender_in_fdt_based_mode(arguments_t *a, flute_sender_t *sender) {
   unsigned long long curr_time;
 
   struct stat fdt_file_stats;
-  FILE *fp;
+  FILE *fp, *fabcd;
 
   char *buf = NULL;
 
-  unsigned long long fdt_length = 0;
+  unsigned long long fdt_length = 0, **tempo;
   long long nbytes = 0;
-
+  fdt_t *fdt;
+  efdt_t *efdt;
   BOOL is_fec_oti_in_fdt = TRUE;
 
   if(stat(a->fdt_file, &fdt_file_stats) == -1) {
@@ -2058,9 +2951,27 @@ int sender_in_fdt_based_mode(arguments_t *a, flute_sender_t *sender) {
     free(buf);
     return -1;
   }
+  	
+  sender->efdt = decode_efdt_payload(buf);
 
-  sender->fdt = decode_fdt_payload(buf);
-
+ 
+  fdt= calloc(1, sizeof(fdt_t));
+  fdt->expires=sender->efdt->expires;
+  fdt->file_list= sender->efdt->file_list;
+  fdt->nb_of_files= sender->efdt->nb_of_files;
+  fdt->type= sender->efdt->type;
+  fdt->encoding= sender->efdt->encoding;
+  fdt->fec_enc_id= sender->efdt->fec_enc_id;
+  fdt->fec_inst_id= sender->efdt->fec_inst_id;
+  fdt->finite_field= sender->efdt->finite_field;
+  fdt->nb_of_es_per_group= sender->efdt->nb_of_es_per_group;
+  fdt->max_sb_len= sender->efdt->max_sb_len;
+  fdt->es_len= sender->efdt->es_len;
+  fdt->max_nb_of_es= sender->efdt->max_nb_of_es;
+  //fdt->complete = TRUE;
+  //sender->efdt->complete= TRUE;
+  sender->fdt=fdt;
+  
   free(buf);
   fclose(fp);
 

@@ -297,12 +297,11 @@ window.onload = function()
                       data: {ip: JSON.stringify(alternateServerIP)},
             }).done( function(e) {
                console.log("**** Setting IP Address and process, result: " + e);
-                
             })
 	});
 	
 		// Video
-	video = document.getElementById("video");
+    video = document.getElementById("video");
     var context = new Dash.di.DashContext();
     player= new MediaPlayer(context);
     player.startup();
@@ -426,7 +425,7 @@ window.onbeforeunload = function (e) {
 
 function playingNow(e)
 {
-	logger.clear();
+    logger.clear();
     logger.log("Playing Channel " + udchannel);
     var timeNow = new Date();
     console.log("***************** Playback started, " + timeNow + timeNow.getMilliseconds());
@@ -435,33 +434,45 @@ function playingNow(e)
     
 	img = document.getElementById('settingsbtn');
     img.style.visibility = 'visible';	
-    //switchChannel();
+   //switchChannel();
 }
 
 function switchChannel()
 {
     totalChannelChanges ++;
+    if (totalChannelChanges == 10){
+    averageTuneInDuration = (totalTuneinDuration/(totalChannelChanges*1000)).toFixed(2);
+    console.log("The average tune-in duration for " + totalChannelChanges + " switching is " + averageTuneInDuration + " seconds.");
+    $.ajax({
+		type: 'POST',
+		url: "Log.php",
+		datatype: "json",
+ 		data: {averageTuneInDuration: JSON.stringify(averageTuneInDuration)},
+      });
+    //file_put_contents("test.txt","The average tune-in duration for " + totalChannelChanges + " switching is " + averageTuneIn + " seconds.");
+    video.pause();
+    }
     var timeNow = Date.now();
     totalSwitchingDuration += (timeNow - switchStartTime);
     var status =document.getElementById('switches');
-    status.innerHTML="Total time in switches: " + (totalSwitchingDuration/1000).toFixed(2) + " sec, Switches: " + totalChannelChanges + ", " 
-            + (totalSwitchingDuration/(totalChannelChanges*1000)).toFixed(2) + " seconds for switch, " 
-            + (totalTuneinDuration/(totalChannelChanges*1000)).toFixed(2) + " seconds for tune in";
-
+    //status.innerHTML="Total time in switches: " + (totalSwitchingDuration/1000).toFixed(2) + " sec, Switches: " + totalChannelChanges + ", " 
+    //        + (totalSwitchingDuration/(totalChannelChanges*1000)).toFixed(2) + " seconds for switch, " 
+    //        + (totalTuneinDuration/(totalChannelChanges*1000)).toFixed(2) + " seconds for tune in";
     var timeNow = Date.now();        
     var nextChangeDelay = Math.ceil(timeNow/1000)*1000 - timeNow + Math.random()*1000;
     if(udchannel == 1)
       setTimeout(function () {start(2)}, nextChangeDelay);
     else
       setTimeout(function () {start(1)}, nextChangeDelay);
+    
 
     //video.pause();
  }
  
 var alternateServerIP = "";
-var alternateLocation1 = "/Work/Route_Sender/bin/ToS_1_0";
-var alternateLocation2 = "/Work/Route_Sender/bin/Elysium_1_0";
-var alternateLocationK = "/Work/Route_Sender/bin/Ita_ToS_1_0";
+var alternateLocation1 = "/ATSC_ROUTE/Work/Route_Sender/bin/ToS_1_0";
+var alternateLocation2 = "/ATSC_ROUTE/Work/Route_Sender/bin/Elysium_1_0";
+var alternateLocationK = "/ATSC_ROUTE/Work/Route_Sender/bin/Ita_ToS_1_0";
 var switchAudio = false;
 var monitoringInterval = 200;
 var monitoringWindowSize = 6;
@@ -539,7 +550,7 @@ function start(channel)
                 console.log(response);
 				logger.clear();
 				logger.log("Tuned in, buffering ...");				
-
+		//console.log("The total-tune-in-duration is " + totalTuneinDuration);
                 // Start player
                 var timeNow = new Date();
                 console.log("*********** Instructing to play MPD: " + mpdURL + timeNow + timeNow.getMilliseconds());
@@ -562,7 +573,7 @@ function start(channel)
 						processStarted = processStarted + 1;
 					}
 				}
-
+		//switchChannel();
             }
           );
 		  

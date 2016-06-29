@@ -807,7 +807,7 @@ void PrintFDT(fdt_t *fdt, int s_id) {
 	unlock_fdt();
 }
 
-void free_file(file_t *file) {
+/*void free_file(file_t *file) {
 
 	lock_fdt();
 
@@ -830,3 +830,4 @@ void free_file(file_t *file) {
 	free(file);
 	unlock_fdt();
 }
+*/

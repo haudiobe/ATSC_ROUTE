@@ -188,7 +188,7 @@ var startTime;
 var numSwitches = 0;
 var sumChangeTime = 0;
 var startTimeTotal = 0;
-
+var queue=[]; 
 function PlayChannel(channel)
 {
     $.post(
@@ -274,10 +274,10 @@ function callback(e)
 
   window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-        var websocket = new WebSocket('ws://127.0.0.1:9000',
+        var websocket = new WebSocket('ws://127.0.0.1:9001',
                                       'dumb-increment-protocol');
 									  
-        var websocketAudio = new WebSocket('ws://127.0.0.1:9001',
+        var websocketAudio = new WebSocket('ws://127.0.0.1:9002',
                                       'dumb-increment-protocol');
 
         websocket.onopen = function () {
@@ -285,7 +285,7 @@ function callback(e)
         };
 
         websocket.onerror = function () {
-            setTimeout(function(){ websocket = new WebSocket('ws://127.0.0.1:9000','dumb-increment-protocol'); }, 50);
+            setTimeout(function(){ websocket = new WebSocket('ws://127.0.0.1:9001','dumb-increment-protocol'); }, 50);
         };
 	
         websocketAudio.onopen = function () {
@@ -293,7 +293,7 @@ function callback(e)
         };
 
         websocketAudio.onerror = function () {
-            setTimeout(function(){ websocketAudio = new WebSocket('ws://127.0.0.1:9001','dumb-increment-protocol'); }, 50);
+            setTimeout(function(){ websocketAudio = new WebSocket('ws://127.0.0.1:9002','dumb-increment-protocol'); }, 50);
         };
 		
 		// Convert an integer to a string made up of the bytes in network/big-endian order.
@@ -324,6 +324,7 @@ function callback(e)
 			fileReader.onload = function() 
 			{
 			    arraybuffer = this.result;
+			    //console.log(this.result);
 				arrayData = new Uint8Array(arraybuffer);
 				if(initVideoBuffer == true)
 				{
@@ -334,7 +335,7 @@ function callback(e)
 				{					
 					videoBuffer = _appendBuffer(videoBuffer,arrayData);
 				}
-				
+				//console.log(videoBuffer);
 			    var period = 0;
 			    var timeNow = new Date();
 			    if(lastAppendTime != 0)
@@ -348,9 +349,14 @@ function callback(e)
 				if(period > 100)
 				{
 					initVideoBuffer = true;
-				    //console.log(videoBuffer);
-
+					console.log("Video source buffer");
+				    console.log(sourceBuffer);
+			//if (!sourceBuffer.updating )
+			     // queue.push(videoBuffer);
+			//else
+			
 			        sourceBuffer.appendBuffer(videoBuffer);
+			        
     		        lastAppendTime = new Date();	
  					if(!autoPlaybackDone)
                         console.log("Appending video buffer length: " + videoBuffer.byteLength + ", time: " + lastAppendTime + lastAppendTime.getMilliseconds());
@@ -421,6 +427,8 @@ function callback(e)
 				if(period > 100)
 				{
 					initAudioBuffer = true;
+					console.log("Audio source buffer");
+					console.log(sourceBuffer);
 			        audioSourceBuffer.appendBuffer(audioBuffer);
     		        lastAppendTimeAudio = new Date();
  					if(!autoPlaybackDone)

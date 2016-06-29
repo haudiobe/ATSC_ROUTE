@@ -1,0 +1,17 @@
+*.mp4
+Work/Route_Sender/bin/ToS_1_0/*
+Work/Route_Sender/bin/Elysium_1_0/*
+*~
+*Log*
+Work/Route_Receiver/Receiver/DASH_Content1/
+Work/Route_Receiver/Receiver/DASH_Content/
+Work/Route_Receiver/Receiver/SLT_signalling/socket
+Work/Route_Receiver/Receiver/SLT_signalling/sys
+Work/Route_Receiver/bin/ErrorDebugging.txt
+Work/Route_Sender/bin/ErrorDebugging.txt
+Work/Route_Sender/bin/SLT_signalling/ET
+Work/Route_Receiver/Receiver/nbproject/private/private.xml
+Work/Route_Receiver/bin/Log_Times.txt
+Work/Route_Receiver/bin/Rcv_Log_Audio1.txt
+Work/Route_Receiver/bin/Rcv_Log_Audio2.txt
+Work/Route_Sender/bin/nbproject/private/private.xml

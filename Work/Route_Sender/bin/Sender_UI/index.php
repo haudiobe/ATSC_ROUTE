@@ -229,7 +229,7 @@ and open the template in the editor.
                 $.ajax({
                       type: 'POST',
                       url: "setIP.php",
-                       datatype: "json",
+                      datatype: "json",
                       data: {ip: JSON.stringify(ipaddr)},
             }).done( function() {
                // console.log("1done");
