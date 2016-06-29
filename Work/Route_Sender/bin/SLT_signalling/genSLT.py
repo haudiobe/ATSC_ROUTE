@@ -14,10 +14,10 @@ for channel in range(1,3):
 	# This source IP address shall be later received as a run-time parameter.
 	tree = ET.ElementTree(SLT)
 
-tree.write("../SLT_signalling/intermediate.xml")
-x = etree.parse("../SLT_signalling/intermediate.xml")
+tree.write("SLT_signalling/intermediate.xml")
+x = etree.parse("SLT_signalling/intermediate.xml")
 xml_string = etree.tostring(x, pretty_print = True)
 #print xml_string
-text_file = open("../SLT_signalling/SLT.xml", "w")
+text_file = open("SLT_signalling/SLT.xml", "w")
 text_file.write(xml_string)
 text_file.close()
