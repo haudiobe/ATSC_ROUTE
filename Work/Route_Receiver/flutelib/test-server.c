@@ -215,9 +215,14 @@ void * serviceThread()
     while(workingPort == 0)
         usleep(100);
     
+    // For audio segments.
     if(workingPort == 4002 || workingPort == 4004)
         port= 9001;
 		
+	// For SLS segments.	
+    if(workingPort == 4005 || workingPort == 4006)
+        port= 9002;
+
 	memset(&info, 0, sizeof info);
 	info.port = port;
 	info.iface = interface;
