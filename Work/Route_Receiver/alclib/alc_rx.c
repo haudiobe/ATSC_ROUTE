@@ -179,19 +179,19 @@ int newWriteToBuffer(struct packetBuffer buffer)
         FILE * pktFile;
         static int first = 1;
         char packetFiles[200];
-        sprintf(packetFiles,"Merge/Pkt%.4d_%.4d.mp4",buffer.toi,buffer.esi);
-        if(first)
-            sendMergeFile = fopen("sendMerge.mp4","w");
-        else
-            sendMergeFile = fopen("sendMerge.mp4","a");
+        //sprintf(packetFiles,"Merge/Pkt%.4d_%.4d.mp4",buffer.toi,buffer.esi);
+        //if(first)
+        //    sendMergeFile = fopen("sendMerge.mp4","w");
+        //else
+        //    sendMergeFile = fopen("sendMerge.mp4","a");
 
         first = 0;
 
-        fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
-        fclose(sendMergeFile);
-        pktFile = fopen(packetFiles,"w");
-        fwrite(buffer.buffer,1,buffer.length,pktFile);
-        fclose(pktFile);
+        //fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
+        //fclose(sendMergeFile);
+        //pktFile = fopen(packetFiles,"w");
+        //fwrite(buffer.buffer,1,buffer.length,pktFile);
+        //fclose(pktFile);
 	}
     struct packetBuffer *emptySlot = getEmptyBufferSlot();
 
@@ -1689,7 +1689,6 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 				//Malek El Khatib 11.08.2014
 				printf("The object length is: %llu\n",transfer_len);
 				//End
-			        audioSourceBuffer.appendBuffer(audioBuffer);
 
 				trans_obj->len = transfer_len;
 				trans_obj->fec_enc_id = (unsigned char)fec_enc_id;
@@ -1995,7 +1994,7 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
     
     if(tunedIn == 1)
     {
-/*        if(workingPort == 4001 || workingPort == 4003)
+        if(workingPort == 4001 || workingPort == 4003)
         {
             if( toi%2 != 0 )
                 tunedIn = 2;
@@ -2005,9 +2004,6 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             if( (toi - 2) % 3 == 0 )
                 tunedIn = 2;
         }
-*/
-		if( toi%2 != 0 )
-			tunedIn = 2;
     }
     
     if(tunedIn == 2)
@@ -2016,7 +2012,7 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             tunedIn = 3;
         else
         {
-/*            if(workingPort == 4001 || workingPort == 4003)
+            if(workingPort == 4001 || workingPort == 4003)
             {
                 if( toi%2 != 0 )
                     addPacket(toi,tsi,sbn,esi,buffer,len);
@@ -2026,15 +2022,13 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
                 if( (toi - 2) % 3 == 0 )
                     addPacket(toi,tsi,sbn,esi,buffer,len);
             }
-*/
-			if( toi%2 != 0 )
-				addPacket(toi,tsi,sbn,esi,buffer,len);
-        }            
+        }
+            
     }
     
     if(tunedIn == 3)
     {
-/*        if(workingPort == 4001 || workingPort == 4003)
+        if(workingPort == 4001 || workingPort == 4003)
         {
             if( toi%2 == 0 && toi != 0 )
                 addPacket(toi,tsi,sbn,esi,buffer,len);
@@ -2044,9 +2038,6 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             if( (toi - 3) % 3 == 0 && toi != 0)
                 addPacket(toi,tsi,sbn,esi,buffer,len);
         }
-*/
-		if( toi%2 == 0 && toi != 0 )
-		addPacket(toi,tsi,sbn,esi,buffer,len);
     }
 
 }
