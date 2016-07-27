@@ -13,7 +13,18 @@ header('Cache-Control: no-cache');
 exec("sudo python ../SLT_signalling/receiver.py");
 
 // Have to modify the file to get the IP from the SLT.xml file itself.
-$contents = file_get_contents("../../bin/SDP1.sdp") ;
+
+chdir('../Receiver/SLT_signalling');
+$result = json_decode(exec('sudo python readFromSLT.py 1'), true);
+
+// Adithyan
+// Earlier was read from SDP, not read from the SLT.xml file itself.
+// Here, the assumption is that the both the channels are being sent by the same sender.
+// If they are send by different sender, then we would have to change the "readFromSLT.py 1", according to the channel number.
+// Channel 1 : sudo python readFromSLT.py 1
+// Channel 2 : sudo python readFromSLT.py 2
+
+/*$contents = file_get_contents("../../bin/SDP1.sdp") ;
 
 $findme="IP4";
 $pos = strpos($contents, $findme);
@@ -21,5 +32,6 @@ $start=$pos+4;
  $end=strpos($contents,"\n",$start);
  $ip=substr($contents,$start,$end-$start);
  //echo $ip;
- echo json_encode($ip);
+*/
+ echo json_encode($result[1]);
  ?>
