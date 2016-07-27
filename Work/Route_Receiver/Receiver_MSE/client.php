@@ -178,6 +178,17 @@ section {
 <script>
 var video = document.querySelector('video');
 
+window.onload = function()
+{  
+	//Start the python script to receive the SLT signalling.
+	//The script will put the SLT.xml file in the SLT_signalling folder.
+	  $.ajax({
+			  type: 'POST',
+			  url: "ReceiverConfig/onloadfunc.php",
+			  datatype: "json",
+	});
+}
+
 window.MediaSource = window.MediaSource || window.WebKitMediaSource;
 if (!!!window.MediaSource) {
   alert('MediaSource API is not available');
