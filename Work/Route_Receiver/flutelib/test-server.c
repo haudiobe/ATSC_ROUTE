@@ -46,8 +46,10 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 
             if(workingPort == 4001 || workingPort == 4003)
             {
-                //FILE * tempff = fopen("mergedFile.mp4","w");
-                //fclose(tempff);
+                // Adi start
+                FILE * tempff = fopen("mergedFile.mp4","w");
+                fclose(tempff);
+                // Adi end
             }
 			// get the ball rolling
 			usleep(10000);
@@ -121,19 +123,31 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 				    libwebsocket_write(wsi, &respBuf[LWS_SEND_BUFFER_PRE_PADDING], toSend.length, LWS_WRITE_BINARY);
 
                     free(toSend.buffer);
-                    //FILE * tempff = fopen("mergedFile.mp4","a");
                     
-                    //fwrite(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],1,toSend.length, tempff);
-                    //fclose(tempff);
-
-                    
-                    sprintf(packetFileName,"packet%3d.mp4",fileCounter);
-                    fileCounter++;
-                    /*tempff = fopen(packetFileName,"wb");
-                    fprintf(stderr,"************************ ptr2: %x\n",tempff);
-                    fprintf(stdout,"************************ ptr2: %x\n",tempff);
+                    // Adi start
+                    FILE * tempff = fopen("mergedFile.mp4","a");                    
                     fwrite(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],1,toSend.length, tempff);
-                    fclose(tempff);*/
+                    fclose(tempff);
+					// Adi end
+				
+                    
+                    
+                    // Adi start log
+                    /*
+                    sprintf(packetFileName,"packets/packet%3d.txt",fileCounter);
+                    fileCounter++;
+                    
+                    
+                    
+                    tempff = fopen(packetFileName,"wb");
+                    //fprintf(stderr,"************************ ptr2: %x\n",tempff);
+                    //fprintf(stdout,"************************ ptr2: %x\n",tempff);
+                    //fwrite(&respBuf[LWS_SEND_BUFFER_PRE_PADDING],1,toSend.length, tempff);
+                    fclose(tempff);
+                    */
+                    // Adi end log
+                    
+                    
                     //if(fileCounter > 2000)
                       //  exit(-1);
 
@@ -215,6 +229,11 @@ void * serviceThread()
     while(workingPort == 0)
         usleep(100);
     
+
+    // For video segments.
+    if(workingPort == 4001 || workingPort == 4003)
+        port= 9000;
+		
     // For audio segments.
     if(workingPort == 4002 || workingPort == 4004)
         port= 9001;

@@ -55,7 +55,7 @@ chdir('../Receiver/SLT_signalling');
 $result = json_decode(exec('sudo python readFromSLT.py ' . $channel), true);
 chdir('../../bin');
 #$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:". $result[0] ." -s:". $result[1] ." -p:". $result[2] ." -t:". $result[3] ." -Q -Y:". $encodingSymbolsPerPacket ." -J:". $Log ." > /dev/null &"; // > logout2.txt &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:". $result[0] ." -s:". $result[1] ." -p:". $result[2] ." -t:". $result[3] ." -Q -Y:". $encodingSymbolsPerPacket ." -J:". $Log ." > log_sls.txt &"; // > logout2.txt &";
 #$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:10.4.247.130 -p:4005 -t:5 -Q -Y:1 > /dev/null &"; // > logout2.txt &";
 exec($cmd);
 
@@ -91,11 +91,13 @@ unlink('../bin/socketServerReady.trig');
 error_log(print_r($port_a, TRUE)); 
 
 # Start first flute sender
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_v." -t:".$tsi_v. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > /dev/null &";
+#$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_v." -t:".$tsi_v. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > /dev/null &";
+#$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_v." -t:".$tsi_v. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > /dev/null &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_v." -t:".$tsi_v. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > log_video.txt &";
 exec($cmd);
 
 # Start second flute sender
-$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_a." -t:".$tsi_a. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > /dev/null &";
+$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -m:224.1.1.1 -s:"  .$sourceIP . " -p:".$port_a." -t:".$tsi_a. " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log2 . " > log_audio.txt &";
 exec($cmd);
 
 $micro_date = microtime();
