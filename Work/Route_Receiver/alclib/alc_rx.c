@@ -95,7 +95,8 @@ unsigned long long tsi = 0; /* TSI */
 unsigned long long toi = 0; /* TOI */
 unsigned int sbn = 0;
 unsigned int esi = 0;
-unsigned long long prevToi = 0;
+unsigned long long prevToiVideo = 0;
+unsigned long long prevToiAudio = 0;
 
 long newBufferFullness()
 {
@@ -2032,13 +2033,25 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
 	
 	
 	if(workingPort == 4001 || workingPort == 4003){
-		if ((prevToi > toi) && toi !=0)	{
+		if ((prevToiVideo > toi) && toi !=0)	{
 			FILE * packetCached = fopen("packetCached.txt","a");
-			fprintf(packetCached,"Out of order delivery, prevToi: %d, toi: %d",prevToi,toi);
+			fprintf(packetCached,"Out of order delivery, prevToiVideo: %d, toi: %d",prevToiVideo,toi);
 			fclose(packetCached);
 			return;
 		}
-		prevToi = toi;
+		prevToiVideo = toi;
+	}
+
+
+
+	if(workingPort == 4002 || workingPort == 4003){
+		if ((prevToiAudio > toi) && toi !=0)	{
+			FILE * packetCached = fopen("packetCached.txt","a");
+			fprintf(packetCached,"Out of order delivery, prevToiAudio: %d, toi: %d",prevToiAudio,toi);
+			fclose(packetCached);
+			return;
+		}
+		prevToiAudio = toi;
 	}
 
 	if(workingPort == 4001 || workingPort == 4003){
