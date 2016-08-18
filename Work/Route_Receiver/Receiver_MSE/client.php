@@ -159,7 +159,7 @@ section {
 <h3>ROUTE MDE Delivery</h3>
 
 <div style="background-image: url(thumbs/background.png); height: 540px; width: 960px;">
-  <video controls width="960" height="540" onplay="playEvent()"></video>
+  <video controls width="960" height="540" onplay="playEvent()" onerror="playbackFailed(event)"></video>
 </div>
 <section>
   <pre id="log"></pre>
@@ -199,6 +199,48 @@ var startTime;
 var numSwitches = 0;
 var sumChangeTime = 0;
 var startTimeTotal = 0;
+var sourceBuffersReady = true; // Can I already start appending to the source buffer?
+var sourceBuffer;
+var audioSourceBuffer;
+var initVideoBuffer = true;
+var autoPlaybackDone = false;
+var result;
+var retuneOver1 = false;
+var retuneOver2 = false;
+var tuneinTriggeredFromVideo = false;
+var tuneinTriggeredFromAudio = false;
+
+function playbackFailed(e) {
+  // Video playback failed - show a message saying why.
+  // Useful for the purpose of debugging.
+   switch (e.target.error.code) {
+     case e.target.error.MEDIA_ERR_ABORTED:
+       alert('You aborted the video playback.');
+       break;
+    case e.target.error.MEDIA_ERR_NETWORK:
+      alert('A network error caused the video download to fail part-way.');
+      break;
+   case e.target.error.MEDIA_ERR_DECODE:
+      alert('The video playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+      break;
+   case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+     alert('The video could not be loaded, either because the server or network failed or because the format is not supported.');
+     break;
+   default:
+     alert('An unknown error occurred.');
+     break;
+   }
+}
+
+function reInitializeVariables(){
+ // Since, we changed the scope of many variables to global. We need to reintialize them when
+ // we switch channels. This way they go back to the original state. 
+ sourceBuffersReady = true; // The sourcebuffers (audio and video) are ready to be appended.
+ initVideoBuffer = true;
+ autoPlaybackDone = false;
+ tuneinTriggeredFromVideo = false; // Indicates whether the .init segment was first received from
+ tuneinTriggeredFromAudio = false; // video or audio.
+}
 
 function PlayChannel(channel)
 {
@@ -216,31 +258,36 @@ function PlayChannel(channel)
 	  {channel:channel},
 	  function(response)
 	  {
-	      if(response == "Started channel 1")
-		localChannel = 1;
-	      else
-		localChannel = 2;
-		
-         mediaSource = new MediaSource();
+	    result = JSON.parse(response); 
+	    var localChannel = result[0]; 	
+	    reInitializeVariables();	
+	    mediaSource = new MediaSource();                
 
-        video.src = window.URL.createObjectURL(mediaSource);
-        mediaSource.addEventListener('sourceopen', callback, false);
-        mediaSource.addEventListener('webkitsourceopen', callback, false);
-	{
-	    var tt = new Date;
-        console.log("Added MSE: " + tt + tt.getMilliseconds());
-    }
+	    // Now the mediasource object takes place of a file URL for the 
+	    // src of the video elements. 
+	    // And the video is now pointing at the mediasource object.
+	    video.src = window.URL.createObjectURL(mediaSource);
+	    
+	    // Wait for event that tells us that our media source object is 
+	    // ready for a buffer to be added.	  	    
+	    mediaSource.addEventListener('sourceopen', callback, false);
+	
+	    // Adi : Yet to figure out what this eventListener does? 
+	    // Adi : Proabaly this implies, either sourceopen or webkitsourceopen is called. 
+	    mediaSource.addEventListener('webkitsourceopen', callback, false);
+                
+	    {
+	      var tt = new Date;
+	      console.log("Added MSE: " + tt + tt.getMilliseconds());
+	    }
 
 	  }
 	);
-	{
-	    var tt = new Date;
-        console.log("*****Channel change start: " + tt + tt.getMilliseconds());
-    }
-
-	startTime = new Date();
-	if(numSwitches == 0)
-	    startTimeTotal = startTime;
+    var tt = new Date;
+    console.log("*****Channel change start: " + tt + tt.getMilliseconds());
+    startTime = new Date();
+    if(numSwitches == 0)
+      startTimeTotal = startTime;
 }
 
 /**
@@ -265,207 +312,341 @@ function playEvent()
     console.log("Play event called: " + timeNow + timeNow.getMilliseconds());
     sumChangeTime = sumChangeTime + channelChangeDuration;
     numSwitches = numSwitches + 1;
-	logger.clear();
+    logger.clear();
     logger.log('Last channel change time: ' + channelChangeDuration + " msec, Average: " + (sumChangeTime/numSwitches).toFixed(2) + " msec");
 }
 
+function callbackNew(e)
+{
+	  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
+	  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+	  sourceBuffersReady = true;
+	  //audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
+	  //audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
+	  //audioSourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
+	  console.log("New buffers created");
+	}
+
+function callbackErrorInBuffer(e){
+	console.log("Some errors in source buffer");
+}
+
+function callbackErrorInBuffer2(e){
+	console.log("Some errors in source buffer - update");
+}
+
+function callbackErrorInBuffer3(e){
+	console.log("Some errors in source buffer - abort");
+}
+
+function callbackErrorInPlayback(e){
+	console.log("Some errors in playback.");
+}
+
+
+
+function reTuneInProcess(triggeredFrom){
+  console.log("Tunein triggered from " + triggeredFrom);	
+  console.log("Now will attempt to remove buffer and add it again" );
+  // Ideally, one should be able to remove the buffers of mediasource and add it again.
+  // But there have been issues in realizing this in some of the buffers.
+  // For detailed description see : https://github.com/Dash-Industry-Forum/dash.js/issues/126
+  video.src = null;
+  // The way to do this now is point the video element to null. 
+  // What this does is remove the entire mediasource element assoicated with the video element.
+  // This is a routine which is executed when the video element is pointed to null. 
+  sourceBuffersReady = false; // The sourcebuffers are not yet created.  
+
+  if (triggeredFrom == "video")
+    tuneinTriggeredFromVideo = true; // Later used to discard packets until audio init comes.
+  else 
+    tuneinTriggeredFromAudio = true; // Later used to discard packets until video init comes.
+  
+  // Repeat the earlier process.
+  mediaSource = new MediaSource();
+  video.src = window.URL.createObjectURL(mediaSource);
+  mediaSource.addEventListener('sourceopen', callbackNew, false);
+  mediaSource.addEventListener('webkitsourceopen', callbackNew, false);
+  video.addEventListener('error', callbackErrorInPlayback, false);  // Indicates if any error in playback.
+  autoPlaybackDone = false;
+}
+
+
+
 function callback(e)
 {
-    {
-        var tt = new Date;
-        console.log("MSE callback started: " + tt + tt.getMilliseconds());
-    }
-
-  var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
-  var audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
-
-  logString = "";//'mediaSource readyState: ' + this.readyState + "\n";
-
+  var tt = new Date;
+  console.log("MSE callback started: " + tt + tt.getMilliseconds());
+  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
+  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+  logString = "";
+  //'mediaSource readyState: ' + this.readyStatevar period + "\n";
   //logger.log(logString);
-
   window.WebSocket = window.WebSocket || window.MozWebSocket;
+  // ---------------------- Video websocket start---------------//	
+  var websocket = new WebSocket('ws://127.0.0.1:9000',
+			'dumb-increment-protocol');
+  websocket.onopen = function () {
+		  websocket.send("video");
+  };
+  websocket.onerror = function () {
+      setTimeout(function(){ websocket = new WebSocket('ws://127.0.0.1:9000','dumb-increment-protocol'); }, 50);
+  };
+  // ---------------------- Video websocket end-----------------//
 
-        var websocket = new WebSocket('ws://127.0.0.1:9000',
-                                      'dumb-increment-protocol');
-									  
-        var websocketAudio = new WebSocket('ws://127.0.0.1:9001',
-                                      'dumb-increment-protocol');
+  // ---------------------- Audio websocket start---------------//
+  var websocketAudio = new WebSocket('ws://127.0.0.1:9001',
+				'dumb-increment-protocol');
 
-        websocket.onopen = function () {
-			websocket.send("video");
-        };
+  websocketAudio.onopen = function () {
+		  websocketAudio.send("audio");
+  };
 
-        websocket.onerror = function () {
-            setTimeout(function(){ websocket = new WebSocket('ws://127.0.0.1:9000','dumb-increment-protocol'); }, 50);
-        };
-	
-        websocketAudio.onopen = function () {
-			websocketAudio.send("audio");
-        };
 
-        websocketAudio.onerror = function () {
-            setTimeout(function(){ websocketAudio = new WebSocket('ws://127.0.0.1:9001','dumb-increment-protocol'); }, 50);
-        };
+  websocketAudio.onerror = function () {
+      setTimeout(function(){ websocketAudio = new WebSocket('ws://127.0.0.1:9001','dumb-increment-protocol'); }, 50);
+  };  
+  // ---------------------- Audio websocket end---------------//
+
+  // Convert an integer to a string made up of the bytes in network/big-endian order.
+
+function htonl(n)
+{
+      var newv = ((n & 0xFF000000) >>> 24) + ((n & 0x00FF0000) >>> 8) + ((n & 0x0000FF00) <<  8) + ((n & 0x000000FF) <<  24);
+	  return newv;
+}
+
+var PTOFound = 0;
+var videoPTOFound = false;
+var audioPTOFound = false;
+var videoBuffer;
+var audioBuffer;
+var initAudioBuffer = true;
+var minVideoAppendLength = 41000;
+var minAudioAppendLength = 1000;
+var lastAppendTime = 0;
+var lastAppendTimeAudio = 0;
+var tempSegmentCount = 0;	
+var boundary1 = result[3]*1000; 
+var boundary2 = (result[4]-result[3])*1000; 
+// The subraction because the sourcebuffer get reinitiliazed to zero.  
+var initInterval = 150; // We look for 150ms up and down around the boundary, for .init segment to arrive.
+var sourceBufferLength = 0;
+var audioSourceBufferLength = 0;
+var reTuneInVideo = 0;
+var reTuneInAudio = 0;
+
+// ------------------ Video packet received from websocket -----------------//
+websocket.onmessage = function (message)
+{
+	tempSegmentCount = tempSegmentCount + 1;					
+	var arraybuffer;
+	var arrayData;			
+	var fileReader = new FileReader();
+	fileReader.onload = function() 
+	{
+		arraybuffer = this.result;
+		arrayData = new Uint8Array(arraybuffer);
+
+		/* What this essentially does is this after if the tunein is triggered from audio, it waits 
+		until we receive the first .init segment of video is received. It discards all other packets
+		that were received in between the time of tuning in from the audio and until the first .init segment
+		of video is received.
+		*/ 
+		if (tuneinTriggeredFromAudio){	
+		  if ( (arrayData.length == 900) || (arrayData.length == 920) ){
+		    initVideoBuffer = true;
+		    tuneinTriggeredFromAudio = false;
+		    }
+		  else 
+		    return;
+		}				
+		//console.log("Video array data length = " + arrayData.length);
 		
-		// Convert an integer to a string made up of the bytes in network/big-endian order.
-		function htonl(n)
+		// Checks for condition to retune at the first boundary between end of first period and begining of ad.
+		if( (sourceBufferLength < (boundary1 + initInterval)) && (sourceBufferLength > (boundary1 - initInterval)) && !retuneOver1 )				
 		{
-		     var newv = ((n & 0xFF000000) >>> 24) + ((n & 0x00FF0000) >>> 8) + ((n & 0x0000FF00) <<  8) + ((n & 0x000000FF) <<  24);
-			 return newv;
+		  //console.log("Retuned 1");
+		  reTuneInVideo = 1;
+		  retuneOver1 = true;
 		}
 		
-		var autoPlaybackDone = false;
-		var PTOFound = 0;
-		var videoPTOFound = false;
-		var audioPTOFound = false;
-		var videoBuffer;
-		var initVideoBuffer = true;
-		var audioBuffer;
-		var initAudioBuffer = true;
-		var minVideoAppendLength = 41000;
-		var minAudioAppendLength = 1000;
-		var lastAppendTime = 0;
-		var lastAppendTimeAudio = 0;
-
-        websocket.onmessage = function (message)
+		// Checks for condition to retune at the second boundary between end of ad and begining of third period.
+		if( (sourceBufferLength < (boundary2 + initInterval)) && (sourceBufferLength > (boundary2 - initInterval)) && !retuneOver2 && retuneOver1 )				
 		{
-			var arraybuffer;
-			var arrayData;
-			var fileReader = new FileReader();
-			fileReader.onload = function() 
-			{
-			    arraybuffer = this.result;
-				arrayData = new Uint8Array(arraybuffer);
-				if(initVideoBuffer == true)
-				{
-					videoBuffer = arrayData;
-                    initVideoBuffer = false;				
-                }
-				else
-				{					
-					videoBuffer = _appendBuffer(videoBuffer,arrayData);
-				}
-				
-			    var period = 0;
-			    var timeNow = new Date();
-			    if(lastAppendTime != 0)
-			    {
-			        period = timeNow - lastAppendTime;
-			        //console.log(period);
-		        }
-		        else
-		            lastAppendTime = timeNow;
-		        
-				if(period > 100)
-				{
-					initVideoBuffer = true;
-				    //console.log(videoBuffer);
-
-			        sourceBuffer.appendBuffer(videoBuffer);
-    		        lastAppendTime = new Date();	
- 					if(!autoPlaybackDone)
-                        console.log("Appending video buffer length: " + videoBuffer.byteLength + ", time: " + lastAppendTime + lastAppendTime.getMilliseconds());
-
-				}
-				
-				if (sourceBuffer.buffered.length > 0) 
-				{
-					if(videoPTOFound == false && sourceBuffer.buffered.start(0) > PTOFound)
-					{
-						PTOFound = sourceBuffer.buffered.start(0);
-						video.currentTime = PTOFound;
-						videoPTOFound = true;
-						{
-						    var tt = new Date;
-                            console.log("Video PTO found: " + tt + tt.getMilliseconds());
-                        }
-					}
-
-					if(!autoPlaybackDone)
-					{
-						{
-						    var tt = new Date;
-                            console.log("Play called from video: " + tt + tt.getMilliseconds());
-                        }
-						video.play(); // Start playing after 1st chunk is appended.
-						autoPlaybackDone = true;
-					}
-				}
-				//logger.clear();
-		        //logger.log(logString + 'Appending audio and video chunk ');
-			};
-			fileReader.readAsArrayBuffer(message.data);
-			
-			var elem = document.getElementById('field_name');
-			var msgpt1 = ", Size: " + message.data.size;
-        };
+		  //console.log("Retuned 2");
+		  reTuneInVideo = 1;
+		  retuneOver2 = true;
+		}
 		
+		if ( reTuneInVideo && ((arrayData.length == 900) || (arrayData.length == 920)) ){
+		  //Waits for the first .init segment to arrive after tunein state is triggered.
+		  //TODO: The way we look for .init segment right now is for the size. This is ugly and hardcoded.
+		  // In future, some other way shall be looked at. 
+		  reTuneInVideo = 0;
+		  reTuneInProcess("video");
+		  initVideoBuffer = true;
+		  videoPTOFound = false;
+		  lastAppendTime = 0;
+		}				
 		
-        websocketAudio.onmessage = function (message) {
-			var arraybuffer;
-			var arrayData;
-			var fileReader = new FileReader();
-			fileReader.onload = function() {
-			    arraybuffer = this.result;
-				arrayData = new Uint8Array(arraybuffer);
+		if(initVideoBuffer == true){
+			videoBuffer = arrayData;
+			initVideoBuffer = false;				
+		}
+		else{					
+			//console.log("Array data length 2 = " + arrayData.length);
+			videoBuffer = _appendBuffer(videoBuffer,arrayData);
+		}
+		
+	    var period = 0;
+	    var timeNow = new Date();
+	    if(lastAppendTime != 0)
+	    {
+		period = timeNow - lastAppendTime;
+	    }
+	    else
+	    lastAppendTime = timeNow;
+	
+	    if(period > 100 && sourceBuffersReady){
+	      initVideoBuffer = true;
+	      sourceBuffer.appendBuffer(videoBuffer);
+	      lastAppendTime = new Date();	
+	      if(!autoPlaybackDone)
+		console.log("Appending video buffer length: " + videoBuffer.byteLength + ", time: " + lastAppendTime + lastAppendTime.getMilliseconds());
+	    }
+	      
+	    if (sourceBuffersReady) {					
+	      if (sourceBuffer.buffered.length > 0) {
+		sourceBufferLength = sourceBuffer.buffered.end(0) * 1000;
+		if(videoPTOFound == false && sourceBuffer.buffered.start(0) > PTOFound) {
+			PTOFound = sourceBuffer.buffered.start(0);
+			video.currentTime = PTOFound;
+			console.log("PTO found = " + PTOFound);
+			videoPTOFound = true;
+			var tt = new Date;
+			console.log("Video PTO found: " + tt + tt.getMilliseconds());
+		}
 
-				if(initAudioBuffer == true)
-				{
-					audioBuffer = arrayData;
-					initAudioBuffer = false;
-				}
-				else
-				{
-					audioBuffer = _appendBuffer(audioBuffer,arrayData);
-				}
-				
-			    var period = 0;
-			    var timeNow = new Date();
-			    if(lastAppendTimeAudio != 0)
-			    {
-			        period = timeNow - lastAppendTimeAudio;
-			        //console.log(period);
-		        }
-		        else
-		            lastAppendTimeAudio = timeNow;
+	      if(!autoPlaybackDone) {
+		var tt = new Date;
+		console.log("Play called from video: " + tt + tt.getMilliseconds());
+		video.play(); // Start playing after 1st chunk is appended.
+		autoPlaybackDone = true;
+	      }
+	    }
+	  }
+	//logger.clear();
+	//logger.log(logString + 'Appending audio and video chunk ');
+	};
+      fileReader.readAsArrayBuffer(message.data);	
+      var elem = document.getElementById('field_name');
+      var msgpt1 = ", Size: " + message.data.size;
+};
+		
+websocketAudio.onmessage = function (message) {
+      var arraybuffer;
+      var arrayData;
+      var fileReader = new FileReader();
+      fileReader.onload = function() {
+	  arraybuffer = this.result;
+	  arrayData = new Uint8Array(arraybuffer);
 
-				if(period > 100)
-				{
-					initAudioBuffer = true;
-			        audioSourceBuffer.appendBuffer(audioBuffer);
-    		        lastAppendTimeAudio = new Date();
- 					if(!autoPlaybackDone)
-                        console.log("Appending audio buffer length: " + audioBuffer.byteLength + ", time: " + lastAppendTimeAudio + lastAppendTimeAudio.getMilliseconds());
-				}
-				
-				if (audioSourceBuffer.buffered.length > 0) 
-				{
-					  if(audioPTOFound == false && audioSourceBuffer.buffered.start(0) > PTOFound)
-				  	{
-				  		PTOFound = audioSourceBuffer.buffered.start(0);
-						video.currentTime = PTOFound;
-						audioPTOFound = true;
-						{
-						    var tt = new Date;
-                            console.log("Audio PTO found: " + tt + tt.getMilliseconds());
-                        }
-				  	}
-					  
-					if(!autoPlaybackDone)
-					{
-						video.play(); // Start playing after 1st chunk is appended.
-						autoPlaybackDone = true;
-						{
-						    var tt = new Date;
-                            console.log("Play called from Audio: " + tt + tt.getMilliseconds());
-                        }
-					}
-		      	}
-			};
-			fileReader.readAsArrayBuffer(message.data);
+      /* What this essentially does is this after if the tunein is triggered from video, it waits 
+      until we receive the first .init segment of audio is received. It discards all other packets
+      that were received in between the time of tuning in from the video and until the first .init segment
+      is received.
+      */ 
+      if (tuneinTriggeredFromVideo){	
+	if (arrayData.length == 826){
+	  initAudioBuffer = true;
+	  tuneinTriggeredFromVideo = false;
+	  }
+	else 
+	  return;			
+      }
+      
+      if( (audioSourceBufferLength < (boundary1 + initInterval)) && (audioSourceBufferLength > (boundary1 - initInterval)) && !retuneOver1 ){
+	  console.log("Retuned audio 1");
+	  reTuneInAudio = 1;
+	  retuneOver1 = true;
+      }
+	
+      // Condition to retune at the second boundary between end of ad and begining of third period.
+      if( (audioSourceBufferLength < (boundary2 + initInterval)) && (audioSourceBufferLength > (boundary2 - initInterval)) && !retuneOver2 && retuneOver1 ) {
+	console.log("Retuned audio 2");
+	reTuneInAudio = 1;
+	retuneOver2 = true;
+      }
+	  
+      if ( reTuneInAudio && (arrayData.length == 826) ){
+	//Waits for the first .init segment to arrive after tunein state is triggered;
+	reTuneInAudio = 0;
+	reTuneInProcess("audio");
+	initAudioBuffer = true;
+	audioPTOFound = false;
+	lastAppendTimeAudio = 0;
+      }							    
+	  
+	
+	  
+      if(initAudioBuffer == true){
+	audioBuffer = arrayData;
+	initAudioBuffer = false;
+      }
+      else{
+	audioBuffer = _appendBuffer(audioBuffer,arrayData);
+      }
+	  
+      var period = 0;
+      var timeNow = new Date();
+      if(lastAppendTimeAudio != 0)
+      {
+	period = timeNow - lastAppendTimeAudio;
+      }
+      else
+	lastAppendTimeAudio = timeNow;
+
+      if(period > 100 && sourceBuffersReady)
+      {
+	initAudioBuffer = true;
+	audioSourceBuffer.appendBuffer(audioBuffer);
+	lastAppendTimeAudio = new Date();
+	if(!autoPlaybackDone)
+	  console.log("Appending audio buffer length: " + audioBuffer.byteLength + ", time: " + lastAppendTimeAudio + lastAppendTimeAudio.getMilliseconds());
+      }
+	      
+      if (sourceBuffersReady){				
+	      if (audioSourceBuffer.buffered.length > 0) 
+	      {
+		      audioSourceBufferLength = audioSourceBuffer.buffered.end(0) * 1000;
+			if(audioPTOFound == false && audioSourceBuffer.buffered.start(0) > PTOFound)
+		      {
+			      PTOFound = audioSourceBuffer.buffered.start(0);
+			      video.currentTime = PTOFound;
+										      
+			      audioPTOFound = true;
+			      {
+				      var tt = new Date;
+				      console.log("Audio PTO found: " + tt + tt.getMilliseconds());
+			      }
+		      }
 			
-			var msgpt1 = ", Size: " + message.data.size;
-        };
+		      if(!autoPlaybackDone)
+		      {
+			      video.play(); // Start playing after 1st chunk is appended.
+			      autoPlaybackDone = true;
+			      {
+				      var tt = new Date;
+				      console.log("Play called from Audio: " + tt + tt.getMilliseconds());
+			      }
+		      }
+	      }
+      }
+      };
+fileReader.readAsArrayBuffer(message.data);			
+var msgpt1 = ", Size: " + message.data.size;
+};
 }
                 
       window.onbeforeunload = function (e) {

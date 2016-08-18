@@ -227,16 +227,14 @@ Adi end */
 	// Maybe this information was used for logging earlier
 	// The following is specific to video and it causing some problem and it will be removed.	
 	
-	if(workingPort == 4001 || workingPort == 4003)
+	/*if(workingPort == 4001 || workingPort == 4003)
 	{       
-	#define mmy emptySlot->buffer
-    
-    static unsigned long long stoi = 0;
-    static unsigned long long stsi = 0;
-    static unsigned int ssbn = 0;
-    static unsigned int sesi = 0;
+	#define mmy emptySlot->buffer    
+	static unsigned long long stoi = 0;
+	static unsigned long long stsi = 0;
+	static unsigned int ssbn = 0;
+	static unsigned int sesi = 0;
 	FILE * tempff = fopen("bufferLog.txt","a");
-
 	fprintf(tempff,"WRITE: fullness %d, toi %llu, tsi %llu, sbn %u, esi %u, len %d, bytes %2x %2x %2x %2x %2x %2x %2x %2x",newBufferFullness(),buffer.toi,buffer.tsi,buffer.sbn,buffer.esi,buffer.length,mmy[0],mmy[1],mmy[2],mmy[3],mmy[4],mmy[5],mmy[6],mmy[7]);
 	if(buffer.toi != stoi || buffer.tsi != stsi || buffer.sbn != ssbn || (buffer.esi - sesi) > 1)
 		fprintf(tempff,"<==========================");
@@ -246,7 +244,7 @@ Adi end */
 	ssbn = buffer.sbn;
 	stsi = buffer.tsi;
 	stoi = buffer.toi;
-	}
+	}*/
 
 	pthread_mutex_unlock(&bufferLock);
 	
@@ -439,18 +437,11 @@ int writeToBuffer(struct packetBuffer buffer)
 	
 	if(getBufferFullness() == circularBufferLength - 1)	//Dont let the pointers point to same thing again
 	{
-		if(workingPort == 4001 || workingPort == 4003)
-		{
-			FILE * tempff = fopen("bufferLog.txt","a");
-			fprintf(tempff,"********** WRITE: Could not write, buffer full\n");
-			fprintf(stdout,"********** WRITE: Could not write, buffer full\n");
-			fclose(tempff);
-		}
 		pthread_mutex_unlock(&bufferLock);
 		return -1;
 	}
 	
-	if(workingPort == 4001 || workingPort == 4003)
+	/*if(workingPort == 4001 || workingPort == 4003)
 	{
         FILE * sendMergeFile;
         if(writePtr == 0 && readPtr == 0)
@@ -461,8 +452,8 @@ int writeToBuffer(struct packetBuffer buffer)
         fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
         fclose(sendMergeFile);
             
-	}
-	
+	}*/
+		
 	circularPacketBuffer[writePtr].length = buffer.length;
     memcpy(circularPacketBuffer[writePtr].buffer,buffer.buffer,buffer.length);
 
@@ -1801,21 +1792,9 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 						}
 					}
                     
-					if(workingPort == 4001 || workingPort == 4003)
-					{
-						FILE * packetCached = fopen("packetCached.txt","a");
-						fprintf(packetCached,"cachePacket Called\n");
-						fclose(packetCached);
-					}   
 
-                    cachePacket(toi,tsi,sbn,esi,trans_unit->data,(unsigned int)len - hdrlen);
+					cachePacket(toi,tsi,sbn,esi,trans_unit->data,(unsigned int)len - hdrlen);
                     
-					if(workingPort == 4001 || workingPort == 4003)
-					{
-						FILE * packetCached = fopen("packetCached.txt","a");
-						fprintf(packetCached,"Packet cached\n");
-						fclose(packetCached);
-					}   
 
 					/* if large file mode data symbol is stored in the tmp file */
 					if(toi != FDT_TOI && ch->s->rx_memory_mode == 2) {
@@ -2028,38 +2007,25 @@ void addPacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn,
 	}
 }
 
-void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn, unsigned int esi, char *buffer, int len)
-{
-	
-	
+void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn, unsigned int esi, char *buffer, int len){	
+	// If out of order delivery packets come. Neglect them.
 	if(workingPort == 4001 || workingPort == 4003){
-		if ((prevToiVideo > toi) && toi !=0)	{
-			FILE * packetCached = fopen("packetCached.txt","a");
-			fprintf(packetCached,"Out of order delivery, prevToiVideo: %d, toi: %d",prevToiVideo,toi);
-			fclose(packetCached);
-			return;
-		}
+		if ((prevToiVideo > toi) && toi !=0)	
+			return;		
 		prevToiVideo = toi;
-	}
-
-
+	}	
 
 	if(workingPort == 4002 || workingPort == 4003){
-		if ((prevToiAudio > toi) && toi !=0)	{
-			FILE * packetCached = fopen("packetCached.txt","a");
-			fprintf(packetCached,"Out of order delivery, prevToiAudio: %d, toi: %d",prevToiAudio,toi);
-			fclose(packetCached);
-			return;
-		}
+		if ((prevToiAudio > toi) && toi !=0)	
+			return;		
 		prevToiAudio = toi;
 	}
 
-	if(workingPort == 4001 || workingPort == 4003){
-
+	/*if(workingPort == 4001 || workingPort == 4003){
 	FILE * packetCached = fopen("packetCached.txt","a");
 	fprintf(packetCached,"Inside cache packet, toi: %d, tsi: %d, sbn: %d, esi: %d, len: %d\n",toi,tsi,sbn,esi,len);
 	fclose(packetCached);
-	}
+	}*/
 	
 	// Adi's understanding of the state diagram implementation
 	// The following is a state diagram implementation.
@@ -2068,94 +2034,28 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
 	// 2. Then, wait for init segment to arrive and add first time to the buffer. 
 	// 3. Then, neglect the init segment, add only the video segment.
 
-    if(tunedIn == 0 && toi == 0){
+    if(tunedIn == 0 && toi == 0)
         tunedIn = 1;        
-		if(workingPort == 4001 || workingPort == 4003)
-		{
-			FILE * addingPacket = fopen("addingPacket.txt","w");
-			fprintf(addingPacket,"1\n");
-			fclose(addingPacket);
-		}       
+        
+    if(tunedIn == 1) {
+		if( toi%2 != 0 )
+			tunedIn = 2;		
     }
     
-    if(tunedIn == 1)
-    {
-		if( toi%2 != 0 ){
-			tunedIn = 2;
-			if(workingPort == 4001 || workingPort == 4003)
-				{
-					FILE * addingPacket = fopen("addingPacket.txt","a");
-					fprintf(addingPacket,"2\n");
-					fclose(addingPacket);
-				}       
-		}
-    }
-    
-    if(tunedIn == 2)
-    {
+    if(tunedIn == 2) {
         if(toi == 0)
             tunedIn = 3;
-        else
-        {
-		if( toi%2 != 0 ){
-			FILE * addingPacket = fopen("addingPacket.txt","a");
-			if(workingPort == 4001 || workingPort == 4003)
-				{
-					fprintf(addingPacket,"4\n");
-				} 
-			addPacket(toi,tsi,sbn,esi,buffer,len);		
-			if(workingPort == 4001 || workingPort == 4003)
-				{
-					fprintf(addingPacket,"5\n");
-				} 
-			fclose(addingPacket);
-			}
-        }
-            
+        else {
+		if( toi%2 != 0 )
+			addPacket(toi,tsi,sbn,esi,buffer,len);					
+        }            
     }
     
-
-	if(workingPort == 4001 || workingPort == 4003)
-	{
-		FILE * addingPacket = fopen("addingPacket.txt","a");
-		fprintf(addingPacket,"I am here - 1!, tunedIn = %d \n", tunedIn);
-		fclose(addingPacket);
-	}     
-
-    if(tunedIn == 3)
-    {
-
-		if(workingPort == 4001 || workingPort == 4003)
-		{
-			FILE * addingPacket = fopen("addingPacket.txt","a");
-			fprintf(addingPacket,"I am here - 2!, workingPort: %d \n",workingPort);
-			fclose(addingPacket);
-		}     
-
-//		if( toi%2 == 0 && toi != 0 ){
-		if( toi != 0 ){					
-			FILE * addingPacket = fopen("addingPacket.txt","a");
-			if(workingPort == 4001 || workingPort == 4003)
-				{
-					fprintf(addingPacket,"6, toi: %d, tsi: %d, sbn: %d, esi: %d, len: %d\n",toi,tsi,sbn,esi,len);
-				}     		
-			addPacket(toi,tsi,sbn,esi,buffer,len);
-			if(workingPort == 4001 || workingPort == 4003)
-				{
-					fprintf(addingPacket,"7, toi: %d, tsi: %d, sbn: %d, esi: %d, len: %d\n",toi,tsi,sbn,esi,len);
-				}     		
-			fclose(addingPacket);
-		}
+    if(tunedIn == 3){
+//		if( toi%2 == 0 && toi != 0 ){ Dont filter out the init segments
+		if( toi != 0 )					
+			addPacket(toi,tsi,sbn,esi,buffer,len);		
     }
-
-	if(workingPort == 4001 || workingPort == 4003){
-	FILE * packetCached = fopen("packetCached.txt","a");
-	fprintf(packetCached,"Exiting cache packet\n");
-	fclose(packetCached);
-	}
-
-
-
 }
 
 /**
