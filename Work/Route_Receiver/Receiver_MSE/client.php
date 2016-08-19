@@ -24,6 +24,7 @@ MSE Example used by Eric Bidelman (ebidel@)
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <title>ROUTE MDE Delivery</title>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href="style.css" rel="stylesheet">
 <style>
 ::selection {
   color: #fff;
@@ -172,8 +173,18 @@ section {
         <a href="#" title="Channel 2" onclick="PlayChannel(2);return false;"><img src="thumbs/thumb2.png" /></a>
       </div>
     </div>
+  </div> 
+
+  <p id="AdSel">Unicast</p> 
+  <div class="onoffswitch">
+    <input onchange="checkthis(this)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+      <label class="onoffswitch-label" for="myonoffswitch">
+      <span class="onoffswitch-inner"></span>
+      <span class="onoffswitch-switch"></span>
+      </label>
   </div>
 
+  
 <script src="jquery-1.11.1.min.js"></script>
 <script>
 var video = document.querySelector('video');
@@ -205,10 +216,22 @@ var audioSourceBuffer;
 var initVideoBuffer = true;
 var autoPlaybackDone = false;
 var result;
-var retuneOver1 = false;
-var retuneOver2 = false;
+var reTuneOver1 = false;
+var reTuneOver2 = false;
 var tuneinTriggeredFromVideo = false;
 var tuneinTriggeredFromAudio = false;
+var customAd = false;
+var customAdTriggered = false;
+var reTuneInVideo = 0;
+var reTuneInAudio = 0;
+
+function checkthis(ele){   
+  if(!ele.checked )
+    customAd = true;
+    else
+    customAd = false;
+}
+
 
 function playbackFailed(e) {
   // Video playback failed - show a message saying why.
@@ -319,7 +342,7 @@ function playEvent()
 function callbackNew(e)
 {
 	  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
-	  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+	  //audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
 	  sourceBuffersReady = true;
 	  //audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
 	  //audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
@@ -351,26 +374,38 @@ function reTuneInProcess(triggeredFrom){
   // Ideally, one should be able to remove the buffers of mediasource and add it again.
   // But there have been issues in realizing this in some of the buffers.
   // For detailed description see : https://github.com/Dash-Industry-Forum/dash.js/issues/126
-  video.src = null;
   // The way to do this now is point the video element to null. 
   // What this does is remove the entire mediasource element assoicated with the video element.
-  // This is a routine which is executed when the video element is pointed to null. 
-  sourceBuffersReady = false; // The sourcebuffers are not yet created.  
-
-  if (triggeredFrom == "video")
-    tuneinTriggeredFromVideo = true; // Later used to discard packets until audio init comes.
-  else 
-    tuneinTriggeredFromAudio = true; // Later used to discard packets until video init comes.
-  
-  // Repeat the earlier process.
-  mediaSource = new MediaSource();
-  video.src = window.URL.createObjectURL(mediaSource);
-  mediaSource.addEventListener('sourceopen', callbackNew, false);
-  mediaSource.addEventListener('webkitsourceopen', callbackNew, false);
-  video.addEventListener('error', callbackErrorInPlayback, false);  // Indicates if any error in playback.
-  autoPlaybackDone = false;
+  // This is a routine which is executed when the video element is pointed to null.  
+  if (customAd && !reTuneOver2){
+    video.src = "../Receiver_MSE/CustomAd/video_30s.mp4";
+    video.play();
+    video.addEventListener('ended',videoEnded,false);
+    customAdTriggered = true;
+  }
+  else{  
+    video.src = null;
+    sourceBuffersReady = false; // The sourcebuffers are not yet created.    
+    if (triggeredFrom == "video")
+      tuneinTriggeredFromVideo = true; // Later used to discard packets until audio init comes.
+    else 
+      tuneinTriggeredFromAudio = true; // Later used to discard packets until video init comes.  
+    // Repeat the earlier process.
+    mediaSource = new MediaSource();
+    video.src = window.URL.createObjectURL(mediaSource);
+    mediaSource.addEventListener('sourceopen', callbackNew, false);
+    mediaSource.addEventListener('webkitsourceopen', callbackNew, false);
+    video.addEventListener('error', callbackErrorInPlayback, false);  // Indicates if any error in playback.
+    autoPlaybackDone = false;
+  }
 }
 
+function videoEnded(e){
+  console.log("The custom ad video has finished playing.");
+  customAdTriggered = false;
+  reTuneInVideo = 1;
+  reTuneOver2 = true;
+}
 
 
 function callback(e)
@@ -378,7 +413,7 @@ function callback(e)
   var tt = new Date;
   console.log("MSE callback started: " + tt + tt.getMilliseconds());
   sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
-  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+  //audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
   logString = "";
   //'mediaSource readyState: ' + this.readyStatevar period + "\n";
   //logger.log(logString);
@@ -398,9 +433,9 @@ function callback(e)
   var websocketAudio = new WebSocket('ws://127.0.0.1:9001',
 				'dumb-increment-protocol');
 
-  websocketAudio.onopen = function () {
+/*  websocketAudio.onopen = function () {
 		  websocketAudio.send("audio");
-  };
+  };*/
 
 
   websocketAudio.onerror = function () {
@@ -433,12 +468,14 @@ var boundary2 = (result[4]-result[3])*1000;
 var initInterval = 150; // We look for 150ms up and down around the boundary, for .init segment to arrive.
 var sourceBufferLength = 0;
 var audioSourceBufferLength = 0;
-var reTuneInVideo = 0;
-var reTuneInAudio = 0;
+reTuneInVideo = 0;
+reTuneInAudio = 0;
 
 // ------------------ Video packet received from websocket -----------------//
 websocket.onmessage = function (message)
 {
+	if (customAdTriggered)
+	  return;
 	tempSegmentCount = tempSegmentCount + 1;					
 	var arraybuffer;
 	var arrayData;			
@@ -463,20 +500,18 @@ websocket.onmessage = function (message)
 		}				
 		//console.log("Video array data length = " + arrayData.length);
 		
-		// Checks for condition to retune at the first boundary between end of first period and begining of ad.
-		if( (sourceBufferLength < (boundary1 + initInterval)) && (sourceBufferLength > (boundary1 - initInterval)) && !retuneOver1 )				
-		{
+		// Checks for condition to reTune at the first boundary between end of first period and begining of ad.
+		if( (sourceBufferLength < (boundary1 + initInterval)) && (sourceBufferLength > (boundary1 - initInterval)) && !reTuneOver1 ){
 		  //console.log("Retuned 1");
 		  reTuneInVideo = 1;
-		  retuneOver1 = true;
+		  reTuneOver1 = true;
 		}
 		
-		// Checks for condition to retune at the second boundary between end of ad and begining of third period.
-		if( (sourceBufferLength < (boundary2 + initInterval)) && (sourceBufferLength > (boundary2 - initInterval)) && !retuneOver2 && retuneOver1 )				
-		{
+		// Checks for condition to reTune at the second boundary between end of ad and begining of third period.
+		if( (sourceBufferLength < (boundary2 + initInterval)) && (sourceBufferLength > (boundary2 - initInterval)) && !reTuneOver2 && reTuneOver1 ){
 		  //console.log("Retuned 2");
 		  reTuneInVideo = 1;
-		  retuneOver2 = true;
+		  reTuneOver2 = true;
 		}
 		
 		if ( reTuneInVideo && ((arrayData.length == 900) || (arrayData.length == 920)) ){
@@ -545,6 +580,9 @@ websocket.onmessage = function (message)
 };
 		
 websocketAudio.onmessage = function (message) {
+      if (customAdTriggered)
+	return;
+
       var arraybuffer;
       var arrayData;
       var fileReader = new FileReader();
@@ -566,17 +604,17 @@ websocketAudio.onmessage = function (message) {
 	  return;			
       }
       
-      if( (audioSourceBufferLength < (boundary1 + initInterval)) && (audioSourceBufferLength > (boundary1 - initInterval)) && !retuneOver1 ){
+      if( (audioSourceBufferLength < (boundary1 + initInterval)) && (audioSourceBufferLength > (boundary1 - initInterval)) && !reTuneOver1 ){
 	  console.log("Retuned audio 1");
 	  reTuneInAudio = 1;
-	  retuneOver1 = true;
+	  reTuneOver1 = true;
       }
 	
-      // Condition to retune at the second boundary between end of ad and begining of third period.
-      if( (audioSourceBufferLength < (boundary2 + initInterval)) && (audioSourceBufferLength > (boundary2 - initInterval)) && !retuneOver2 && retuneOver1 ) {
+      // Condition to reTune at the second boundary between end of ad and begining of third period.
+      if( (audioSourceBufferLength < (boundary2 + initInterval)) && (audioSourceBufferLength > (boundary2 - initInterval)) && !reTuneOver2 && reTuneOver1 ) {
 	console.log("Retuned audio 2");
 	reTuneInAudio = 1;
-	retuneOver2 = true;
+	reTuneOver2 = true;
       }
 	  
       if ( reTuneInAudio && (arrayData.length == 826) ){
@@ -586,9 +624,7 @@ websocketAudio.onmessage = function (message) {
 	initAudioBuffer = true;
 	audioPTOFound = false;
 	lastAppendTimeAudio = 0;
-      }							    
-	  
-	
+      }							     
 	  
       if(initAudioBuffer == true){
 	audioBuffer = arrayData;
