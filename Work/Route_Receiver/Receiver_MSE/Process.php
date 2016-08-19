@@ -53,7 +53,7 @@ file_put_contents ( "timelog.txt" , "Launching FLUTE:" . $date . $date_array[0] 
 # ----------------------------------------------------------------------
 # Start first flute sender
 # Start MPD receiving session followed by Audio and Video sessions.
-chdir('../Receiver/SLT_signalling');
+chdir('../Receiver_MSE/SLT_signalling');
 $result = json_decode(exec('sudo python readFromSLT.py ' . $channel), true);
 chdir('../../bin');
 #$cmd=  "sudo nice --20 ./flute -A -B:". $DASHContent ." -d:" . $sdp . " -Q -Y:" . $encodingSymbolsPerPacket . " -J:" . $Log . " > /dev/null &"; // > logout2.txt &";
