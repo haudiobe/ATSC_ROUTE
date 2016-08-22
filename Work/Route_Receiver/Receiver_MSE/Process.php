@@ -104,9 +104,14 @@ exec($cmd);
 
 $micro_date = microtime();
 $date_array = explode(" ",$micro_date);
+$date_array[0] = round($date_array[0],4);
 $date = date("Y-m-d H:i:s",$date_array[1]);
 file_put_contents ( "timelog.txt" , "Started Globbing:" . $date . $date_array[0] . " \r\n" , FILE_APPEND );
 while (!glob("../bin/socketServerReady.trig")) usleep(1000);
+
+
+$AST_SEC = new DateTime( 'now',  new DateTimeZone( 'UTC' ) );	/* initializer for availability start time */
+$AST_SEC->setTimestamp($date_array[1]);    //Better use a single time than now above
 
 
 $MPD = simplexml_load_file($DASHContent . "/" . $OriginalMPD);
@@ -128,11 +133,20 @@ $dom_sxe = $dom->appendChild($dom_sxe);
 
 $periods = parseMPD($dom->documentElement);
 
+// ------ Time elapsed between the original AST and Tune-in time ------------------
+$MPDNode = &$periods[0]['node']->parentNode;
+$MPD_AST = $MPDNode->getAttribute("availabilityStartTime");
+preg_match('/\.\d*/',$MPD_AST,$matches);
+$fracAST = "0" . $matches[0];
+$originalAST = new DateTime($MPD_AST);   
+$deltaTimeASTTuneIn = $AST_SEC->getTimestamp() + round($date_array[0],4) - ($originalAST->getTimestamp() + $fracAST);
+//------------------------------------------------------------------------------------
+
 $periodStart;   //Start of this period in the iteration
 $lastPeriodStart;   //Period start of the last period in the iteration
 $lastPeriodDuration;    //Period duration of the last period in iteration
-
-$responseToSend[1] = count($periods);
+//$responseToSend[1] = count($periods);
+$responseToSend[1] = $deltaTimeASTTuneIn;
 	
 for ($periodIndex = 0; $periodIndex < count($periods); $periodIndex++)  //Loop on all periods in orginal MPD
 {

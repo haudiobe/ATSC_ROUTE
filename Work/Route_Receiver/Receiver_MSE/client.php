@@ -190,9 +190,9 @@ section {
 var video = document.querySelector('video');
 
 window.onload = function()
-{  
-	//Start the python script to receive the SLT signalling.
-	//The script will put the SLT.xml file in the SLT_signalling folder.
+{  	// Once the MSE receiver window is loaded in the browser. 	
+	// Start the python script to receive the SLT signalling.
+	// The script will put the SLT.xml file in the SLT_signalling folder.
 	  $.ajax({
 			  type: 'POST',
 			  url: "ReceiverConfig/onloadfunc.php",
@@ -224,6 +224,7 @@ var customAd = false;
 var customAdTriggered = false;
 var reTuneInVideo = 0;
 var reTuneInAudio = 0;
+var customAdOffset = 10;
 
 function checkthis(ele){   
   if(!ele.checked )
@@ -342,7 +343,7 @@ function playEvent()
 function callbackNew(e)
 {
 	  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
-	  //audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+	  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
 	  sourceBuffersReady = true;
 	  //audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
 	  //audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
@@ -378,7 +379,12 @@ function reTuneInProcess(triggeredFrom){
   // What this does is remove the entire mediasource element assoicated with the video element.
   // This is a routine which is executed when the video element is pointed to null.  
   if (customAd && !reTuneOver2){
-    video.src = "../Receiver_MSE/CustomAd/video_30s.mp4";
+    video.src = "../Receiver_MSE/CustomAd/video_30s.mp4#t=" + customAdOffset;
+    /*
+    Adjust video start and end time when using the video tag in html5;
+    http://www.yoursite.com/yourfolder/yourfile.mp4#t=5,15
+    where left of comma is start time in seconds, right of comma is end time in seconds. drop the comma and end time to effect the start time only.
+    */
     video.play();
     video.addEventListener('ended',videoEnded,false);
     customAdTriggered = true;
@@ -413,11 +419,37 @@ function callback(e)
   var tt = new Date;
   console.log("MSE callback started: " + tt + tt.getMilliseconds());
   sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
-  //audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
   logString = "";
+  
+  var boundary1 = result[3]*1000; 
+  var boundary2 = (result[4]-result[3])*1000; 
+  var deltaTimeASTTuneIn = result[1];    
+  // Using the deltaTimeASTTuneIn, you will approximately know which place you are in.
+    
+  if ((deltaTimeASTTuneIn > result[3]) && (deltaTimeASTTuneIn < result[4])){
+    reTuneOver1 = true;
+    if (customAd){
+      reTuneInProcess("Callback");
+      customAdOffset = deltaTimeASTTuneIn - result[3] - 2; 
+      // The -2 is just a safe number so that we dont run out of ad and create some error.
+      // This value will be updated or changed in the future.
+      // How much ad has to be skipped?
+      // -------------------------------> deltaTimeASTTuneIn
+      // ---------------> result[3]
+      //                 ---------------> customAdOffset
+      console.log("Going to play custom ad with an offset of = " + customAdOffset);
+    }
+    
+    }
+  else if (deltaTimeASTTuneIn > result[4]){
+    reTuneOver2 = true;   
+    }
+  
   //'mediaSource readyState: ' + this.readyStatevar period + "\n";
   //logger.log(logString);
   window.WebSocket = window.WebSocket || window.MozWebSocket;
+  
   // ---------------------- Video websocket start---------------//	
   var websocket = new WebSocket('ws://127.0.0.1:9000',
 			'dumb-increment-protocol');
@@ -428,14 +460,14 @@ function callback(e)
       setTimeout(function(){ websocket = new WebSocket('ws://127.0.0.1:9000','dumb-increment-protocol'); }, 50);
   };
   // ---------------------- Video websocket end-----------------//
-
+  
   // ---------------------- Audio websocket start---------------//
   var websocketAudio = new WebSocket('ws://127.0.0.1:9001',
 				'dumb-increment-protocol');
 
-/*  websocketAudio.onopen = function () {
+  websocketAudio.onopen = function () {
 		  websocketAudio.send("audio");
-  };*/
+  };
 
 
   websocketAudio.onerror = function () {
@@ -444,7 +476,7 @@ function callback(e)
   // ---------------------- Audio websocket end---------------//
 
   // Convert an integer to a string made up of the bytes in network/big-endian order.
-
+  
 function htonl(n)
 {
       var newv = ((n & 0xFF000000) >>> 24) + ((n & 0x00FF0000) >>> 8) + ((n & 0x0000FF00) <<  8) + ((n & 0x000000FF) <<  24);
@@ -462,8 +494,6 @@ var minAudioAppendLength = 1000;
 var lastAppendTime = 0;
 var lastAppendTimeAudio = 0;
 var tempSegmentCount = 0;	
-var boundary1 = result[3]*1000; 
-var boundary2 = (result[4]-result[3])*1000; 
 // The subraction because the sourcebuffer get reinitiliazed to zero.  
 var initInterval = 150; // We look for 150ms up and down around the boundary, for .init segment to arrive.
 var sourceBufferLength = 0;
@@ -471,11 +501,15 @@ var audioSourceBufferLength = 0;
 reTuneInVideo = 0;
 reTuneInAudio = 0;
 
+
+
 // ------------------ Video packet received from websocket -----------------//
 websocket.onmessage = function (message)
 {
+
 	if (customAdTriggered)
 	  return;
+	  
 	tempSegmentCount = tempSegmentCount + 1;					
 	var arraybuffer;
 	var arrayData;			
@@ -494,6 +528,7 @@ websocket.onmessage = function (message)
 		  if ( (arrayData.length == 900) || (arrayData.length == 920) ){
 		    initVideoBuffer = true;
 		    tuneinTriggeredFromAudio = false;
+		    console.log('Heya! video');
 		    }
 		  else 
 		    return;
@@ -501,6 +536,11 @@ websocket.onmessage = function (message)
 		//console.log("Video array data length = " + arrayData.length);
 		
 		// Checks for condition to reTune at the first boundary between end of first period and begining of ad.
+		// The sourceBuffer.buffered indicates a portion of the media that has been buffered.
+		// The sourceBufferLength (sourceBuffer.buffered.end) clearly indicates the end time of the media time that has been buffered.
+		// This variable is a much better indication where we are in the time range than the other ones. 
+		
+		
 		if( (sourceBufferLength < (boundary1 + initInterval)) && (sourceBufferLength > (boundary1 - initInterval)) && !reTuneOver1 ){
 		  //console.log("Retuned 1");
 		  reTuneInVideo = 1;
@@ -582,6 +622,8 @@ websocket.onmessage = function (message)
 websocketAudio.onmessage = function (message) {
       if (customAdTriggered)
 	return;
+	
+
 
       var arraybuffer;
       var arrayData;
@@ -599,11 +641,12 @@ websocketAudio.onmessage = function (message) {
 	if (arrayData.length == 826){
 	  initAudioBuffer = true;
 	  tuneinTriggeredFromVideo = false;
+	  console.log('Heya! audio');
 	  }
 	else 
 	  return;			
       }
-      
+
       if( (audioSourceBufferLength < (boundary1 + initInterval)) && (audioSourceBufferLength > (boundary1 - initInterval)) && !reTuneOver1 ){
 	  console.log("Retuned audio 1");
 	  reTuneInAudio = 1;
