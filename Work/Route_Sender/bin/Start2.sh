@@ -5,14 +5,29 @@
 #	2- After (Delay - x) seconds has passed, FLUTE sender is triggered.
 
 #Define Directories
-DASHContent=Elysium_1_0
-DASHContent2=ToS_1_0
+#DASHContent=Elysium_1_0
+#DASHContent2=ToS_1_0
 
 #if [ "$#" -gt 0 ] && [ "$1" -eq 1000 ]
 #then
  # DASHContent=Hotel
   #DASHContent2=Wave
 #fi
+#Open-source/propriteary switch
+
+if [ -f "Hotel/MultiRate.mpd" ]
+then		 
+  DASHContent=Hotel
+else		
+  DASHContent=Elysium_1_0		
+fi		
+ 		
+if [ -f "Wave/MultiRate.mpd" ]		
+then		
+  DASHContent2=Wave		
+else		
+  DASHContent2=ToS_1_0		
+fi
 
 FLUTESender=.
 
