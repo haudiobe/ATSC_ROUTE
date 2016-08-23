@@ -224,7 +224,7 @@ var customAd = false;
 var customAdTriggered = false;
 var reTuneInVideo = 0;
 var reTuneInAudio = 0;
-var customAdOffset = 10;
+var customAdOffset = 0;
 
 function checkthis(ele){   
   if(!ele.checked )
@@ -345,9 +345,12 @@ function callbackNew(e)
 	  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
 	  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
 	  sourceBuffersReady = true;
-	  //audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
-	  //audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
-	  //audioSourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
+	  audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
+	  audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
+	  audioSourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
+	  sourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
+	  sourceBuffer.addEventListener("update",callbackErrorInBuffer2Audio,true);
+	  sourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
 	  console.log("New buffers created");
 	}
 
@@ -357,6 +360,10 @@ function callbackErrorInBuffer(e){
 
 function callbackErrorInBuffer2(e){
 	console.log("Some errors in source buffer - update");
+}
+
+function callbackErrorInBuffer2Audio(e){
+	console.log("Some errors in audio buffer - update");
 }
 
 function callbackErrorInBuffer3(e){
@@ -379,6 +386,8 @@ function reTuneInProcess(triggeredFrom){
   // What this does is remove the entire mediasource element assoicated with the video element.
   // This is a routine which is executed when the video element is pointed to null.  
   if (customAd && !reTuneOver2){
+    customAdTriggered = true;
+    console.log("Custom ad triggered with " + customAdOffset + " offset");
     video.src = "../Receiver_MSE/CustomAd/video_30s.mp4#t=" + customAdOffset;
     /*
     Adjust video start and end time when using the video tag in html5;
@@ -387,7 +396,6 @@ function reTuneInProcess(triggeredFrom){
     */
     video.play();
     video.addEventListener('ended',videoEnded,false);
-    customAdTriggered = true;
   }
   else{  
     video.src = null;
@@ -430,8 +438,8 @@ function callback(e)
   if ((deltaTimeASTTuneIn > result[3]) && (deltaTimeASTTuneIn < result[4])){
     reTuneOver1 = true;
     if (customAd){
-      reTuneInProcess("Callback");
       customAdOffset = deltaTimeASTTuneIn - result[3] - 2; 
+      reTuneInProcess("Callback");
       // The -2 is just a safe number so that we dont run out of ad and create some error.
       // This value will be updated or changed in the future.
       // How much ad has to be skipped?
