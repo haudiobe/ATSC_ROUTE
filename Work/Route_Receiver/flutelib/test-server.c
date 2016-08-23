@@ -215,11 +215,14 @@ void * serviceThread()
     while(workingPort == 0)
         usleep(100);
     
-    if(workingPort == 4001 || workingPort == 4003) // For video sessions
-        port= 9001;  
-    else if(workingPort == 4002 || workingPort == 4004)
-        port= 9002;   // New additional port
+    // For audio segments.
+    if(workingPort == 4002 || workingPort == 4004)
+        port= 9001;
 		
+	// For SLS segments.	
+    if(workingPort == 4005 || workingPort == 4006)
+        port= 9002;
+
 	memset(&info, 0, sizeof info);
 	info.port = port;
 	info.iface = interface;

@@ -1994,7 +1994,7 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
     
     if(tunedIn == 1)
     {
-        if(workingPort == 4001 || workingPort == 4003)
+/*        if(workingPort == 4001 || workingPort == 4003)
         {
             if( toi%2 != 0 )
                 tunedIn = 2;
@@ -2004,6 +2004,9 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             if( (toi - 2) % 3 == 0 )
                 tunedIn = 2;
         }
+*/
+		if( toi%2 != 0 )
+			tunedIn = 2;
     }
     
     if(tunedIn == 2)
@@ -2012,7 +2015,7 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             tunedIn = 3;
         else
         {
-            if(workingPort == 4001 || workingPort == 4003)
+/*           if(workingPort == 4001 || workingPort == 4003)
             {
                 if( toi%2 != 0 )
                     addPacket(toi,tsi,sbn,esi,buffer,len);
@@ -2022,13 +2025,17 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
                 if( (toi - 2) % 3 == 0 )
                     addPacket(toi,tsi,sbn,esi,buffer,len);
             }
+*/
+			if( toi%2 != 0 )
+				addPacket(toi,tsi,sbn,esi,buffer,len);
+			
         }
             
     }
     
     if(tunedIn == 3)
     {
-        if(workingPort == 4001 || workingPort == 4003)
+/*       if(workingPort == 4001 || workingPort == 4003)
         {
             if( toi%2 == 0 && toi != 0 )
                 addPacket(toi,tsi,sbn,esi,buffer,len);
@@ -2038,6 +2045,9 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
             if( (toi - 3) % 3 == 0 && toi != 0)
                 addPacket(toi,tsi,sbn,esi,buffer,len);
         }
+*/
+		if( toi%2 == 0 && toi != 0 )
+			addPacket(toi,tsi,sbn,esi,buffer,len);
     }
 
 }

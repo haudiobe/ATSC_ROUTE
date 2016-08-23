@@ -56,7 +56,7 @@ echo "Converting MPD"
 
 #Brackets are used to temporarilSimAdminy change working directory
 
-slsFrequencyDuration=100
+slsFrequencyDuration=1000
 
 #The duration of how often the SLT segments are sent in ms
 #For example, 100ms will imply every 100ms S-TSID, USBD (and maybe .mpd) segment will be sent

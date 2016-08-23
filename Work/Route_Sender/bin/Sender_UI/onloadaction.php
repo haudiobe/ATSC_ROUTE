@@ -13,14 +13,6 @@ header('Cache-Control: no-cache');
 
 exec("sudo killall Start2.sh");
 exec("sudo killall flute_sender");
-exec("sudo pkill -f sender.py");
-// pkill is an utility. We kill the previous SLT signalling sender.
-
-exec("sudo python ../SLT_signalling/genSLT.py");
-exec("sudo python ../SLT_signalling/sender.py > /dev/null 2>&1 &");
-
-// The dev null part is to make the python script execute in the background.
-// http://stackoverflow.com/questions/25619229/how-to-make-python-script-executed-in-background
 
 $output2=shell_exec("sudo ifconfig");
  
