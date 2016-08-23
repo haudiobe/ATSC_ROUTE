@@ -1,0 +1,53 @@
+
+index.php:79 Started channel 1
+jquery-1.10.2.min.js:4 GET http://localhost/Player/app/lib/bootstrap/fonts/glyphiconshalflings-regular.woff 
+Debug.js:48 Parsing complete: ( xml2json: 2ms, objectiron: 0ms, total: 0.002s)
+Debug.js:48 Manifest has loaded.
+Debug.js:48 Manifest has been refreshed.
+localhost/:1 GET http://localhost/Player/app/lib/bootstrap/fonts/glyphiconshalflings-regular.ttf 
+Debug.js:48 MediaSource is open!
+Debug.js:48 Event {clipboardData: undefined, path: NodeList[0], cancelBubble: false, returnValue: true, srcElement: MediaSource…}
+Debug.js:48 Added 0 inline events
+Debug.js:48 video codec: video/mp4;codecs="avc1.4d401f"
+Debug.js:48 ScheduleController video stop.
+Debug.js:48 audio codec: audio/mp4;codecs="mp4a.40.5"
+Debug.js:48 ScheduleController audio stop.
+Debug.js:48 No text data.
+Debug.js:48 Duration successfully set to: 595
+Debug.js:48 Getting the request for time: 102.468
+Debug.js:48 Index for time 102.468 is 101
+FragmentLoader.js:190 HEAD http://localhost/Work/Route/bin/DASH_Content1/BBB_720_4M_video_102.mp4 404 (Not Found)
+Debug.js:48 Getting the request for time: 102.468
+Debug.js:48 Index for time 102.468 is 101
+
+
+
+
+
+
+
+
+
+
+
+ 
+index.php:79 Started channel 1
+jquery-1.10.2.min.js:4 GET http://localhost/Player/app/lib/bootstrap/fonts/glyphiconshalflings-regular.woff 
+Debug.js:48 Parsing complete: ( xml2json: 2ms, objectiron: 0ms, total: 0.002s)
+Debug.js:48 Manifest has loaded.
+Debug.js:48 Manifest has been refreshed.
+localhost/:1 GET http://localhost/Player/app/lib/bootstrap/fonts/glyphiconshalflings-regular.ttf 
+Debug.js:48 MediaSource is open!
+Debug.js:48 Event {clipboardData: undefined, path: NodeList[0], cancelBubble: false, returnValue: true, srcElement: MediaSource…}
+Debug.js:48 Added 0 inline events
+Debug.js:48 video codec: video/mp4;codecs="avc1.4d401f"
+Debug.js:48 ScheduleController video stop.
+Debug.js:48 audio codec: audio/mp4;codecs="mp4a.40.5"
+Debug.js:48 ScheduleController audio stop.
+Debug.js:48 No text data.
+Debug.js:48 Duration successfully set to: 595
+Debug.js:48 Getting the request for time: 19.488
+Debug.js:48 Index for time 19.488 is 18
+FragmentLoader.js:190 HEAD http://localhost/Work/Route/bin/DASH_Content1/BBB_720_4M_video_19.mp4 404 (Not Found)
+Debug.js:48 Getting the request for time: 19.488
+Debug.js:48 Index for time 19.488 is 18
