@@ -345,25 +345,27 @@ function callbackNew(e)
 	  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028"');
 	  audioSourceBuffer = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
 	  sourceBuffersReady = true;
+	  /*
 	  audioSourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
 	  audioSourceBuffer.addEventListener("update",callbackErrorInBuffer2,true);
 	  audioSourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
 	  sourceBuffer.addEventListener("error",callbackErrorInBuffer,true);
 	  sourceBuffer.addEventListener("update",callbackErrorInBuffer2Audio,true);
 	  sourceBuffer.addEventListener("abort",callbackErrorInBuffer3,true);
+	  */
 	  console.log("New buffers created");
 	}
 
 function callbackErrorInBuffer(e){
-	console.log("Some errors in source buffer");
+	console.log("Some errors in sourceBuffer.");
 }
 
 function callbackErrorInBuffer2(e){
-	console.log("Some errors in source buffer - update");
+	console.log("SourceBuffer has been updated");
 }
 
 function callbackErrorInBuffer2Audio(e){
-	console.log("Some errors in audio buffer - update");
+	console.log("SourceBuffer has been aborted.");
 }
 
 function callbackErrorInBuffer3(e){
@@ -568,8 +570,11 @@ websocket.onmessage = function (message)
 		  // In future, some other way shall be looked at. 
 		  reTuneInVideo = 0;
 		  reTuneInProcess("video");
+		  // Since we are retuning in, reintialize the variables to their original state.
 		  initVideoBuffer = true;
 		  videoPTOFound = false;
+		  audioPTOFound = false;
+		  PTOFound = 0;
 		  lastAppendTime = 0;
 		}				
 		
@@ -673,7 +678,9 @@ websocketAudio.onmessage = function (message) {
 	reTuneInAudio = 0;
 	reTuneInProcess("audio");
 	initAudioBuffer = true;
+	videoPTOFound = false;
 	audioPTOFound = false;
+	PTOFound = 0;
 	lastAppendTimeAudio = 0;
       }							     
 	  
@@ -707,16 +714,12 @@ websocketAudio.onmessage = function (message) {
 	      if (audioSourceBuffer.buffered.length > 0) 
 	      {
 		      audioSourceBufferLength = audioSourceBuffer.buffered.end(0) * 1000;
-			if(audioPTOFound == false && audioSourceBuffer.buffered.start(0) > PTOFound)
-		      {
-			      PTOFound = audioSourceBuffer.buffered.start(0);
-			      video.currentTime = PTOFound;
-										      
-			      audioPTOFound = true;
-			      {
-				      var tt = new Date;
-				      console.log("Audio PTO found: " + tt + tt.getMilliseconds());
-			      }
+			if(audioPTOFound == false && audioSourceBuffer.buffered.start(0) > PTOFound){
+			  PTOFound = audioSourceBuffer.buffered.start(0);
+			  video.currentTime = PTOFound;
+			  audioPTOFound = true;
+			  var tt = new Date;
+			  console.log("Audio PTO found: " + tt + tt.getMilliseconds());
 		      }
 			
 		      if(!autoPlaybackDone)
