@@ -108,6 +108,7 @@ and open the template in the editor.
 			  var timeProgress = 0;
 			  var progressCallback;
 			  var restart = false;
+			  var ipaddr;
 			  
            function onloadfunction()
            {
@@ -163,7 +164,7 @@ and open the template in the editor.
                 $.ajax({
                       type: 'POST',
                       url: "sender.php",
-                      data: {}
+                      data: {ip: JSON.stringify(ipaddr)}
             }).done( function() {
            
             }).fail(function() {

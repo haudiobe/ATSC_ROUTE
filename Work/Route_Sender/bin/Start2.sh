@@ -29,6 +29,10 @@ else
   DASHContent2=ToS_1_0		
 fi
 
+# Generate the S-TSID file for the two contents in their respective folder.
+php genStsid.php IP=$2 DASHContent=$DASHContent
+php genStsid.php IP=$2 DASHContent=$DASHContent2
+
 FLUTESender=.
 
 #Variables
