@@ -5,6 +5,7 @@ if (isset($argv[0])) {
 }
 $ip=$_GET['IP'];
 $DASHContent=$_GET['DASHContent'];
+$Channel=$_GET['Channel'];
 
 // Start create S-TSID.xml file
 $doc = new DOMDocument('1.0');
@@ -22,13 +23,13 @@ $RS->setAttribute("dport","4000");
 
 $LS1 = $doc->createElement('LS');
 $LS1 = $RS->appendChild($LS1);
-$LS1->setAttribute("id","1");
-$LS1->setAttribute("tsi","1");
+$LS1->setAttribute("id",1);
+$LS1->setAttribute("tsi",(string)($Channel-1)*2+1);
 
 $LS2 = $doc->createElement('LS');
 $LS2 = $RS->appendChild($LS2);
 $LS2->setAttribute("id","2");
-$LS2->setAttribute("tsi","2");
+$LS2->setAttribute("tsi",(string)($Channel-1)*2+2);
 
 $doc->save($DASHContent . "/S-TSID.xml");
 // End create S-TSID.xml file

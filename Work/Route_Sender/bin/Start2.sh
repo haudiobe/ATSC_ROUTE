@@ -30,8 +30,8 @@ else
 fi
 
 # Generate the S-TSID file for the two contents in their respective folder.
-php genStsid.php IP=$2 DASHContent=$DASHContent
-php genStsid.php IP=$2 DASHContent=$DASHContent2
+php genStsid.php IP=$2 DASHContent=$DASHContent Channel=1
+php genStsid.php IP=$2 DASHContent=$DASHContent2 Channel=2
 
 FLUTESender=.
 
