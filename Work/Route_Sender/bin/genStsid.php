@@ -6,10 +6,10 @@ if (isset($argv[0])) {
 $ip=$_GET['IP'];
 $DASHContent=$_GET['DASHContent'];
 
+// Start create S-TSID.xml file
 $doc = new DOMDocument('1.0');
 // we want a nice output
 $doc->formatOutput = true;
-
 $root = $doc->createElement('S-TSID');
 $root = $doc->appendChild($root);
 
@@ -31,5 +31,26 @@ $LS2->setAttribute("id","2");
 $LS2->setAttribute("tsi","2");
 
 $doc->save($DASHContent . "/S-TSID.xml");
+// End create S-TSID.xml file
+
+
+// Start create usbd.xml file
+$doc1 = new DOMDocument('1.0');
+// we want a nice output
+$doc1->formatOutput = true;
+$root = $doc1->createElement('bundleDescription');
+$root = $doc1->appendChild($root);
+
+$userServiceDescription = $doc1->createElement('userServiceDescription');
+$userServiceDescription = $root->appendChild($userServiceDescription);
+$userServiceDescription->setAttribute("fullMPDUri","MultiRate_Dynamic.mpd");
+$userServiceDescription->setAttribute("sTSIDUri","S-TSID.xml");
+
+$name = $doc1->createElement('name');
+$name = $userServiceDescription->appendChild($name);
+$name->setAttribute("lang","eng");
+
+$doc1->save($DASHContent . "/usbd.xml");
+// End create USBD.xml file
 
 ?>
