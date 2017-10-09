@@ -457,8 +457,7 @@ function generateFDTAndTimingSlS($videoSegmentDuration,$videoTimescale,$audioSeg
 	$fdtparametersMpd->setAttribute("FEC-OTI-Encoding-Symbol-Length","1428");
 	$mpdInstance->appendChild($fdtparametersMpd);
 	
-	// unlink($mpdTimingFile); The $mpdTimingFile is called only once, hence there is no need to unlink.
-	
+	unlink($mpdTimingFile); 	
 	#$slsFrequencyDuration = 0.1;
 	// How often to send the SLT segments in seconds 
 	// 0.1s means, for every 100ms we will send S-TSID, USBD (also, maybe the .mpd) segments.

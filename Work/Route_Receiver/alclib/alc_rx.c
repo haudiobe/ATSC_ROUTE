@@ -95,7 +95,8 @@ unsigned long long tsi = 0; /* TSI */
 unsigned long long toi = 0; /* TOI */
 unsigned int sbn = 0;
 unsigned int esi = 0;
-
+unsigned long long prevToiVideo = 0;
+unsigned long long prevToiAudio = 0;
 
 long newBufferFullness()
 {
@@ -162,37 +163,48 @@ int newWriteToBuffer(struct packetBuffer buffer)
     
 	if(newBufferFullness() == circularBufferLength - 1)	//Dont let the pointers point to same thing again
 	{
-		if(workingPort == 4001 || workingPort == 4003)
+
+/* Adi start - remove this buffering log thing.
+ 		if(workingPort == 4001 || workingPort == 4003)
 		{
 			FILE * tempff = fopen("bufferLog.txt","a");
 			fprintf(tempff,"********** WRITE: Could not write, buffer full\n");
 			fprintf(stdout,"********** WRITE: Could not write, buffer full\n");
 			fclose(tempff);
 		}
+Adi end */
+
 		pthread_mutex_unlock(&bufferLock);
 		return -1;
 	}
 	
+	/* Adi - Not needed
 	if(workingPort == 4001 || workingPort == 4003)
 	{
         FILE * sendMergeFile;
         FILE * pktFile;
         static int first = 1;
         char packetFiles[200];
-        //sprintf(packetFiles,"Merge/Pkt%.4d_%.4d.mp4",buffer.toi,buffer.esi);
-        //if(first)
-        //    sendMergeFile = fopen("sendMerge.mp4","w");
-        //else
-        //    sendMergeFile = fopen("sendMerge.mp4","a");
+      
+        sprintf(packetFiles,"Merge/Pkt%.4d_%.4d.mp4",buffer.toi,buffer.esi);
+        if(first)
+            sendMergeFile = fopen("sendMerge.mp4","w");
+        else
+            sendMergeFile = fopen("sendMerge.mp4","a");
 
         first = 0;
-
+		
+        /* Adi-start 2       
         //fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
         //fclose(sendMergeFile);
         //pktFile = fopen(packetFiles,"w");
         //fwrite(buffer.buffer,1,buffer.length,pktFile);
         //fclose(pktFile);
+
 	}
+
+	Adi - Not needed */	
+
     struct packetBuffer *emptySlot = getEmptyBufferSlot();
 
     emptySlot->occupied = TRUE;
@@ -209,28 +221,31 @@ int newWriteToBuffer(struct packetBuffer buffer)
     memcpy(emptySlot->buffer,buffer.buffer,buffer.length);
 
     fullness++;
+
+
+	// Adi-start Why is this even needed? 
+	// Maybe this information was used for logging earlier
+	// The following is specific to video and it causing some problem and it will be removed.	
 	
-	if(workingPort == 4001 || workingPort == 4003)
+	/*if(workingPort == 4001 || workingPort == 4003)
 	{       
-	#define mmy emptySlot->buffer
-    
-    static unsigned long long stoi = 0;
-    static unsigned long long stsi = 0;
-    static unsigned int ssbn = 0;
-    static unsigned int sesi = 0;
-		//FILE * tempff = fopen("bufferLog.txt","a");
-    
-		//fprintf(tempff,"WRITE: fullness %d, toi %llu, tsi %llu, sbn %u, esi %u, len %d, bytes %2x %2x %2x %2x %2x %2x %2x %2x",newBufferFullness(),buffer.toi,buffer.tsi,buffer.sbn,buffer.esi,buffer.length,mmy[0],mmy[1],mmy[2],mmy[3],mmy[4],mmy[5],mmy[6],mmy[7]);
-        //if(buffer.toi != stoi || buffer.tsi != stsi || buffer.sbn != ssbn || (buffer.esi - sesi) > 1)
-        //    fprintf(tempff,"<==========================");
-        //fprintf(tempff,"\n");
-        //fclose(tempff);
-        sesi = buffer.esi;
-        ssbn = buffer.sbn;
-        stsi = buffer.tsi;
-        stoi = buffer.toi;
-	}
-	
+	#define mmy emptySlot->buffer    
+	static unsigned long long stoi = 0;
+	static unsigned long long stsi = 0;
+	static unsigned int ssbn = 0;
+	static unsigned int sesi = 0;
+	FILE * tempff = fopen("bufferLog.txt","a");
+	fprintf(tempff,"WRITE: fullness %d, toi %llu, tsi %llu, sbn %u, esi %u, len %d, bytes %2x %2x %2x %2x %2x %2x %2x %2x",newBufferFullness(),buffer.toi,buffer.tsi,buffer.sbn,buffer.esi,buffer.length,mmy[0],mmy[1],mmy[2],mmy[3],mmy[4],mmy[5],mmy[6],mmy[7]);
+	if(buffer.toi != stoi || buffer.tsi != stsi || buffer.sbn != ssbn || (buffer.esi - sesi) > 1)
+		fprintf(tempff,"<==========================");
+	fprintf(tempff,"\n");
+	fclose(tempff);
+	sesi = buffer.esi;
+	ssbn = buffer.sbn;
+	stsi = buffer.tsi;
+	stoi = buffer.toi;
+	}*/
+
 	pthread_mutex_unlock(&bufferLock);
 	
 	return 0;
@@ -378,7 +393,9 @@ struct packetBuffer newReadFromBuffer()
         return buffer;
     }
     	
-	if(workingPort == 4001 || workingPort == 4003)
+
+/* Adi - start
+ *	if(workingPort == 4001 || workingPort == 4003)
 	{
         static unsigned long long savedTOI = 0;
         static unsigned int savedESI = 0;
@@ -392,6 +409,7 @@ struct packetBuffer newReadFromBuffer()
         savedTOI = buffer.toi;
         savedESI = buffer.esi;
 	}
+   Adi -end	*/ 
 
 	fullness --;
 	
@@ -419,18 +437,11 @@ int writeToBuffer(struct packetBuffer buffer)
 	
 	if(getBufferFullness() == circularBufferLength - 1)	//Dont let the pointers point to same thing again
 	{
-		if(workingPort == 4001 || workingPort == 4003)
-		{
-			FILE * tempff = fopen("bufferLog.txt","a");
-			fprintf(tempff,"********** WRITE: Could not write, buffer full\n");
-			fprintf(stdout,"********** WRITE: Could not write, buffer full\n");
-			fclose(tempff);
-		}
 		pthread_mutex_unlock(&bufferLock);
 		return -1;
 	}
 	
-	if(workingPort == 4001 || workingPort == 4003)
+	/*if(workingPort == 4001 || workingPort == 4003)
 	{
         FILE * sendMergeFile;
         if(writePtr == 0 && readPtr == 0)
@@ -441,8 +452,8 @@ int writeToBuffer(struct packetBuffer buffer)
         fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
         fclose(sendMergeFile);
             
-	}
-	
+	}*/
+		
 	circularPacketBuffer[writePtr].length = buffer.length;
     memcpy(circularPacketBuffer[writePtr].buffer,buffer.buffer,buffer.length);
 
@@ -501,14 +512,16 @@ struct packetBuffer readFromBuffer()
 
 	if(readPtr == circularBufferLength)readPtr = 0;
 	
-	if(workingPort == 4001 || workingPort == 4003)
+/* Adi - start
+ * 	if(workingPort == 4001 || workingPort == 4003)
 	{
 #define mmy circularPacketBuffer[savedWptr].buffer
 		//FILE * tempff = fopen("bufferLog.txt","a");
 		//fprintf(tempff,"***AD: wptr %d, rptr %d, fullness %d, bytes %2x %2x %2x %2x %2x %2x %2x %2x\n",writePtr,savedWptr,getBufferFullness(),mmy[0],mmy[1],mmy[2],mmy[3],mmy[4],mmy[5],mmy[6],mmy[7]);
 		//fclose(tempff);
 	}
-	
+  Adi - end */
+  	
 	pthread_mutex_unlock(&bufferLock);
 	
 	return buffer;
@@ -1610,7 +1623,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 			if(trans_obj == NULL) {
 
 				trans_obj = create_object();
-
+			
 				if(trans_obj == NULL) {
 					return MEM_ERROR;
 				}
@@ -1718,7 +1731,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 			if(trans_block->nb_of_rx_units == 0) {
 				trans_block->sbn = sbn;
 
-				//Malek El Khatib 11.08.2014
+				//Malek El Khatib 11.08.2014FILE * tempff = fopen("bufferLogRead.txt","a");
 				trans_block->nb_of_rx_symbols = 0;
 				//End
 
@@ -1779,7 +1792,9 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 						}
 					}
                     
-                    cachePacket(toi,tsi,sbn,esi,trans_unit->data,(unsigned int)len - hdrlen);
+
+					cachePacket(toi,tsi,sbn,esi,trans_unit->data,(unsigned int)len - hdrlen);
+                    
 
 					/* if large file mode data symbol is stored in the tmp file */
 					if(toi != FDT_TOI && ch->s->rx_memory_mode == 2) {
@@ -1874,7 +1889,8 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 
 								if(!(tu->data = (char*)calloc(tu->len, sizeof(char)))) {
 									printf("Could not alloc memory for transport unit's data!\n");
-									return MEM_ERROR;
+									return MEM_ERROR;		FILE * tempff = fopen("bufferLog.txt","a");
+    
 								}
 
 								if(read(trans_obj->fd_st, tu->data, tu->len) == -1) {
@@ -1983,63 +1999,63 @@ void addPacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn,
     packet.length = len;
     packet.buffer = (unsigned char *)buffer;
     ret = newWriteToBuffer(packet);
-    if(ret < 0)
-        fprintf(stdout,"Failure to write to circular paket buffer!!\n");
+    if(ret < 0){
+//        fprintf(stdout,"Failure to write to circular paket buffer!!\n");
+		FILE * fp = fopen("errorLogBuffer.txt","w");
+        fprintf(fp,"Failure to write to circular paket buffer!!\n");
+		fclose(fp);
+	}
 }
 
-void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn, unsigned int esi, char *buffer, int len)
-{
+void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn, unsigned int esi, char *buffer, int len){	
+	// If out of order delivery packets come. Neglect them.
+	if(workingPort == 4001 || workingPort == 4003){
+		if ((prevToiVideo > toi) && toi !=0)	
+			return;		
+		prevToiVideo = toi;
+	}	
+
+	if(workingPort == 4002 || workingPort == 4003){
+		if ((prevToiAudio > toi) && toi !=0)	
+			return;		
+		prevToiAudio = toi;
+	}
+
+	/*if(workingPort == 4001 || workingPort == 4003){
+	FILE * packetCached = fopen("packetCached.txt","a");
+	fprintf(packetCached,"Inside cache packet, toi: %d, tsi: %d, sbn: %d, esi: %d, len: %d\n",toi,tsi,sbn,esi,len);
+	fclose(packetCached);
+	}*/
+	
+	// Adi's understanding of the state diagram implementation
+	// The following is a state diagram implementation.
+	// It decides when to start adding packets inside a buffer. 
+	// 1. Wait for EDFT instance to arrive. 
+	// 2. Then, wait for init segment to arrive and add first time to the buffer. 
+	// 3. Then, neglect the init segment, add only the video segment.
+
     if(tunedIn == 0 && toi == 0)
-        tunedIn = 1;
-    
-    if(tunedIn == 1)
-    {
-        if(workingPort == 4001 || workingPort == 4003)
-        {
-            if( toi%2 != 0 )
-                tunedIn = 2;
-        }
-        else if(workingPort == 4002 || workingPort == 4004)
-        {
-            if( (toi - 2) % 3 == 0 )
-                tunedIn = 2;
-        }
+        tunedIn = 1;        
+        
+    if(tunedIn == 1) {
+		if( toi%2 != 0 )
+			tunedIn = 2;		
     }
     
-    if(tunedIn == 2)
-    {
+    if(tunedIn == 2) {
         if(toi == 0)
             tunedIn = 3;
-        else
-        {
-            if(workingPort == 4001 || workingPort == 4003)
-            {
-                if( toi%2 != 0 )
-                    addPacket(toi,tsi,sbn,esi,buffer,len);
-            }
-            else if(workingPort == 4002 || workingPort == 4004)
-            {
-                if( (toi - 2) % 3 == 0 )
-                    addPacket(toi,tsi,sbn,esi,buffer,len);
-            }
-        }
-            
+        else {
+		if( toi%2 != 0 )
+			addPacket(toi,tsi,sbn,esi,buffer,len);					
+        }            
     }
     
-    if(tunedIn == 3)
-    {
-        if(workingPort == 4001 || workingPort == 4003)
-        {
-            if( toi%2 == 0 && toi != 0 )
-                addPacket(toi,tsi,sbn,esi,buffer,len);
-        }
-        else if(workingPort == 4002 || workingPort == 4004)
-        {
-            if( (toi - 3) % 3 == 0 && toi != 0)
-                addPacket(toi,tsi,sbn,esi,buffer,len);
-        }
+    if(tunedIn == 3){
+//		if( toi%2 == 0 && toi != 0 ){ Dont filter out the init segments
+		if( toi != 0 )					
+			addPacket(toi,tsi,sbn,esi,buffer,len);		
     }
-
 }
 
 /**
@@ -2233,6 +2249,7 @@ void* rx_socket_thread(void *ch) {
 	printf("Receiving socket:\n");
 	//End
 	
+	/* Adi - comment out this buffering thing in the following
 	if(workingPort == 4001 || workingPort == 4003)
 	{
 		FILE * tempff = fopen("bufferLog.txt","w");
@@ -2240,6 +2257,7 @@ void* rx_socket_thread(void *ch) {
 		tempff = fopen("bufferLogRead.txt","w");
 		fclose(tempff);
 	}
+	Adi End */
 		
 	/*for(index = 0 ; index < circularBufferLength ; index ++)
 	{

@@ -5,14 +5,33 @@
 #	2- After (Delay - x) seconds has passed, FLUTE sender is triggered.
 
 #Define Directories
-DASHContent=Elysium_1_0
-DASHContent2=ToS_1_0
+#DASHContent=Elysium_1_0
+#DASHContent2=ToS_1_0
 
 #if [ "$#" -gt 0 ] && [ "$1" -eq 1000 ]
 #then
  # DASHContent=Hotel
   #DASHContent2=Wave
 #fi
+#Open-source/propriteary switch
+
+if [ -f "Hotel/MultiRate.mpd" ]
+then		 
+  DASHContent=Hotel
+else		
+  DASHContent=Elysium_1_0		
+fi		
+ 		
+if [ -f "Wave/MultiRate.mpd" ]		
+then		
+  DASHContent2=Wave		
+else		
+  DASHContent2=ToS_1_0		
+fi
+
+# Generate the S-TSID file for the two contents in their respective folder.
+php genStsid.php IP=$2 DASHContent=$DASHContent Channel=1
+php genStsid.php IP=$2 DASHContent=$DASHContent2 Channel=2
 
 FLUTESender=.
 
@@ -56,7 +75,7 @@ echo "Converting MPD"
 
 #Brackets are used to temporarilSimAdminy change working directory
 
-slsFrequencyDuration=100
+slsFrequencyDuration=1000
 
 #The duration of how often the SLT segments are sent in ms
 #For example, 100ms will imply every 100ms S-TSID, USBD (and maybe .mpd) segment will be sent

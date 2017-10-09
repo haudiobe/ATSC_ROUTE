@@ -18,7 +18,7 @@ sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 1)
 # Send file data. 
 # Currently, the buffer size is set 1024 bytes.
 # IMPORTANT! Change the buffer size to higher if xml file changes in size. 
-f = open("../SLT_signalling/SLT.xml","rb") 
+f = open("SLT_signalling/SLT.xml","rb") 
 file_data = f.read(1024)
 
 # Send data to the multicast group

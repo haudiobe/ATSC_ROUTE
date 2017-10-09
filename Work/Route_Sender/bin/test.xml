@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<S-TSID>
+  <RS sIpAddr="10.4.247.130" dIpAddr="10.4.247.130" dport="4000">
+    <LS id="1" tsi="1"/>
+    <LS id="2" tsi="2"/>
+  </RS>
+</S-TSID>

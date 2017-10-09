@@ -1,2 +1,0 @@
-Sat Nov 29 13:42:03 CET 2014
-/var/www/html/Work/Route/bin/DASH_Content1/BBB_720_4M_video_103.mp4/var/www/html/Work/Route/bin/DASH_Content1/BBB_720_4M_video_init.mp4

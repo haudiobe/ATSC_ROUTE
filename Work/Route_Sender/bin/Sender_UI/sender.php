@@ -10,13 +10,12 @@ header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache'); 
 ini_set('memory_limit', '-1');
 chdir("../");
-$command="sudo nice --20 ./Start2.sh 1000 &>> ServiceLog.txt &";
+$ip=json_decode($_POST['ip']);;
+$command="sudo nice --20 ./Start2.sh 1000 " . $ip . " &>> ServiceLog.txt &";
 echo $command;
 $output=array();
 exec($command,$output);
 //var_dump($output);
-
-
 echo "Done";
 
 exit;
