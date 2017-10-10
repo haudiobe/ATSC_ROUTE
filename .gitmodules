@@ -9,4 +9,4 @@
 	url = https://github.com/waqarz/ToS
 [submodule "Work/Route_Sender/bin/Sintel"]
 	path = Work/Route_Sender/bin/Sintel
-	url = ../Sintel
+	url = https://github.com/waqarz/Sintel
