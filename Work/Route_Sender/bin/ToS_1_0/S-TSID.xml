@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0"?>
 <S-TSID>
- <RS sIpAddr="10.4.247.130" dIpAddr="10.4.247.130" dport="4000">
-  <LS id="1" tsi="5"/>
-  <LS id="2" tsi="6"/>
- </RS>
+  <RS sIpAddr="10.4.247.130" dIpAddr="10.4.247.130" dport="4000">
+    <LS id="1" tsi="3"/>
+    <LS id="2" tsi="4"/>
+  </RS>
 </S-TSID>
