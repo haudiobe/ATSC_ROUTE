@@ -14,7 +14,7 @@ exec("sudo python ../SLT_signalling/receiver.py");
 
 // Have to modify the file to get the IP from the SLT.xml file itself.
 
-chdir('../Receiver/SLT_signalling');
+chdir('../SLT_signalling/');
 $result = json_decode(exec('sudo python readFromSLT.py 1'), true);
 
 // Adithyan
