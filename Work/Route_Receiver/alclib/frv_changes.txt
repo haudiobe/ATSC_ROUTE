@@ -1,0 +1,55 @@
+Now AL-FEC works with Reed-Solomon FEC. The following two problems were identified and solved
+
+FEC-OTI-FEC-Instance-ID shall be set to 0 in the EFDT file, as alc_rx.c:1936 --> in analyze_packet() requires it.
+   #define SB_SYS_FEC_ENC_ID    129     /**< Small Block Systematic FEC scheme */
+   #define REED_SOL_FEC_INST_ID 0       /**< Reed-Solomon instance id, when Small Block Systematic FEC scheme is used */
+   ...
+   else if(fec_enc_id == SB_SYS_FEC_ENC_ID && fec_inst_id == REED_SOL_FEC_INST_ID) {
+     buf = rs_fec_decode_src_block(trans_block, &block_len, es_len);
+   }
+then
+
+   <FDT-Parameters FEC-OTI-FEC-Instance-ID="0" FEC-OTI-FEC-Encoding-ID="129" FEC-OTI-Maximum-Source-Block-Length="5000" FEC-OTI-Encoding-Symbol-Length="1428" FEC-OTI-Max-Number-of-
+   Encoding-Symbols="512 />
+Parameters for creation of the FEC codec at the receiver were wrongly set.
+At alc_rc.c:1748, analyze_packet()
+
+else if(fec_enc_id == SB_SYS_FEC_ENC_ID) {
+    /* [FRV] correction to provide right input parameters to AL-FEC decoder
+     * trans_block->k = sb_len; <-- shall be as follows
+     * sb_len is being derived from the header but as far i have
+     * seen always leading to 1
+     */
+
+    div_t div_k;
+    div_k = div((unsigned int)trans_obj->len, trans_obj->es_len);
+    if(div_k.rem == 0) {
+        trans_block->k = (unsigned int)div_k.quot;
+    }
+    else {
+        trans_block->k = (unsigned int)div_k.quot + 1;
+    }
+
+    trans_block->max_k = max_sb_len;
+    /* [FRV]: max_n below is not the right name as internally
+     * max_n will be derived from
+     * the FEC-OTI-Maximum-Source-Block-Length and
+     * the FEC ratio percent (hardcoded to 50%)
+     */
+    trans_block->max_n = max_nb_of_es;
+and internally in rs_fec.c:162:ff, rs_fec_decode_src_block()
+
+    int rs = 50; // TODO: [FRV] to read this from command line and propagate to his point
+    unsigned int max_n;
+
+    k = tr_block->k; // [FRV]: tr_block->k has being set correctly outside the function
+    div_max_n = div((tr_block->max_k * (100 + rs)), 100);
+    max_n = (unsigned int)div_max_n.quot;
+
+    //div_n = div((k * tr_block->max_n), tr_block->max_k); [FRV]: this was the original line but does not match the calculation done in the encoder side
+    div_n = div((k * max_n), tr_block->max_k);
+    n = (unsigned int)div_n.quot;
+
+    len = es_len*tr_block->k;
+
+    code =  fec_new(k, n);
