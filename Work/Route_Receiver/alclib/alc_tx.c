@@ -770,7 +770,7 @@ int alc_send(int s_id, int tx_mode, char *buf, int buf_len,
 	}
 
 	//Malek El Khatib
-	printf("What is the size of the packet: %d %d\n",packet_length, sizeof(def_lct_hdr_t));
+	printf("What is the size of the packet: %d %ld \n",packet_length, sizeof(def_lct_hdr_t));
 	printf("The buffer legnth is: %d\n",buf_len);
 	//packet_length -= es_len;
 	//packet_length += 1428;

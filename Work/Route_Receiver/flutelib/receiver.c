@@ -1563,8 +1563,7 @@ void* fdt_thread(void *s) {
 	  free(buf);
 	  FreeFDT(efdt_instance);
 	  continue;
-	}
-	else {
+        } else {
 	  if(receiver->verbosity == 4) {
 	    printf("Expired EFDT Instance received, using it anyway\n");
 	    fflush(stdout);

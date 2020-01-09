@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <EFDT-Instance TSI="1" IDRef="file:///efdt_Video.xml">
-  <FDT-Parameters Expires="32511974400" FEC-OTI-FEC-Encoding-ID="0" FEC-OTI-Maximum-Source-Block-Length="5000" FEC-OTI-Encoding-Symbol-Length="1428"/>
+  <FDT-Parameters Expires="32511974400" FEC-OTI-FEC-Encoding-ID="129" FEC-OTI-FEC-Instance-ID="0" FEC-OTI-Maximum-Source-Block-Length="5000" FEC-OTI-Encoding-Symbol-Length="1428" FEC-OTI-Max-Number-of-Encoding-Symbols="1024"/>
   <File TOI="1" Content-Location="file:///video_8M_init.mp4" Content-Length="900"/>
   <File TOI="2" Content-Location="file:///video_8M_1.mp4" Content-Length="3686"/>
   <File TOI="3" Content-Location="file:///video_8M_init.mp4" Content-Length="900"/>

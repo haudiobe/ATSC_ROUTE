@@ -1272,7 +1272,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 			//Start 12.11.2014
 			// Always rebuffer since if fdt is sent at beginning, a packet might be dropped
 			////if(ch->s->rx_fdt_instance_list == NULL || ch->s->waiting_fdt_instance == TRUE /*Malek El Khatib 16.07.2014*/ || sendFDTAfterObj ==TRUE /*END*/) {
-				printf("MalekElKhatib: Packet rebuffering for toi %i\n",toi);
+				//FRV: printf("MalekElKhatib: Packet rebuffering for toi %lld\n",toi);
 				return WAITING_FDT;
 			////}
 			////else {printf("MALEK_WANTED PACKET IS DROPPED2\n");
@@ -1699,9 +1699,10 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 					}  
 				}
 
-				//Malek El Khatib 11.08.2014
+				if(((toi == FDT_TOI && ch->s->verbosity == 4) || (toi != FDT_TOI && ch->s->verbosity > 1))) {
 				printf("The object length is: %llu\n",transfer_len);
-				//End
+				    fflush(stdout);
+				}
 
 				trans_obj->len = transfer_len;
 				trans_obj->fec_enc_id = (unsigned char)fec_enc_id;
@@ -1745,9 +1746,27 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 					}
 				}
 				else if(fec_enc_id == SB_SYS_FEC_ENC_ID) {
+				    /* [FRV] correction to provide right input parameters to AL-FEC decoder
+				     * trans_block->k = sb_len; <-- shall be as follows
+				     * sb_len is being derived from the header but as far i have
+				     * seen always leading to 1
+				     */
 
-					trans_block->k = sb_len;
+				    div_t div_k;
+				    div_k = div((unsigned int)trans_obj->len, trans_obj->es_len);
+				    if(div_k.rem == 0) {
+				        trans_block->k = (unsigned int)div_k.quot;
+				    }
+				    else {
+				        trans_block->k = (unsigned int)div_k.quot + 1;
+				    }
+
 					trans_block->max_k = max_sb_len;
+					/* [FRV]: max_n below is not the right name as internally
+					 * max_n will be derived from
+					 * the FEC-OTI-Maximum-Source-Block-Length and
+					 * the FEC ratio percent (hardcoded to 50%)
+					 */
 					trans_block->max_n = max_nb_of_es;
 				}
 				else if(fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
@@ -1862,7 +1881,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 					if(block_ready_to_decode(trans_block)) {
 
 						//Malek El Khatib 11.08.2014
-						printf("Start decoding\n");
+						//printf("Start decoding\n");
 						//End
 
 						if(ch->s->rx_memory_mode == 2){
@@ -1905,7 +1924,6 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 						}
 
 						/* decode the block and save data to the tmp file */
-
 						if(fec_enc_id == COM_NO_C_FEC_ENC_ID) {
 							buf = null_fec_decode_src_block(trans_block, &block_len, es_len);
 						}
@@ -1915,7 +1933,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 						else if(fec_enc_id == RS_FEC_ENC_ID) {
 							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len);
 						}
-						else if(fec_enc_id == SB_SYS_FEC_ENC_ID && fec_inst_id == REED_SOL_FEC_INST_ID) {		
+						else if(fec_enc_id == SB_SYS_FEC_ENC_ID && fec_inst_id == REED_SOL_FEC_INST_ID) {
 							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len);
 						}
 
@@ -2000,9 +2018,9 @@ void addPacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn,
     packet.buffer = (unsigned char *)buffer;
     ret = newWriteToBuffer(packet);
     if(ret < 0){
-//        fprintf(stdout,"Failure to write to circular paket buffer!!\n");
+//        fprintf(stdout,"Failure to write to circular packet buffer!!\n");
 		FILE * fp = fopen("errorLogBuffer.txt","w");
-        fprintf(fp,"Failure to write to circular paket buffer!!\n");
+        fprintf(fp,"Failure to write to circular packet buffer!!\n");
 		fclose(fp);
 	}
 }
@@ -2188,6 +2206,7 @@ int recv_packet(alc_session_t *s) {
 
 					//Malek El Khatib 16.07.2014
 					//Start
+				    //printf("DOES WAITING_FDT EVER HAPPPEN?\n");
 					if (sendFDTAfterObj)
 						push_back(ch->receiving_list, (void*)container);
 					else //END
@@ -2214,8 +2233,11 @@ int recv_packet(alc_session_t *s) {
 					ch->previous_lost = FALSE;
 				}
 			}
-			else { printf("DOES IT EVER GET HERE TO SIMULATE LOSSES?\n");
-			ch->previous_lost = TRUE;
+			else {
+			    //printf("DOES IT EVER GET HERE TO SIMULATE LOSSES?\n");
+			    ch->previous_lost = TRUE;
+                free(container);
+                container = NULL;
 			}
 		}
 	}    
@@ -2229,7 +2251,7 @@ void* rx_socket_thread(void *ch) {
 	fd_set read_set;
 	struct timeval time_out;
 	char hostname[100];
-    char *tempBuf;
+    // FRV: char *tempBuf;
 	int retval;
 	unsigned long long id;
 	int index;
@@ -2240,7 +2262,7 @@ void* rx_socket_thread(void *ch) {
     unsigned int esi = 0;
 
 	channel = (alc_channel_t *)ch;
-    tempBuf = malloc(MAX_PACKET_LENGTH);
+	// FRV: tempBuf = malloc(MAX_PACKET_LENGTH);
 
 	//Malek El Khatib 04.04.2014
 	//Start

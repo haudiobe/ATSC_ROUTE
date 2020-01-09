@@ -160,7 +160,7 @@ int increase_ipv6_address(struct in6_addr *ipv6) {
 
 int randomloss(double lossprob) {
 	
-	int loss = 0;
+	/*int loss = 0;
 
 	double msb;
 	double lsb;
@@ -177,6 +177,26 @@ int randomloss(double lossprob) {
 	tmp = msb + (double)(lsb/(double)10);
 
 	if(tmp < lossprob) {
+		loss = 1;
+	}
+	
+	return loss;
+	*/
+
+    int loss = 0;
+
+    double msb;
+    double lsb;
+
+    double tmp;
+
+    if(lossprob == 0.0) {
+        return loss;
+    }
+
+    msb = 100 * ((double)rand() / (double)RAND_MAX);
+
+    if(msb < lossprob) {
 		loss = 1;
 	}
 	

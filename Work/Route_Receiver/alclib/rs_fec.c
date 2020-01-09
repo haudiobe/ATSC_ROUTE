@@ -171,13 +171,19 @@ char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block
     char    *dst[GF_SIZE];
     int             index[GF_SIZE];
     unsigned int i = 0;
-    unsigned int k;
-    unsigned int n;
+    unsigned int k; /* number of source symbols */
+    unsigned int n; /* number of encoding symbols */
     div_t div_n;
+    div_t div_max_n;
+    int rs = 50; // TODO: [FRV] to read this from command line and propagate to his point
+    unsigned int max_n;
 
     k = tr_block->k;
+    div_max_n = div((tr_block->max_k * (100 + rs)), 100);
+    max_n = (unsigned int)div_max_n.quot;
 
-    div_n = div((k * tr_block->max_n), tr_block->max_k);
+    //div_n = div((k * tr_block->max_n), tr_block->max_k); [FRV]: this was the original line but does not match the calculation done in the encoder side
+    div_n = div((k * max_n), tr_block->max_k);
     n = (unsigned int)div_n.quot;
 
     len = es_len*tr_block->k;
