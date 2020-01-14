@@ -209,7 +209,7 @@ apd_t* decode_apd_config(char *apd_config) {
         XML_SetCharacterDataHandler(parser, characterDataHandler_APD);
 
         if(XML_Parse(parser, apd_config, len, 1) == XML_STATUS_ERROR) {
-                fprintf(stderr, "%s at line %d\n",
+                fprintf(stderr, "%s at line %lu\n",
                                 XML_ErrorString(XML_GetErrorCode(parser)),
                                 XML_GetCurrentLineNumber(parser));
                 XML_ParserFree(parser);

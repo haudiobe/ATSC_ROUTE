@@ -184,11 +184,7 @@ int randomloss(double lossprob) {
 	*/
 
     int loss = 0;
-
     double msb;
-    double lsb;
-
-    double tmp;
 
     if(lossprob == 0.0) {
         return loss;

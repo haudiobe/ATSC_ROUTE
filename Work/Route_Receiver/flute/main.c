@@ -302,8 +302,10 @@ void usage(void) {
  * @return different values (0, -1, -2, -3) depending on how program ends
  *
  */
+#ifdef CIRCULAR_BUFFER
+  void calling_main(void);
+#endif
 
-void calling_main(void);
 extern pthread_mutex_t bufferLock;
 
 int main(int argc, char **argv) {
@@ -348,7 +350,9 @@ int main(int argc, char **argv) {
   if(retval == -1) {
     usage();
   }
+#ifdef CIRCULAR_BUFFER
   calling_main();
+#endif
 
   //Malek El Khatib 15.05.2014
   //Start

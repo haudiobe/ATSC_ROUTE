@@ -156,7 +156,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
   int point;
   int ch = '/';
   int i = 0;
-  FILE *fabcd;
+
 #ifdef USE_OPENSSL
   char *md5_digest = NULL;
 #endif
@@ -571,7 +571,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
   int point;
   int ch = '/';
   uri_t *uri = NULL;
-FILE *fabcd;
+
   //Malek El Khatib 07.05.2014
   //Start
   unsigned long long timeInUsec = 0L;		//Used later for timing purposes
@@ -908,7 +908,7 @@ FILE *fabcd;
 	retcode = padding_decoder(tmp_filename, (int)file->content_len);
 	  
 	if(retcode == -1) {
-	  free(tmp_filename);
+	  //free(tmp_filename); <-- attempt to free a non-heap object
 	  return -1;
 	}
 	
@@ -1465,11 +1465,9 @@ int receiver_in_object_mode(int *s_id, arguments_t *a) {
 }
 
 void* fdt_thread(void *s) {
-  
-  int i;
+    int i;
   flute_receiver_t *receiver;
   char *buf = NULL;
-  
   unsigned long long buflen = 0;
   
   int updated;
@@ -1480,8 +1478,7 @@ void* fdt_thread(void *s) {
   file_t *file;
   file_t *next_file;
   int retval;
-  FILE *fabcd;
-  
+    
   unsigned long long curr_time;
   
 #ifdef USE_ZLIB
@@ -1504,19 +1501,12 @@ void* fdt_thread(void *s) {
 
     /* Get initial fdt */
     if(receiver->efdt == NULL) {
- 
-      buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo, &fdt_instance_id);
-       
- 
-		
+        buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo,
+          &fdt_instance_id);
       if(buf == NULL) {
-
-	
-		
 	    if(retval == -1) {
 	      continue;
 	    }
-
 #ifdef _MSC_VER
 	    _endthread();
 #else
@@ -1534,34 +1524,26 @@ void* fdt_thread(void *s) {
 	    }
 	    efdt_instance = decode_efdt_payload(uncompr_buf);
 	      free(uncompr_buf);
-        }
-        else {
+        } else {
 	     efdt_instance = decode_efdt_payload(buf);
-	      
         }
 #else 
       efdt_instance = decode_efdt_payload(buf);
-       
 #endif
   
-      
       if(efdt_instance == NULL) {
-		
 	free(buf);
 	continue;
       }
       
       if(efdt_instance->expires < curr_time) {
-	
 	if(!receiver->accept_expired_fdt_inst) {
-	  
 	  if(receiver->verbosity == 4) {
 	    printf("Expired EFDT Instance received, discarding\n");
 	    fflush(stdout);
 	  }
-	  
 	  free(buf);
-	  FreeFDT(efdt_instance);
+      FreeEFDT(efdt_instance);
 	  continue;
         } else {
 	  if(receiver->verbosity == 4) {
@@ -1603,10 +1585,10 @@ void* fdt_thread(void *s) {
       
       while(next_file != NULL) {
 	i = 0;
+
 	file = next_file;
 	
 	if(file->status == 0) {
-	  
 	  if(file->encoding == NULL) {
 	    content_enc_algo = 0;
 	  }
@@ -1732,7 +1714,6 @@ void* fdt_thread(void *s) {
       }
       else {
 	efdt_instance = decode_efdt_payload(buf);
-	 
       }
 #else 
       efdt_instance = decode_efdt_payload(buf);
@@ -1749,7 +1730,7 @@ void* fdt_thread(void *s) {
 	    printf("Expired FDT Instance received, discarding\n");
 	    fflush(stdout);
 	  }
-	  FreeFDT(efdt_instance);
+    FreeEFDT(efdt_instance);
 	  free(buf);
 	  continue;
 	}
@@ -1791,13 +1772,7 @@ void* fdt_thread(void *s) {
   updated = update_fdt(receiver->fdt, fdt_instance);
       //receiver->fdt = fdt_instance;
       //receiver->efdt= efdt_instance;
-      FILE *fabcd;
-   fabcd=fopen("ErrorDebugging.txt", "w");
 			 
-		
-			//  fprintf(fabcd, "%llu\n", tmp->toi);
-			  fprintf(fabcd, fdt_instance->file_list);
-			  fclose(fabcd);
       if(updated < 0) {
 	continue;
       }
@@ -1841,15 +1816,11 @@ void* fdt_thread(void *s) {
 	    }
 
 	    if(receiver->rx_automatic) {
-	      
-	      retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					 file->es_len,
-					 file->max_sb_len,
-					 file->fec_inst_id,
-					 file->fec_enc_id,
-					 file->max_nb_of_es, content_enc_algo,
-					 file->finite_field, file->nb_of_es_per_group
-					 );
+          retval = set_wanted_object(
+            receiver->s_id, file->toi, file->transfer_len, file->es_len,
+            file->max_sb_len,  file->fec_inst_id, file->fec_enc_id,
+            file->max_nb_of_es, content_enc_algo, file->finite_field,
+            file->nb_of_es_per_group);
 	      
 	      if(retval < 0) {
 		/* Memory error */
@@ -1860,7 +1831,8 @@ void* fdt_thread(void *s) {
 	    }
 	    else if(receiver->wildcard_token != NULL) {
 	      if(strstr(file->location, receiver->wildcard_token) != NULL) {
-		retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+            retval = set_wanted_object(receiver->s_id, file->toi,
+              file->transfer_len,
 					   file->es_len,
 					   file->max_sb_len,
 					   file->fec_inst_id,
@@ -1878,7 +1850,6 @@ void* fdt_thread(void *s) {
 	      }
 	    }
 	    else {
-	      
 	      for(i = 0; i < FILE_URI_TABLE_SIZE; i++) {
 		
 		if(receiver->file_uri_table[i] == NULL) {
@@ -1898,8 +1869,7 @@ void* fdt_thread(void *s) {
 		  
 		  if(retval < 0) {
 		    /* Memory error */
-		  }
-		  else {
+              } else {
 		    file->status = 1;
 		    break;
 		  }

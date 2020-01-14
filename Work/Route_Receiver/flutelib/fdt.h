@@ -188,6 +188,9 @@ void PrintFDT(fdt_t *fdt, int s_id);
 /*
 void free_file(file_t *file);*/
 
+
+int copy_file_info(file_t *src, file_t *dest);
+
 #ifdef __cplusplus
 }; //extern "C"
 #endif

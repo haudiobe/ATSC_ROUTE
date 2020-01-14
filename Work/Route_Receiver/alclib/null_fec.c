@@ -74,12 +74,12 @@ trans_block_t* null_fec_encode_src_block(char *data, unsigned long long len,
 	tr_block->k = nb_of_units;
 
 	//Malek El Khatib
-	unsigned short es0_len;
+	unsigned short es0_len = 0;
 	//End
 	for(i = 0; i < nb_of_units; i++) {
 
 		//Malek El Khatib
-		//We want to send esi=0 at the end to simulate transmission during the live prodution of a media file
+		//We want to send esi=0 at the end to simulate transmission during the live production of a media file
 		//Only after the whole media file is created do we know the metadata for this file which is populated in esi=0
 		if ( i == 0 && nb_of_units > 1)
 		{

@@ -632,7 +632,7 @@ efdt_t* decode_efdt_payload(char *efdt_payload) {
 	XML_SetStartElementHandler(parser, startElement_EFDT);
 
 	if(XML_Parse(parser, efdt_payload, len, 1) == XML_STATUS_ERROR) {
-		fprintf(stderr, "%s at line %d\n",
+		fprintf(stderr, "%s at line %lu\n",
 			XML_ErrorString(XML_GetErrorCode(parser)),
 			XML_GetCurrentLineNumber(parser));
 		XML_ParserFree(parser);
@@ -769,8 +769,8 @@ void PrintEFDT(efdt_t *efdt, int s_id) {
 
 	file_t *next_file;
 	file_t *file;
-	char encoding[5] = "null"; 
-	char *enc = encoding;
+	//char encoding[5] = "null";
+	//char *enc = encoding;
 
 	lock_efdt();
 
@@ -780,7 +780,7 @@ void PrintEFDT(efdt_t *efdt, int s_id) {
 		file = next_file;
 
 		if(file->encoding != NULL) {
-			enc = file->encoding;
+			//enc = file->encoding;
 		}
 
 #ifdef _MSC_VER

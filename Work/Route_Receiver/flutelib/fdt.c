@@ -632,7 +632,7 @@ fdt_t* decode_fdt_payload(char *fdt_payload) {
 	XML_SetStartElementHandler(parser, startElement_FDT);
 
 	if(XML_Parse(parser, fdt_payload, len, 1) == XML_STATUS_ERROR) {
-		fprintf(stderr, "%s at line %d\n",
+		fprintf(stderr, "%s at line %lu\n",
 			XML_ErrorString(XML_GetErrorCode(parser)),
 			XML_GetCurrentLineNumber(parser));
 		XML_ParserFree(parser);

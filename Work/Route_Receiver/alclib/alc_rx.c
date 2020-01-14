@@ -88,7 +88,7 @@ long fullness = 0;
 unsigned int tunedIn = 0;
 pthread_mutex_t bufferLock;
 
-extern unsigned int workingPort;
+
 
 int hdrlen = 0;			/* length of whole FLUTE/ALC/LCT header */
 unsigned long long tsi = 0; /* TSI */
@@ -97,6 +97,9 @@ unsigned int sbn = 0;
 unsigned int esi = 0;
 unsigned long long prevToiVideo = 0;
 unsigned long long prevToiAudio = 0;
+
+#ifdef CIRCULAR_BUFFER
+extern unsigned int workingPort;
 
 long newBufferFullness()
 {
@@ -157,7 +160,7 @@ struct packetBuffer *getEmptyBufferSlot()
     
 int newWriteToBuffer(struct packetBuffer buffer)
 {
-	unsigned long savedWptr;
+	//unsigned long savedWptr;
 	
 	pthread_mutex_lock(&bufferLock);
     
@@ -194,7 +197,7 @@ Adi end */
 
         first = 0;
 		
-        /* Adi-start 2       
+        // Adi-start 2
         //fwrite(buffer.buffer,1,buffer.length,sendMergeFile);
         //fclose(sendMergeFile);
         //pktFile = fopen(packetFiles,"w");
@@ -1013,6 +1016,7 @@ int parse_packet(char *data, int len, int *hdrlenp, unsigned long long *toip, un
 
 	return OK;
 }
+#endif
 
 /**
 * This is a private function which parses and analyzes an ALC packet.
@@ -1811,8 +1815,9 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 						}
 					}
                     
-
+#ifdef CIRCULAR_BUFFER
 					cachePacket(toi,tsi,sbn,esi,trans_unit->data,(unsigned int)len - hdrlen);
+#endif
                     
 
 					/* if large file mode data symbol is stored in the tmp file */
@@ -1908,8 +1913,7 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 
 								if(!(tu->data = (char*)calloc(tu->len, sizeof(char)))) {
 									printf("Could not alloc memory for transport unit's data!\n");
-									return MEM_ERROR;		FILE * tempff = fopen("bufferLog.txt","a");
-    
+									return MEM_ERROR;
 								}
 
 								if(read(trans_obj->fd_st, tu->data, tu->len) == -1) {
@@ -2006,6 +2010,8 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 	return OK;
 }
 
+#ifdef CIRCULAR_BUFFER
+
 void addPacket(unsigned long long toi, unsigned long long tsi, unsigned int sbn, unsigned int esi, char *buffer, int len)
 {
     struct packetBuffer packet;
@@ -2075,6 +2081,7 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
 			addPacket(toi,tsi,sbn,esi,buffer,len);		
     }
 }
+#endif
 
 /**
 * This is a private function which receives unit(s) from the session's channels.
@@ -2086,6 +2093,10 @@ void cachePacket(unsigned long long toi, unsigned long long tsi, unsigned int sb
 *
 */
 
+/*unsigned long long wait_cnt = 0;
+unsigned long long ready_cnt = 0;
+unsigned long long package_cnt = 0;*/
+
 int recv_packet(alc_session_t *s) {
 
 	char recvbuf[MAX_PACKET_LENGTH];
@@ -2094,14 +2105,11 @@ int recv_packet(alc_session_t *s) {
 	int retval;
 	int recv_pkts = 0;
 	alc_channel_t *ch;
-	struct sockaddr_storage from;
 
 	double loss_prob;
 
 	alc_rcv_container_t *container;
 	int my_list_not_empty = 0;
-
-	socklen_t fromlen;
 
 	time_t systime;
 	unsigned long long curr_time;
@@ -2147,12 +2155,11 @@ int recv_packet(alc_session_t *s) {
 			assert(ch->rx_socket_thread_id != 0);
 
 			container = (alc_rcv_container_t*)pop_front(ch->receiving_list);
+			//package_cnt++;
 
 			assert(container != NULL);
 
 			recvlen = container->recvlen;
-			from = container->from;
-			fromlen = container->fromlen;
 			memcpy(recvbuf, container->recvbuf, MAX_PACKET_LENGTH);
 
 			if(recvlen < 0) {
@@ -2188,7 +2195,6 @@ int recv_packet(alc_session_t *s) {
 			}
 
 			if(!randomloss(loss_prob)) {
-
                 unsigned long long toi;    
 
 				retval = analyze_packet(recvbuf, recvlen, &toi, ch);
@@ -2203,10 +2209,11 @@ int recv_packet(alc_session_t *s) {
 				}
 
 				if(retval == WAITING_FDT) {
-
+				    //wait_cnt++;
 					//Malek El Khatib 16.07.2014
 					//Start
 				    //printf("DOES WAITING_FDT EVER HAPPPEN?\n");
+				    //fflush(stdout);
 					if (sendFDTAfterObj)
 						push_back(ch->receiving_list, (void*)container);
 					else //END
@@ -2214,7 +2221,7 @@ int recv_packet(alc_session_t *s) {
 
 				}
 				else {
-                    
+				    //ready_cnt++;
 					free(container);
 					container = NULL;
 
@@ -2232,6 +2239,7 @@ int recv_packet(alc_session_t *s) {
 
 					ch->previous_lost = FALSE;
 				}
+
 			}
 			else {
 			    //printf("DOES IT EVER GET HERE TO SIMULATE LOSSES?\n");
@@ -2251,18 +2259,26 @@ void* rx_socket_thread(void *ch) {
 	fd_set read_set;
 	struct timeval time_out;
 	char hostname[100];
-    // FRV: char *tempBuf;
 	int retval;
 	unsigned long long id;
+
+	/* FRV: Unused variables. They seem to be used only in case of placing packets
+	 * in some sort of circular buffer that i have no idea what it does.
+	 * It seems to be related to the test-server.c file
+	 */
+#ifdef CIRCULAR_BUFFER
 	int index;
     int hdrlen = 0;         /* length of whole FLUTE/ALC/LCT header */
     unsigned long long tsi = 0; /* TSI */
     unsigned long long toi = 0; /* TOI */
     unsigned int sbn = 0;
     unsigned int esi = 0;
+	char *tempBuf;
+    tempBuf = malloc(MAX_PACKET_LENGTH);
+#endif
 
 	channel = (alc_channel_t *)ch;
-	// FRV: tempBuf = malloc(MAX_PACKET_LENGTH);
+
 
 	//Malek El Khatib 04.04.2014
 	//Start
@@ -2435,7 +2451,8 @@ void* rx_thread(void *s) {
 			usleep(1000);
 		}
 	}
-
+	//printf("Counters T:%lld, W: %lld, R:%lld", package_cnt, wait_cnt, ready_cnt);
+	//fflush(stdout);
 	pthread_exit(0);
 
 	return NULL;
