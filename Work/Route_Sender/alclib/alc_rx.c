@@ -1116,18 +1116,11 @@ int recv_packet(alc_session_t *s) {
 	int retval;
 	int recv_pkts = 0;
 	alc_channel_t *ch;
-	struct sockaddr_storage from;
 
 	double loss_prob;
 
 	alc_rcv_container_t *container;
 	int my_list_not_empty = 0;
-
-#ifdef _MSC_VER
-	int fromlen;
-#else
-	socklen_t fromlen;
-#endif
 
 	time_t systime;
 	unsigned long long curr_time;
@@ -1181,8 +1174,6 @@ int recv_packet(alc_session_t *s) {
 			assert(container != NULL);
 
 			recvlen = container->recvlen;
-			from = container->from;
-			fromlen = container->fromlen;
 			memcpy(recvbuf, container->recvbuf, MAX_PACKET_LENGTH);
 
 			if(recvlen < 0) {

@@ -255,7 +255,7 @@ int encode_file(char *file, char *base_dir, FILE *fp, int *s_id) {
 	free(uri_str);
 	
 	fprintf(fp, "\n\t\t");
-	fprintf(fp, "Content-Length=\"%llu\"", file_stats.st_size);
+	fprintf(fp, "Content-Length=\"%lu\"", file_stats.st_size);
 
 	if(s->encode_content == 0 || s->encode_content == ZLIB_FDT) {
 		if(is_enough_source_block_numbers(s->def_max_sblen, s->def_eslen, file_stats.st_size,
@@ -337,7 +337,7 @@ int encode_file(char *file, char *base_dir, FILE *fp, int *s_id) {
 #endif
                                                                                                                                                               
 					fprintf(fp, "\n\t\t");
-					fprintf(fp, "Transfer-Length=\"%llu\"", enc_file_stats.st_size);
+					fprintf(fp, "Transfer-Length=\"%lu\"", enc_file_stats.st_size);
 
 					if(is_enough_source_block_numbers(s->def_max_sblen, s->def_eslen, enc_file_stats.st_size,
 								   s->def_fec_enc_id, s->def_fec_inst_id) < 0) {
@@ -1023,7 +1023,7 @@ int encode_directory(char *directory, char *base_dir, FILE *fp, int *s_id) {
 			uri_str = NULL;
 
 			fprintf(fp, "\n\t\t");
-			fprintf(fp, "Content-Length=\"%llu\"", file_stats.st_size);
+			fprintf(fp, "Content-Length=\"%lu\"", file_stats.st_size);
 
                         if(s->encode_content == PAD_FILES) {
 
@@ -1032,7 +1032,7 @@ int encode_directory(char *directory, char *base_dir, FILE *fp, int *s_id) {
                                         fprintf(fp, "Content-Encoding=\"%s\"", "pad");
 
                                         fprintf(fp, "\n\t\t");
-                                        fprintf(fp, "Transfer-Length=\"%llu\"", compute_padding_length(file_stats.st_size, s->def_max_sblen, s->def_eslen) + file_stats.st_size);
+                                        fprintf(fp, "Transfer-Length=\"%lu\"", compute_padding_length(file_stats.st_size, s->def_max_sblen, s->def_eslen) + file_stats.st_size);
                                 }
                         }
 #ifdef USE_ZLIB
@@ -1071,7 +1071,7 @@ int encode_directory(char *directory, char *base_dir, FILE *fp, int *s_id) {
 #endif
                 
 					fprintf(fp, "\n\t\t");
-					fprintf(fp, "Transfer-Length=\"%llu\"", enc_file_stats.st_size);
+					fprintf(fp, "Transfer-Length=\"%lu\"", enc_file_stats.st_size);
 				}
 			}
 #endif

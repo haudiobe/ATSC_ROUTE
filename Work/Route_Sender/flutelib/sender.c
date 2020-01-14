@@ -95,7 +95,7 @@ int send_fdt_instance(char *fdt_instance, unsigned long long fdt_inst_len, int s
   int retval = 0;
   unsigned int sbn = 0;
   char *buf = NULL;
-FILE *fabcd;
+
   blocking_struct_t *bs;                
                                                                                                                           
   transfer_len = fdt_inst_len;
@@ -310,7 +310,7 @@ int send_file(char *tx_file, int s_id, int tx_mode, unsigned short es_len, unsig
 	//Malek El Khatib 21.07.2014
 	//Start
 	BOOL seekBack=FALSE;	//Used to send blocks out of order
-	unsigned int sbnBackup;
+
 	//printf("WHAT ARE THE VALUES FOR TRANSFER LENGTH, MAX_SB_Len, and ES_Len: %llu %u %hu",transfer_len,max_sb_len,es_len);
 	//END
 
@@ -2279,7 +2279,7 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
   unsigned long long curr_time;
   
   
-  int sent = 0 ,z;
+  int sent = 0;
   BOOL incomplete_fdt = FALSE;
   
   time(&systime);
@@ -2409,7 +2409,6 @@ int fdtbasedsend(flute_sender_t *sender, int tx_mode, arguments_t *a) {
 
   struct timeval start_timer,end_timer,currentTime;
   unsigned long long elapsedTime= 0L;
-  int USDSent=0;
 
   if (sendingTimesFile != "")
   {
@@ -2911,14 +2910,14 @@ int sender_in_fdt_based_mode(arguments_t *a, flute_sender_t *sender) {
   unsigned long long curr_time;
 
   struct stat fdt_file_stats;
-  FILE *fp, *fabcd;
+  FILE *fp;
 
   char *buf = NULL;
 
-  unsigned long long fdt_length = 0, **tempo;
+  unsigned long long fdt_length = 0;
   long long nbytes = 0;
   fdt_t *fdt;
-  efdt_t *efdt;
+
   BOOL is_fec_oti_in_fdt = TRUE;
 
   if(stat(a->fdt_file, &fdt_file_stats) == -1) {

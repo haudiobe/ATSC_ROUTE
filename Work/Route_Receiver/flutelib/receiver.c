@@ -1532,25 +1532,26 @@ void* fdt_thread(void *s) {
 #endif
   
       if(efdt_instance == NULL) {
-	free(buf);
-	continue;
+        free(buf);
+        continue;
       }
       
       if(efdt_instance->expires < curr_time) {
-	if(!receiver->accept_expired_fdt_inst) {
-	  if(receiver->verbosity == 4) {
-	    printf("Expired EFDT Instance received, discarding\n");
-	    fflush(stdout);
-	  }
-	  free(buf);
-      FreeEFDT(efdt_instance);
-	  continue;
+        if(!receiver->accept_expired_fdt_inst) {
+          if(receiver->verbosity == 4) {
+            printf("Expired EFDT Instance received, discarding\n");
+            fflush(stdout);
+          }
+          FreeEFDT(efdt_instance);
+          free(buf);
+
+          continue;
         } else {
-	  if(receiver->verbosity == 4) {
-	    printf("Expired EFDT Instance received, using it anyway\n");
-	    fflush(stdout);
-	  }
-	}
+          if(receiver->verbosity == 4) {
+            printf("Expired EFDT Instance received, using it anyway\n");
+            fflush(stdout);
+          }
+        }
       }
       
  /*Copy efdt to fdt accordingly */

@@ -632,7 +632,7 @@ fdt_t* decode_fdt_payload(char *fdt_payload) {
 	XML_SetStartElementHandler(parser, startElement_FDT);
 
 	if(XML_Parse(parser, fdt_payload, len, 1) == XML_STATUS_ERROR) {
-		fprintf(stderr, "%s at line %d\n",
+		fprintf(stderr, "%s at line %ld\n",
 			XML_ErrorString(XML_GetErrorCode(parser)),
 			XML_GetCurrentLineNumber(parser));
 		XML_ParserFree(parser);
@@ -781,8 +781,6 @@ void PrintFDT(fdt_t *fdt, int s_id) {
 
 	file_t *next_file;
 	file_t *file;
-	char encoding[5] = "null"; 
-	char *enc = encoding;
 
 	lock_fdt();
 
@@ -792,7 +790,7 @@ void PrintFDT(fdt_t *fdt, int s_id) {
 		file = next_file;
 
 		if(file->encoding != NULL) {
-			enc = file->encoding;
+			//enc = file->encoding;
 		}
 
 #ifdef _MSC_VER

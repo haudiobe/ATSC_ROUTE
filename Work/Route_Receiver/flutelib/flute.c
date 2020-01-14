@@ -988,6 +988,7 @@ int flute_receiver_report(arguments_t *a, int *s_id, flute_receiver_report_t **r
 	if(a->rx_object) {
 		retval = receiver_in_object_mode(s_id, a);
 		receiver.fdt = NULL;
+		receiver.efdt = NULL;
 	}
 	else {
 
@@ -1038,6 +1039,7 @@ int flute_receiver_report(arguments_t *a, int *s_id, flute_receiver_report_t **r
 		}
 
 		receiver.fdt = NULL;
+		receiver.efdt = NULL;
 		receiver.s_id = *s_id;
 		receiver.rx_automatic = a->rx_automatic;
 		receiver.accept_expired_fdt_inst = a->alc_a.accept_expired_fdt_inst;

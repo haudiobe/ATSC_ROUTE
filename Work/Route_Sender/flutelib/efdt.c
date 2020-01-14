@@ -65,146 +65,6 @@ void unlock_efdt(void) {
 }
 
 /**
- * This is a private function which copies file description from source to destination. 
- *
- * @param src pointer to source file structure
- * @param dest pointer to destination file structure
- *
- * @return 1 if file description is updated, 0 if not, and -1 in error cases
- *
- */
-
-/*int copy_file_info(file_t *src, file_t *dest) {
-
-	int updated = 0;
-
-	/* Copy only if particular field is not present in destination, so file description can be only
-	complemented not modified */
-
-/*	if(src->toi != 0) {
-		if(dest->toi == 0) {
-			dest->toi = src->toi;
-			updated = 1;
-		}
-	}
-
-	if(src->expires != 0) {
-		if(dest->expires == 0) {
-			dest->expires = src->expires;
-			updated = 1;
-		}
-	}
-
-	if(src->transfer_len != 0) {
-		if(dest->transfer_len == 0) {
-			dest->transfer_len = src->transfer_len;
-			updated = 1;
-		}
-	}
-
-	if(src->content_len != 0) {
-		if(dest->content_len == 0) {
-			dest->content_len = src->content_len;
-			updated = 1;
-		}
-	}
-
-	if(src->fec_enc_id != -1) {
-		if(dest->fec_enc_id == -1) {
-			dest->fec_enc_id = src->fec_enc_id;
-			updated = 1;
-		}
-	}
-
-	if(src->fec_inst_id != -1) {
-		if(dest->fec_inst_id == -1) {
-			dest->fec_inst_id = src->fec_inst_id;
-			updated = 1;
-		}
-	}
-
-	if(src->max_sb_len != 0) {
-		if(dest->max_sb_len == 0) {
-			dest->max_sb_len = src->max_sb_len;
-			updated = 1;
-		}
-	}
-
-	if(src->es_len != 0) {
-		if(dest->es_len == 0) {
-			dest->es_len = src->es_len;
-			updated = 1;
-		}
-	}
-
-	if(src->max_nb_of_es != 0) {
-		if(dest->max_nb_of_es == 0) {
-			dest->max_nb_of_es = src->max_nb_of_es;
-			updated = 1;
-		}
-	}
-
-	if(src->location != NULL) {
-
-		if(dest->location == NULL) {
-
-			if(!(dest->location  = (char*)calloc((strlen(src->location) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->location!\n");
-				return -1;
-			}
-
-			memcpy(dest->location, src->location, strlen(src->location));
-			updated = 1;
-		}
-	}
-
-	if(src->type != NULL) {
-
-		if(dest->type == NULL) {
-
-			if(!(dest->type  = (char*)calloc((strlen(src->type) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->type!\n");
-				return -1;
-			}
-
-			memcpy(dest->type, src->type, strlen(src->type));
-			updated = 1;
-		}
-	}
-
-	if(src->md5 != NULL) {
-
-		if(dest->md5 == NULL) {
-
-			if(!(dest->md5 = (char*)calloc((strlen(src->md5) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->md5!\n");
-				return -1;
-			}
-
-			memcpy(dest->md5, src->md5, strlen(src->md5));
-			updated = 1;
-		}
-	}
-
-	if(src->encoding != NULL) {
-
-		if(dest->encoding == NULL) {
-
-			if(!(dest->encoding = (char*)calloc((strlen(src->encoding) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->encoding!\n");
-				return -1;
-			}
-
-			memcpy(dest->encoding, src->encoding, strlen(src->encoding));
-			updated = 1;
-		}
-	}
-
-	return updated;
-}
-*/
-
-/**
  * This is a private function which is used in FDT parsing.
  *
  * @param userData not used, must be
@@ -220,7 +80,7 @@ static void startElement_EFDT(void *userData, const char *name, const char **att
 #endif
 
 	char *mbstr;
-FILE *fabcd;
+
 	while(*atts != NULL) {
 		if(!strcmp(name, "File")) {
 
@@ -635,7 +495,7 @@ efdt_t* decode_efdt_payload(char *efdt_payload) {
 	XML_SetStartElementHandler(parser, startElement_EFDT);
 
 	if(XML_Parse(parser, efdt_payload, len, 1) == XML_STATUS_ERROR) {
-		fprintf(stderr, "%s at line %d\n",
+		fprintf(stderr, "%s at line %ld\n",
 			XML_ErrorString(XML_GetErrorCode(parser)),
 			XML_GetCurrentLineNumber(parser));
 		XML_ParserFree(parser);
@@ -772,8 +632,6 @@ void PrintEFDT(efdt_t *efdt, int s_id) {
 
 	file_t *next_file;
 	file_t *file;
-	char encoding[5] = "null"; 
-	char *enc = encoding;
 
 	lock_efdt();
 
@@ -783,7 +641,7 @@ void PrintEFDT(efdt_t *efdt, int s_id) {
 		file = next_file;
 
 		if(file->encoding != NULL) {
-			enc = file->encoding;
+			//enc = file->encoding;
 		}
 
 #ifdef _MSC_VER

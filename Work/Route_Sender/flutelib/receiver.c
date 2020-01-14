@@ -156,7 +156,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
   int point;
   int ch = '/';
   int i = 0;
-  FILE *fabcd;
+
 #ifdef USE_OPENSSL
   char *md5_digest = NULL;
 #endif
@@ -571,7 +571,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
   int point;
   int ch = '/';
   uri_t *uri = NULL;
-FILE *fabcd;
+
   //Malek El Khatib 07.05.2014
   //Start
   unsigned long long timeInUsec = 0L;		//Used later for timing purposes
@@ -1480,8 +1480,7 @@ void* fdt_thread(void *s) {
   file_t *file;
   file_t *next_file;
   int retval;
-  FILE *fabcd;
-  
+
   unsigned long long curr_time;
   
 #ifdef USE_ZLIB
@@ -1561,7 +1560,7 @@ void* fdt_thread(void *s) {
 	  }
 	  
 	  free(buf);
-	  FreeFDT(efdt_instance);
+	  FreeEFDT(efdt_instance);
 	  continue;
 	}
 	else {
@@ -1750,7 +1749,7 @@ void* fdt_thread(void *s) {
 	    printf("Expired FDT Instance received, discarding\n");
 	    fflush(stdout);
 	  }
-	  FreeFDT(efdt_instance);
+	  FreeEFDT(efdt_instance);
 	  free(buf);
 	  continue;
 	}
@@ -1792,13 +1791,7 @@ void* fdt_thread(void *s) {
   updated = update_fdt(receiver->fdt, fdt_instance);
       //receiver->fdt = fdt_instance;
       //receiver->efdt= efdt_instance;
-      FILE *fabcd;
-   fabcd=fopen("ErrorDebugging.txt", "w");
-			 
-		
-			//  fprintf(fabcd, "%llu\n", tmp->toi);
-			  fprintf(fabcd, fdt_instance->file_list);
-			  fclose(fabcd);
+
       if(updated < 0) {
 	continue;
       }
