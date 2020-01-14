@@ -13,6 +13,14 @@ Work/Route_Receiver/bin/Rcv_Log_Audio1.txt
 Work/Route_Receiver/bin/Rcv_Log_Audio2.txt
 Work/Route_Sender/bin/nbproject/private/private.xml
 Work/Route_Receiver/bin/SDPcheck.txt
+Work/Route_Sender/bin/flute_sender
+Work/Route_Receiver/bin/flute
+Work/Route_Sender/.cproject
+Work/Route_Sender/.project
+Work/Route_Sender/.settings
+Work/Route_Receiver/.cproject
+Work/Route_Receiver/.project
+Work/Route_Receiver/.settings
 
 *.d
 
