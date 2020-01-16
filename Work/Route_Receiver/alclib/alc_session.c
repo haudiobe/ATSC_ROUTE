@@ -159,7 +159,7 @@ int open_alc_session(alc_arguments_t *a) {
   if(s->mode == SENDER) {
 
     ftime(&timeb_current_time);
-	s->ftimestarttime = timeb_current_time.time+timeb_current_time.millitm/1000.0;
+    s->ftimestarttime = timeb_current_time.time+timeb_current_time.millitm/1000.0;
 
     memcpy(s->base_dir, a->base_dir, strlen(a->base_dir));
     
@@ -213,6 +213,9 @@ int open_alc_session(alc_arguments_t *a) {
   
   if(s->mode == RECEIVER) {
     
+    // FRV: propagate from command line to session context.
+    s->def_fec_ratio = a->fec_ratio;
+
 #ifdef SSM
     s->ssm = a->use_ssm;
 #endif

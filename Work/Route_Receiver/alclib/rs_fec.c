@@ -160,7 +160,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
 }
 
 char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							  unsigned short es_len) {
+							  unsigned short es_len, int rs) {
 
     char *buf = NULL; /* buffer where to construct the source block from data units */
     trans_unit_t *next_tu;
@@ -175,7 +175,6 @@ char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block
     unsigned int n; /* number of encoding symbols */
     div_t div_n;
     div_t div_max_n;
-    int rs = 50; // TODO: [FRV] to read this from command line and propagate to his point
     unsigned int max_n;
 
     k = tr_block->k;
@@ -241,51 +240,51 @@ char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block
 
 char *rs_fec_decode_object(trans_obj_t *to, unsigned long long *data_len, alc_session_t *s) {
 
-    char *object = NULL; /* buffer where to construct the object */
-    char *block = NULL; /* buffer where to contruct the object */
+  char *object = NULL; /* buffer where to construct the object */
+  char *block = NULL; /* buffer where to construct the object */
 
-    trans_block_t *tb;
+  trans_block_t *tb;
 
-    unsigned long long len;
-    unsigned long long position;
-    unsigned long long to_data_left;
-    unsigned long long block_len;
-    unsigned int i;
+  unsigned long long len;
+  unsigned long long position;
+  unsigned long long to_data_left;
+  unsigned long long block_len;
+  unsigned int i;
 
-    /* Allocate memory for object */
-    if(!(object = (char*)calloc((unsigned int)(to->len + 1), sizeof(char)))) {
-            printf("Could not alloc memory for object!\n");
-            *data_len = 0;
-            return NULL;
-    }
+  /* Allocate memory for object */
+  if(!(object = (char*)calloc((unsigned int)(to->len + 1), sizeof(char)))) {
+    printf("Could not alloc memory for object!\n");
+    *data_len = 0;
+    return NULL;
+  }
 
-    position = 0;
-    to_data_left = to->len;
+  position = 0;
+  to_data_left = to->len;
 
-    tb = to->block_list;
+  tb = to->block_list;
 
-    /*while(tb != NULL) {*/
-    for(i = 0; i < to->bs->N; i++) {
-            block = rs_fec_decode_src_block(tb, &block_len, (unsigned short)to->es_len);
+  /*while(tb != NULL) {*/
+  for(i = 0; i < to->bs->N; i++) {
+    block = rs_fec_decode_src_block(tb, &block_len, (unsigned short)to->es_len, s->def_fec_ratio);
 
-            /* the last packet of the last source block might be padded with zeros */
-            len = to_data_left < block_len ? to_data_left : block_len;
+    /* the last packet of the last source block might be padded with zeros */
+    len = to_data_left < block_len ? to_data_left : block_len;
 
-			assert(0 <= position);
-			assert(position < to->len+1);
-			assert(len <= (to->len-position));
+    assert(0 <= position);
+    assert(position < to->len+1);
+    assert(len <= (to->len-position));
 
-            memcpy(object+(unsigned int)position, block, (unsigned int)len);
-            position += len;
-            to_data_left -= len;
+    memcpy(object+(unsigned int)position, block, (unsigned int)len);
+    position += len;
+    to_data_left -= len;
 
-            free(block);
-            block = NULL;
+    free(block);
+    block = NULL;
 
-            /*tb = tb->next;*/
-            tb = to->block_list+(i+1);
-    }
+    /*tb = tb->next;*/
+    tb = to->block_list+(i+1);
+  }
 
-    *data_len = to->len;
-    return object;
+  *data_len = to->len;
+  return object;
 }

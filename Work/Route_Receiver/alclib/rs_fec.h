@@ -64,6 +64,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
  * @param tr_block pointer to source block
  * @param block_len stores the length of block
  * @param es_len encoding symbol length for this block
+ * @param rs FEC ratio percent
  *
  * @return pointer to buffer which contains block's data, NULL when memory could
  * not be allocated
@@ -71,7 +72,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
  */
 
 char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							  unsigned short es_len);
+							  unsigned short es_len, int rs);
 
 /**
  * This function decodes object to buffer using Reed-Solomon FEC.

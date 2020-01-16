@@ -1935,10 +1935,10 @@ int analyze_packet(char *data, int len, unsigned long long *toir, alc_channel_t 
 							buf = xor_fec_decode_src_block(trans_block, &block_len, es_len);
 						}
 						else if(fec_enc_id == RS_FEC_ENC_ID) {
-							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len);
+							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len, ch->s->def_fec_ratio);
 						}
 						else if(fec_enc_id == SB_SYS_FEC_ENC_ID && fec_inst_id == REED_SOL_FEC_INST_ID) {
-							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len);
+							buf = rs_fec_decode_src_block(trans_block, &block_len, es_len, ch->s->def_fec_ratio);
 						}
 
 						if(buf == NULL) {

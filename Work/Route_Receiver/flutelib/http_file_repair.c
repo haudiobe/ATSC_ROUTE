@@ -337,7 +337,7 @@ int parse_data(chunk_t chunk, file_t *file, trans_obj_t *obj, alc_session_t *s, 
 				}
 				else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID)
 					&& (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
-						buf = rs_fec_decode_src_block(block, &block_len, file->es_len);
+						buf = rs_fec_decode_src_block(block, &block_len, file->es_len, s->def_fec_ratio);
 				}
 
 				if(buf == NULL) {

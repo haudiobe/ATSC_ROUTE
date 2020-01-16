@@ -676,7 +676,7 @@ int parse_args(int argc, char **argv, arguments_t *a) {
 
 	      if(fec_enc > 3) {
             printf("Possible values for option -x are: 0, 1, 2 or 3\n");
-			fflush(stdout);
+            fflush(stdout);
             return -1;
 	      }
 	    }
@@ -758,10 +758,10 @@ int parse_args(int argc, char **argv, arguments_t *a) {
       a->alc_a.fec_enc_id = SIMPLE_XOR_FEC_ENC_ID;
       
       if(a->alc_a.addr_family == PF_INET) {
-		a->alc_a.es_len = MAX_SYMB_LENGTH_IPv4_FEC_ID_2_128_129;
+        a->alc_a.es_len = MAX_SYMB_LENGTH_IPv4_FEC_ID_2_128_129;
       }
       else if(a->alc_a.addr_family == PF_INET6) {
-		a->alc_a.es_len = MAX_SYMB_LENGTH_IPv6_FEC_ID_2_128_129;
+        a->alc_a.es_len = MAX_SYMB_LENGTH_IPv6_FEC_ID_2_128_129;
       }
     }
     else if(fec_enc == 2) {
@@ -769,10 +769,10 @@ int parse_args(int argc, char **argv, arguments_t *a) {
       a->alc_a.fec_inst_id = REED_SOL_FEC_INST_ID;
       
       if(a->alc_a.addr_family == PF_INET) {
-		a->alc_a.es_len = MAX_SYMB_LENGTH_IPv4_FEC_ID_2_128_129;
+        a->alc_a.es_len = MAX_SYMB_LENGTH_IPv4_FEC_ID_2_128_129;
       }
       else if(a->alc_a.addr_family == PF_INET6) {
-		a->alc_a.es_len = MAX_SYMB_LENGTH_IPv6_FEC_ID_2_128_129;
+        a->alc_a.es_len = MAX_SYMB_LENGTH_IPv6_FEC_ID_2_128_129;
       }
     }
     else if(fec_enc == 3) {
@@ -876,37 +876,32 @@ int parse_args(int argc, char **argv, arguments_t *a) {
     if(tmp_max_sb_len != 0) {
       if(a->alc_a.fec_enc_id == COM_NO_C_FEC_ENC_ID) {
 	
-	if(tmp_max_sb_len > MAX_SB_LEN_NULL_FEC) {
-	  printf("Maximum source block length set to maximum value: %i\n", MAX_SB_LEN_NULL_FEC);
-	  fflush(stdout);
-	  tmp_max_sb_len = MAX_SB_LEN_NULL_FEC;
-	}
-	a->alc_a.max_sb_len = tmp_max_sb_len;
+        if(tmp_max_sb_len > MAX_SB_LEN_NULL_FEC) {
+          printf("Maximum source block length set to maximum value: %i\n", MAX_SB_LEN_NULL_FEC);
+          fflush(stdout);
+          tmp_max_sb_len = MAX_SB_LEN_NULL_FEC;
+        }
+        a->alc_a.max_sb_len = tmp_max_sb_len;
       }
-      
       else if(a->alc_a.fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
-	if(tmp_max_sb_len > MAX_SB_LEN_SIMPLE_XOR_FEC) {
-	  printf("Maximum source block length set to maximum value: %i\n", MAX_SB_LEN_SIMPLE_XOR_FEC);
-	  fflush(stdout);
-	  tmp_max_sb_len = MAX_SB_LEN_SIMPLE_XOR_FEC;
-	}
-	a->alc_a.max_sb_len = tmp_max_sb_len;
+        if(tmp_max_sb_len > MAX_SB_LEN_SIMPLE_XOR_FEC) {
+          printf("Maximum source block length set to maximum value: %i\n", MAX_SB_LEN_SIMPLE_XOR_FEC);
+          fflush(stdout);
+          tmp_max_sb_len = MAX_SB_LEN_SIMPLE_XOR_FEC;
+        }
+        a->alc_a.max_sb_len = tmp_max_sb_len;
       }
-      
       else if(((a->alc_a.fec_enc_id == RS_FEC_ENC_ID) || ((a->alc_a.fec_enc_id == SB_SYS_FEC_ENC_ID)
 	       && (a->alc_a.fec_inst_id == REED_SOL_FEC_INST_ID)))) {
+        div_max_n = div((tmp_max_sb_len * (100 + a->alc_a.fec_ratio)), 100);
 	
-	div_max_n = div((tmp_max_sb_len * (100 + a->alc_a.fec_ratio)), 100);
-	
-	if(div_max_n.quot > MAX_N_REED_SOLOMON) {
-	  
-	  div_max_k = div((MAX_N_REED_SOLOMON * 100), (100 + a->alc_a.fec_ratio));
-	  
-	  printf("Maximum source block length set to maximum value: %i\n", div_max_k.quot);
-	  fflush(stdout);
-	  tmp_max_sb_len = div_max_k.quot;
-	}
-	a->alc_a.max_sb_len = tmp_max_sb_len;
+        if(div_max_n.quot > MAX_N_REED_SOLOMON) {
+          div_max_k = div((MAX_N_REED_SOLOMON * 100), (100 + a->alc_a.fec_ratio));
+          printf("Maximum source block length set to maximum value: %i\n", div_max_k.quot);
+          fflush(stdout);
+          tmp_max_sb_len = div_max_k.quot;
+        }
+        a->alc_a.max_sb_len = tmp_max_sb_len;
       }
     }
     

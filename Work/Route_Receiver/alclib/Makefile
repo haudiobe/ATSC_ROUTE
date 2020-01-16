@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS += -Wall -O3 -g -fPIC -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE \
+CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE \
 	-D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE
 
 SOURCES = alc_channel.c alc_hdr.c alc_rx.c alc_session.c alc_socket.c alc_tx.c \
@@ -14,11 +14,19 @@ OBJECTS = $(SOURCES:%.c=%.o)
 
 all: ../lib/libalc.a
 
+debug: CFLAGS += -DDEBUG -g3
+debug: ../lib/libalc.a
+
+release: CFLAGS += -DDEBUG -O3
+release: ../lib/libalc.a
+
+
 ../lib/libalc.a: $(OBJECTS)
 	@echo "creating library $@..."
 	ar rc $@ $(OBJECTS)
 	ranlib $@
 
+ 
 clean:
 	rm -f ../lib/libalc.a *.o *~
 
