@@ -14,13 +14,6 @@ OBJECTS = $(SOURCES:%.c=%.o)
 
 all: ../lib/libalc.a
 
-debug: CFLAGS += -DDEBUG -g3
-debug: ../lib/libalc.a
-
-release: CFLAGS += -DDEBUG -O3
-release: ../lib/libalc.a
-
-
 ../lib/libalc.a: $(OBJECTS)
 	@echo "creating library $@..."
 	ar rc $@ $(OBJECTS)
