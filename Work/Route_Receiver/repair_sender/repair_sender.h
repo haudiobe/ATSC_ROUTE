@@ -41,9 +41,9 @@
  */
 
 typedef struct miss_block {
-  struct miss_block *next;	/**< next item */
-  struct miss_block *prev;	/**< previous item */
-  unsigned int sbn;			/**< source block number */
+  struct miss_block *next;  /**< next item */
+  struct miss_block *prev;  /**< previous item */
+  unsigned int sbn;      /**< source block number */
 } miss_block_t;
 
 /**
@@ -52,10 +52,10 @@ typedef struct miss_block {
  */
 
 typedef struct miss_obj {
-  struct miss_obj *next;			/**< next item */
-  struct miss_obj *prev;			/**< previous item */
-  struct miss_block *block_list;	/**< first missing block for this object */
-  unsigned long long toi;			/**< transport object identifier */
+  struct miss_obj *next;      /**< next item */
+  struct miss_obj *prev;      /**< previous item */
+  struct miss_block *block_list;  /**< first missing block for this object */
+  unsigned long long toi;      /**< transport object identifier */
 } miss_obj_t;
 
 /**

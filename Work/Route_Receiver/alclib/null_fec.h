@@ -54,7 +54,7 @@ extern "C" {
  */
 
 trans_block_t* null_fec_encode_src_block(char *data, unsigned long long len,
-										 unsigned int sbn, unsigned short es_len);
+                     unsigned int sbn, unsigned short es_len);
 
 /**
  * This function decodes source block data to buffer using Null-FEC.
@@ -69,7 +69,7 @@ trans_block_t* null_fec_encode_src_block(char *data, unsigned long long len,
  */
 
 char *null_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-								unsigned short es_len);
+                unsigned short es_len);
 
 /**
  * This function decodes object to buffer using Null-FEC.

@@ -58,21 +58,21 @@ extern "C" {
 
 typedef struct arguments {
 
-  struct alc_arguments alc_a;					/**< structure for ALC level arguments*/
+  struct alc_arguments alc_a;          /**< structure for ALC level arguments*/
   
   /** buffer which contains file repair file name, defaults are 'apd.xml' for the receiver and 'flute.conf' for the sender
       repair sender uses also this variable, and default is 'repair_sender.conf' */
   char repair[MAX_PATH_LENGTH];                
-  char file_path[MAX_PATH_LENGTH];				/**< files and/or directories to send or receive */
+  char file_path[MAX_PATH_LENGTH];        /**< files and/or directories to send or receive */
 
-  int log_fd;									/**< log file descriptor */
-  BOOL rx_automatic;							/**< download files defined in the FDT automatically */
-  BOOL open_file;								/**< open received file automatically */
-  char sdp_file[MAX_PATH_LENGTH];				/**< SDP file name */
-  BOOL rx_object;								/**< receive object with receiver_in_object_mode() */
-  BOOL name_incomplete_objects;					/**< name incomplete files after the session is ended*/
-  unsigned short complete_fdt;					/**< send complete FDT Instance in the beginning of a loop */
-  BOOL file_table_output;						/**< prints sending/receiving information in a thread to the table */
+  int log_fd;                  /**< log file descriptor */
+  BOOL rx_automatic;              /**< download files defined in the FDT automatically */
+  BOOL open_file;                /**< open received file automatically */
+  char sdp_file[MAX_PATH_LENGTH];        /**< SDP file name */
+  BOOL rx_object;                /**< receive object with receiver_in_object_mode() */
+  BOOL name_incomplete_objects;          /**< name incomplete files after the session is ended*/
+  unsigned short complete_fdt;          /**< send complete FDT Instance in the beginning of a loop */
+  BOOL file_table_output;            /**< prints sending/receiving information in a thread to the table */
   
   unsigned long long toi;                       /**< transport object identifier used with receiver_in_object_mode() */
   
@@ -81,11 +81,11 @@ typedef struct arguments {
   int send_session_close_packets;               /**< send session close packet: 1 == Yes, 0 == No */
     
   /* Repair Sender */
-  char requested_blocks_file[MAX_PATH_LENGTH];	/**< PTM repair 'ptm_requested_blocks' file */
-  char flute_conf_file[MAX_PATH_LENGTH];	    /**< FLUTE configuration file */
+  char requested_blocks_file[MAX_PATH_LENGTH];  /**< PTM repair 'ptm_requested_blocks' file */
+  char flute_conf_file[MAX_PATH_LENGTH];      /**< FLUTE configuration file */
 
-  sdp_message_t *sdp;							/**< structure for referencing a SDP packet */
-  sf_t *src_filt;								/**< source filter structure */
+  sdp_message_t *sdp;              /**< structure for referencing a SDP packet */
+  sf_t *src_filt;                /**< source filter structure */
   
 } arguments_t;
 

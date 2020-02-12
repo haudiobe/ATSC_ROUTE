@@ -42,7 +42,7 @@
 //Start
 //This is defined in parse_args.c;
 //extern char* logFile;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //END
 
 /**
@@ -87,7 +87,7 @@ int receiver_in_object_mode(int *s_id, arguments_t *a);
 /**  
  * This function receives and decodes an FDT Instance.
  * 
- * @param s pointer to alc session	
+ * @param s pointer to alc session  
  *
  */
 

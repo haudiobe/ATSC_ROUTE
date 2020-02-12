@@ -1548,14 +1548,14 @@ sdp_message_parse (sdp_message_t * sdp, const char *buf)
   while (i == 1)                /* no more "a" header */
     {
       i = sdp_message_parse_a (sdp, ptr, &next_buf);
-	  if (i == -1) {
-		/* header is bad */
+    if (i == -1) {
+    /* header is bad */
         return -1;
-	  }
+    }
       ptr = next_buf;
-	  if (*ptr == '\0' || (*ptr == '\r') || (*ptr == '\n')) {
-		  return 0;
-	  }
+    if (*ptr == '\0' || (*ptr == '\r') || (*ptr == '\n')) {
+      return 0;
+    }
     }
 
   /* 0 or more media headers */
@@ -1566,10 +1566,10 @@ sdp_message_parse (sdp_message_t * sdp, const char *buf)
       {
 
         more_m_header = sdp_message_parse_m (sdp, ptr, &next_buf);
-		if (more_m_header == -1) {
-		  /* header is bad */
+    if (more_m_header == -1) {
+      /* header is bad */
           return -1;
-		}
+    }
         ptr = next_buf;
         if (*ptr == '\0' || (*ptr == '\r') || (*ptr == '\n'))
           return 0;

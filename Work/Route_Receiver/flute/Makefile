@@ -1,7 +1,7 @@
 CC = gcc
 #CC = ccmalloc g++
 
-CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE \
+CFLAGS += -Wall -g3 -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE \
 	-I../flutelib \
 	-I/usr/local/ssl/include \
 	-I/usr/include

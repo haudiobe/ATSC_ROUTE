@@ -47,132 +47,132 @@
 char* file_md5(const char *filename) {
 
 #ifdef _MSC_VER
-	struct __stat64 file_stats;
+  struct __stat64 file_stats;
 #else
     struct stat64 file_stats;
 #endif
 
-	int nbytes;
-	FILE *fp;
-	char *md5 = NULL;
+  int nbytes;
+  FILE *fp;
+  char *md5 = NULL;
 
-	char b64_digest[MD5_DIGEST_LENGTH*2];
-	BIO *bio, *b64, *mem;
+  char b64_digest[MD5_DIGEST_LENGTH*2];
+  BIO *bio, *b64, *mem;
 
-	unsigned char md5_digest[MD5_DIGEST_LENGTH];
-	MD5_CTX ctx;				
-	int i;
-	char zBuf[10240]; /*10240*/
+  unsigned char md5_digest[MD5_DIGEST_LENGTH];
+  MD5_CTX ctx;        
+  int i;
+  char zBuf[10240]; /*10240*/
 
-	memset(md5_digest, 0, MD5_DIGEST_LENGTH);
-	memset(b64_digest, 0, MD5_DIGEST_LENGTH*2);
+  memset(md5_digest, 0, MD5_DIGEST_LENGTH);
+  memset(b64_digest, 0, MD5_DIGEST_LENGTH*2);
 
-	MD5_Init(&ctx);
+  MD5_Init(&ctx);
 
 #ifdef _MSC_VER
-	fp = fopen(filename, "rb");
+  fp = fopen(filename, "rb");
 #else
-	fp = fopen64(filename, "rb");
+  fp = fopen64(filename, "rb");
 #endif
 
-	if(fp == NULL) {
-	  printf("mad_md5.c: fopen error\n");
-	  fflush(stdout);
-	  return NULL;
-	}
+  if(fp == NULL) {
+    printf("mad_md5.c: fopen error\n");
+    fflush(stdout);
+    return NULL;
+  }
 
 #ifdef _MSC_VER
-	if(_stat64(filename, &file_stats) == -1) {
+  if(_stat64(filename, &file_stats) == -1) {
 #else
     if(stat64(filename, &file_stats) == -1) {
 #endif
-		printf("Error: %s is not valid file name\n", filename);
-		fflush(stdout);
+    printf("Error: %s is not valid file name\n", filename);
+    fflush(stdout);
         return NULL;
-	}
+  }
 
-	for(;;) {
-		nbytes = fread(zBuf, 1, sizeof(zBuf), fp);
-	
-		if(nbytes <= 0) {
-			break;
-		}
-		
-		MD5_Update(&ctx, (unsigned char*)zBuf, (unsigned)nbytes);
+  for(;;) {
+    nbytes = fread(zBuf, 1, sizeof(zBuf), fp);
+  
+    if(nbytes <= 0) {
+      break;
+    }
+    
+    MD5_Update(&ctx, (unsigned char*)zBuf, (unsigned)nbytes);
     }
 
-	MD5_Final(md5_digest, &ctx); 
+  MD5_Final(md5_digest, &ctx); 
 
-	b64 = BIO_new(BIO_f_base64());
-	mem = BIO_new(BIO_s_mem());
-	bio = BIO_push(b64, mem);
-	BIO_write(bio, md5_digest, MD5_DIGEST_LENGTH);
-	BIO_flush(bio);
-	BIO_gets(mem, b64_digest, MD5_DIGEST_LENGTH*2);
-	BIO_free_all(bio);
+  b64 = BIO_new(BIO_f_base64());
+  mem = BIO_new(BIO_s_mem());
+  bio = BIO_push(b64, mem);
+  BIO_write(bio, md5_digest, MD5_DIGEST_LENGTH);
+  BIO_flush(bio);
+  BIO_gets(mem, b64_digest, MD5_DIGEST_LENGTH*2);
+  BIO_free_all(bio);
 
-	for(i = 0; i < MD5_DIGEST_LENGTH*2; i++) {
-		if(b64_digest[i] <= ' ') {
-			b64_digest[i] = '\0';
+  for(i = 0; i < MD5_DIGEST_LENGTH*2; i++) {
+    if(b64_digest[i] <= ' ') {
+      b64_digest[i] = '\0';
         }
-	}
+  }
 
-	if(!(md5 = (char*)calloc((strlen(b64_digest) + 1), sizeof(char)))) {
-		printf("Could not alloc memory for md5 buffer!\n");
-		fflush(stdout);
+  if(!(md5 = (char*)calloc((strlen(b64_digest) + 1), sizeof(char)))) {
+    printf("Could not alloc memory for md5 buffer!\n");
+    fflush(stdout);
         return NULL;
-	} 
+  } 
 
-	memcpy(md5, b64_digest, strlen(b64_digest));
-	
-	if(fclose(fp) != 0) {
-		printf("fclose failed, errno: %i\n", errno);
-	}
+  memcpy(md5, b64_digest, strlen(b64_digest));
+  
+  if(fclose(fp) != 0) {
+    printf("fclose failed, errno: %i\n", errno);
+  }
 
-	return md5;
+  return md5;
 }
 
 char* buffer_md5(char *buffer, unsigned long long length) {
-	
-	char b64_digest[MD5_DIGEST_LENGTH*2];
-	BIO *bio, *b64, *mem;
+  
+  char b64_digest[MD5_DIGEST_LENGTH*2];
+  BIO *bio, *b64, *mem;
 
-	unsigned char md5_digest[MD5_DIGEST_LENGTH];
-	MD5_CTX ctx;				
-	int i;
-	char *md5 = NULL;
+  unsigned char md5_digest[MD5_DIGEST_LENGTH];
+  MD5_CTX ctx;        
+  int i;
+  char *md5 = NULL;
 
-	memset(md5_digest, 0, MD5_DIGEST_LENGTH);
-	memset(b64_digest, 0, MD5_DIGEST_LENGTH*2);
+  memset(md5_digest, 0, MD5_DIGEST_LENGTH);
+  memset(b64_digest, 0, MD5_DIGEST_LENGTH*2);
 
-	MD5_Init(&ctx);
+  MD5_Init(&ctx);
 
-	MD5_Update(&ctx, buffer, (unsigned int)length);
-	MD5_Final(md5_digest, &ctx); 
+  MD5_Update(&ctx, buffer, (unsigned int)length);
+  MD5_Final(md5_digest, &ctx); 
 
-	b64 = BIO_new(BIO_f_base64());
-	mem = BIO_new(BIO_s_mem());
-	bio = BIO_push(b64, mem);
-	BIO_write(bio, md5_digest, MD5_DIGEST_LENGTH);
-	BIO_flush(bio);
-	BIO_gets(mem, b64_digest, MD5_DIGEST_LENGTH*2);
-	BIO_free_all(bio);
+  b64 = BIO_new(BIO_f_base64());
+  mem = BIO_new(BIO_s_mem());
+  bio = BIO_push(b64, mem);
+  BIO_write(bio, md5_digest, MD5_DIGEST_LENGTH);
+  BIO_flush(bio);
+  BIO_gets(mem, b64_digest, MD5_DIGEST_LENGTH*2);
+  BIO_free_all(bio);
 
-	for(i = 0; i < MD5_DIGEST_LENGTH*2; i++) {
-		if(b64_digest[i] <= ' ') {
-			b64_digest[i] = '\0';
+  for(i = 0; i < MD5_DIGEST_LENGTH*2; i++) {
+    if(b64_digest[i] <= ' ') {
+      b64_digest[i] = '\0';
         }
-	}
+  }
 
-	if(!(md5 = (char*)calloc((strlen(b64_digest) + 1), sizeof(char)))) {
-		printf("Could not alloc memory for md5 buffer!\n");
-		fflush(stdout);
+  if(!(md5 = (char*)calloc((strlen(b64_digest) + 1), sizeof(char)))) {
+    printf("Could not alloc memory for md5 buffer!\n");
+    fflush(stdout);
         return NULL;
-	} 
+  } 
 
-	memcpy(md5, b64_digest, strlen(b64_digest));
+  memcpy(md5, b64_digest, strlen(b64_digest));
 
-	return md5;
+  return md5;
 }
 
 #endif

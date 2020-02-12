@@ -45,7 +45,7 @@ extern unsigned long video_segment; /**< Video Segment Duration. Populated with 
 //extern unsigned long audio_segment; /**< Audio Segment Duration. Populated with value entered as argument -Y:value >*/
 
 //This is defined in parse_args.c;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //extern char* logFile;
 extern BOOL sendFDTAfterObj;
 //END

@@ -70,8 +70,8 @@ struct ip_mreq_source {
  */
 
 struct group_req {
-  uint32_t gr_interface;			/**< interface index */
-  struct sockaddr_storage gr_group;	/**< group address */
+  uint32_t gr_interface;      /**< interface index */
+  struct sockaddr_storage gr_group;  /**< group address */
 };
 
 /**
@@ -79,13 +79,13 @@ struct group_req {
  */
 
 struct group_source_req {
-  uint32_t gsr_interface;				/**< interface index */
-  struct sockaddr_storage gsr_group;	/**< group address */
-  struct sockaddr_storage gsr_source;	/**< source address */
+  uint32_t gsr_interface;        /**< interface index */
+  struct sockaddr_storage gsr_group;  /**< group address */
+  struct sockaddr_storage gsr_source;  /**< source address */
 };
 
-#define MCAST_JOIN_SOURCE_GROUP		46
-#define MCAST_LEAVE_SOURCE_GROUP	47
+#define MCAST_JOIN_SOURCE_GROUP    46
+#define MCAST_LEAVE_SOURCE_GROUP  47
 
 #endif
 

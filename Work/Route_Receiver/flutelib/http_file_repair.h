@@ -87,7 +87,7 @@ size_t write_to_buffer(void *ptr, size_t size, size_t nmemb, void *a);
  */
 
 char* http_file_repair(flute_receiver_t *receiver, int openfile, int *retval, CURL *curl,
-					   char *serviceURI);
+             char *serviceURI);
 
 #endif
 

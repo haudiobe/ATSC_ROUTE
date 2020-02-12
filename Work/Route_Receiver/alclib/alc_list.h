@@ -51,15 +51,15 @@
 
 typedef struct alc_rcv_container {
     char recvbuf[MAX_PACKET_LENGTH]; /**< buffer for the received data */ 
-    struct sockaddr_storage from;	/**< information about sender of the packet */ 
+    struct sockaddr_storage from;  /**< information about sender of the packet */ 
 
 #ifdef _MSC_VER
-    int fromlen;					/**< the actual length of from */ 
+    int fromlen;          /**< the actual length of from */ 
 #else
-    socklen_t fromlen;				/**< the actual length of from */ 
+    socklen_t fromlen;        /**< the actual length of from */ 
 #endif
 
-    int recvlen;					/**< the length of received data */ 
+    int recvlen;          /**< the length of received data */ 
 
     struct timeval time_stamp;
 } alc_rcv_container_t;
@@ -71,7 +71,7 @@ typedef struct alc_rcv_container {
 
 typedef struct alc_list_node {
     struct alc_list_node  *next; /**< next item in the list*/ 
-    void  *data;				/**< pointer to the stored data (alc_rcv_container) */ 
+    void  *data;        /**< pointer to the stored data (alc_rcv_container) */ 
 } alc_list_node_t;
 
 /**

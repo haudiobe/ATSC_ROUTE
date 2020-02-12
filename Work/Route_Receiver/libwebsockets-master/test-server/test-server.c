@@ -11,7 +11,7 @@ void * serviceThread()
 {
         while(1){
                 printf("Hello thread!!\n");
-				usleep(500000);
+        usleep(500000);
         }
 }
 

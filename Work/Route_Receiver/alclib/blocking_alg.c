@@ -38,7 +38,7 @@
 #include "mad.h"
 
 blocking_struct_t* compute_blocking_structure(unsigned long long L,
-					      unsigned int B, unsigned int E) {
+                unsigned int B, unsigned int E) {
   
   unsigned int T;
   blocking_struct_t *bs;
@@ -90,7 +90,7 @@ blocking_struct_t* compute_blocking_structure(unsigned long long L,
   
   /* (e) */
   
-  bs->I = div_A.rem;	
+  bs->I = div_A.rem;  
   
   return bs;
 } 

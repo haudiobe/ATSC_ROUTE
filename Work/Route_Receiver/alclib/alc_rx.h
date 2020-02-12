@@ -48,7 +48,7 @@ extern "C" {
 //This is defined in parse_args.c;
 #include "../flutelib/parse_args.h"
 //extern char* logFile;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 extern BOOL sendFDTAfterObj;
 extern unsigned short numEncSymbPerPacket;
 #define circularBufferLength 10000
@@ -60,8 +60,8 @@ typedef struct packetBuffer
     unsigned long long tsi;
     unsigned int sbn;
     unsigned int esi;
-	unsigned char *buffer;
-	unsigned long length;
+  unsigned char *buffer;
+  unsigned long length;
 }packetBuffer_t;
 
 typedef struct PacketBufferLinkedListType
@@ -139,7 +139,7 @@ void  join_rx_socket_thread(alc_channel_t *ch);
 /**
  * This function receives packets from the all channels in the session.
  * 
- * @param s pointer to the session	
+ * @param s pointer to the session  
  *
  */
 
@@ -200,10 +200,10 @@ char* alc_recv3(int s_id, unsigned long long *toi, int *retval);
  */
 
 char* fdt_recv(int s_id,
-	       unsigned long long *data_len,
-	       int *retval,
-	       unsigned char *content_enc_algo,
-	       int *fdt_instance_id);
+         unsigned long long *data_len,
+         int *retval,
+         unsigned char *content_enc_algo,
+         int *fdt_instance_id);
 
 #ifdef __cplusplus
 }; //extern "C"

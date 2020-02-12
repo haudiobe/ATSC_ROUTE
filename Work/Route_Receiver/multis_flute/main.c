@@ -298,24 +298,24 @@ void* start_flute_process(void *t_par) {
   t_p = (thread_params_t*)t_par;
 
   if(t_p->a.alc_a.mode == SENDER) {
-	retval = flute_sender(&t_p->a, &t_p->s_id, &t_p->session_size);
+  retval = flute_sender(&t_p->a, &t_p->s_id, &t_p->session_size);
 
-	if(t_p->a.alc_a.verbosity > 0) {
+  if(t_p->a.alc_a.verbosity > 0) {
 #ifdef _MSC_VER
-	  printf("Total bytes sent: %I64u\n", t_p->session_size);
-#else	
-	  printf("Total bytes sent: %llu\n", t_p->session_size);
-#endif	
-	}
+    printf("Total bytes sent: %I64u\n", t_p->session_size);
+#else  
+    printf("Total bytes sent: %llu\n", t_p->session_size);
+#endif  
+  }
   }
   else if(t_p->a.alc_a.mode == RECEIVER) {
-	retval = flute_receiver(&t_p->a, &t_p->s_id);
+  retval = flute_receiver(&t_p->a, &t_p->s_id);
   }
 
 #ifdef _MSC_VER
-	_endthread();
-#else	
-	pthread_exit(0);
+  _endthread();
+#else  
+  pthread_exit(0);
 #endif
 
   return NULL;
@@ -405,33 +405,33 @@ int main(int argc, char **argv) {
   par2.a.alc_a.port = tmp_port;
 
   if(par1.a.alc_a.addr_family == PF_INET) {
-	memset(tmp_addr, 0, INET6_ADDRSTRLEN);
-	ipv4.sin_addr.s_addr = htonl(ntohl(inet_addr(par1.a.alc_a.addr)) + 10);
-	sprintf(tmp_addr, "%s", inet_ntoa(ipv4.sin_addr));
+  memset(tmp_addr, 0, INET6_ADDRSTRLEN);
+  ipv4.sin_addr.s_addr = htonl(ntohl(inet_addr(par1.a.alc_a.addr)) + 10);
+  sprintf(tmp_addr, "%s", inet_ntoa(ipv4.sin_addr));
   }
   else if(par1.a.alc_a.addr_family == PF_INET6) {
 #ifdef _MSC_VER
     addr_size = sizeof(struct sockaddr_in6);
-	WSAStringToAddress((char*)par1.a.alc_a.addr, AF_INET6, NULL, (struct sockaddr*)&ipv6, &addr_size);
+  WSAStringToAddress((char*)par1.a.alc_a.addr, AF_INET6, NULL, (struct sockaddr*)&ipv6, &addr_size);
 #else 
-	inet_pton(AF_INET6, par1.a.alc_a.addr, &ipv6.sin6_addr);
+  inet_pton(AF_INET6, par1.a.alc_a.addr, &ipv6.sin6_addr);
 #endif
-	
-	for(j = 0; j < 10; j++) {
-		if(increase_ipv6_address(&ipv6.sin6_addr) == -1) {
-			printf("Increasing IPv6 address is not possible\n");
-			return -1;
-		}
-	}
+  
+  for(j = 0; j < 10; j++) {
+    if(increase_ipv6_address(&ipv6.sin6_addr) == -1) {
+      printf("Increasing IPv6 address is not possible\n");
+      return -1;
+    }
+  }
 
-	memset(tmp_addr, 0, INET6_ADDRSTRLEN);
+  memset(tmp_addr, 0, INET6_ADDRSTRLEN);
 
 #ifdef _MSC_VER
-	addr_size = sizeof(tmp_addr);
-	WSAAddressToString((struct sockaddr*)&ipv6, sizeof(struct sockaddr_in6),
-					NULL, tmp_addr, &addr_size);
+  addr_size = sizeof(tmp_addr);
+  WSAAddressToString((struct sockaddr*)&ipv6, sizeof(struct sockaddr_in6),
+          NULL, tmp_addr, &addr_size);
 #else
-	inet_ntop(AF_INET6, &ipv6.sin6_addr, tmp_addr, sizeof(tmp_addr));
+  inet_ntop(AF_INET6, &ipv6.sin6_addr, tmp_addr, sizeof(tmp_addr));
 #endif
   }
 
@@ -443,7 +443,7 @@ int main(int argc, char **argv) {
 #ifdef _MSC_VER
     handle_thread1 =
       (HANDLE)_beginthreadex(NULL, 0, (void*)start_flute_process,
-			 (void*)&par1, 0, &thread_id1);
+       (void*)&par1, 0, &thread_id1);
     
     if(handle_thread1 == NULL) {
       perror("main.c: _beginthread 1");
@@ -459,7 +459,7 @@ int main(int argc, char **argv) {
 #ifdef _MSC_VER
     handle_thread2 =
       (HANDLE)_beginthreadex(NULL, 0, (void*)start_flute_process,
-			     (void*)&par2, 0, &thread_id2);
+           (void*)&par2, 0, &thread_id2);
     
     if(handle_thread2 == NULL) {
       perror("main.c: _beginthread 2");

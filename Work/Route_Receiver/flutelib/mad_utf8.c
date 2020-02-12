@@ -46,96 +46,96 @@ static char UTF8_2_ISO_8859_1_len[] =
 static char UTF8_2_ISO_8859_1_mask[] = {0x3F, 0x7F, 0x1F, 0x0F, 0x07, 0x03, 0x01};
 
 int x_utf8s_to_iso_8859_1s(char *mbstr, const char *utf8str, size_t count) {
-	int res = 0;
+  int res = 0;
 
-	while (*utf8str != '\0') {
-		int len = UTF8_2_ISO_8859_1_len[(*utf8str >> 2) & 0x3F];
-		unsigned long u = *utf8str & UTF8_2_ISO_8859_1_mask[len];
+  while (*utf8str != '\0') {
+    int len = UTF8_2_ISO_8859_1_len[(*utf8str >> 2) & 0x3F];
+    unsigned long u = *utf8str & UTF8_2_ISO_8859_1_mask[len];
 
-		/* erroneous */
-		if(len == 0) {
-			len = 5;
-		}
+    /* erroneous */
+    if(len == 0) {
+      len = 5;
+    }
 
-		for(++utf8str; --len > 0 && (*utf8str != '\0'); ++utf8str) {
-			/* be sure this is not an unexpected start of a new character */
-			if((*utf8str & 0xC0) != 0x80) {
-				break;
-			}
+    for(++utf8str; --len > 0 && (*utf8str != '\0'); ++utf8str) {
+      /* be sure this is not an unexpected start of a new character */
+      if((*utf8str & 0xC0) != 0x80) {
+        break;
+      }
 
-			u = (u << 6) | (*utf8str & 0x3F);
-		}
+      u = (u << 6) | (*utf8str & 0x3F);
+    }
 
-		if(mbstr != 0 && count != 0) {
-			/* be sure there is enough space left in the destination buffer */
-			if(res >= (int)count) {
-				return res;
-			}
+    if(mbstr != 0 && count != 0) {
+      /* be sure there is enough space left in the destination buffer */
+      if(res >= (int)count) {
+        return res;
+      }
 
-			/* add the mapped character to the destination string or '?' (0x1A, SUB) if character
-			   can't be represented in ISO-8859-1 */
-			*mbstr++ = (u <= 0xFF ? (char)u : '?');
-		}
-		++res;
-	}
+      /* add the mapped character to the destination string or '?' (0x1A, SUB) if character
+         can't be represented in ISO-8859-1 */
+      *mbstr++ = (u <= 0xFF ? (char)u : '?');
+    }
+    ++res;
+  }
 
-	/* add the terminating null character */
-	if(mbstr != 0 && count != 0) {
-		// be sure there is enough space left in the destination buffer
-		if(res >= (int)count) {
-			return res;
-		}
+  /* add the terminating null character */
+  if(mbstr != 0 && count != 0) {
+    // be sure there is enough space left in the destination buffer
+    if(res >= (int)count) {
+      return res;
+    }
 
-		*mbstr = 0;
-	}
+    *mbstr = 0;
+  }
 
-	return res;
+  return res;
 }
 
 int x_iso_8859_1s_to_utf8s(char *utf8str, const char *mbstr, size_t count) {
   
-	int res = 0;
+  int res = 0;
 
-	/* loop until we reach the end of the mb string */
-	for(; *mbstr != '\0'; ++mbstr) {
+  /* loop until we reach the end of the mb string */
+  for(; *mbstr != '\0'; ++mbstr) {
 
-		/* the character needs no mapping if the highest bit is not set */
-		if((*mbstr & 0x80) == 0) {
-			if(utf8str != 0 && count != 0) {
-				/* be sure there is enough space left in the destination buffer */
-				if(res >= (int)count) {
-					return res;
-				}
+    /* the character needs no mapping if the highest bit is not set */
+    if((*mbstr & 0x80) == 0) {
+      if(utf8str != 0 && count != 0) {
+        /* be sure there is enough space left in the destination buffer */
+        if(res >= (int)count) {
+          return res;
+        }
 
-				*utf8str++ = *mbstr;
-			}
-			++res;
-		}
+        *utf8str++ = *mbstr;
+      }
+      ++res;
+    }
 
-		/* otherwise mapping is necessary */
-		else {
-			if(utf8str != 0 && count != 0) {
-				/* be sure there is enough space left in the destination buffer */
-				if(res+1 >= (int)count) {
-					return res;
-				}
+    /* otherwise mapping is necessary */
+    else {
+      if(utf8str != 0 && count != 0) {
+        /* be sure there is enough space left in the destination buffer */
+        if(res+1 >= (int)count) {
+          return res;
+        }
 
-				*utf8str++ = (0xC0 | (0x03 & (*mbstr >> 6)));
-				*utf8str++ = (0x80 | (0x3F & *mbstr));
-			}
-			res += 2;
-		}
-	}
+        *utf8str++ = (0xC0 | (0x03 & (*mbstr >> 6)));
+        *utf8str++ = (0x80 | (0x3F & *mbstr));
+      }
+      res += 2;
+    }
+  }
 
-	/* add the terminating null character */
-	if(utf8str != 0 && count != 0) {
-		/* be sure there is enough space left in the destination buffer */
-		if(res >= (int)count) {
-			return res;
-		}
+  /* add the terminating null character */
+  if(utf8str != 0 && count != 0) {
+    /* be sure there is enough space left in the destination buffer */
+    if(res >= (int)count) {
+      return res;
+    }
 
-		*utf8str = 0;
-	}
+    *utf8str = 0;
+  }
 
-	return res;
+  return res;
 }

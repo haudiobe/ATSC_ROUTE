@@ -59,7 +59,7 @@ int s_id; /**< session identifier */
 //Start
 //This is defined in main;
 extern char* logFile;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //END
 
 /**
@@ -374,9 +374,9 @@ int main(int argc, char **argv) {
 
       if(a.alc_a.verbosity > 0) {
 #ifdef _MSC_VER
-	printf("Session size in bytes (including UDP/IP headers): %I64u\n", session_size);
+  printf("Session size in bytes (including UDP/IP headers): %I64u\n", session_size);
 #else
-	printf("Session size in bytes (including UDP/IP headers): %llu\n", session_size);
+  printf("Session size in bytes (including UDP/IP headers): %llu\n", session_size);
 #endif
       }
     }
@@ -385,9 +385,9 @@ int main(int argc, char **argv) {
 
       if(a.alc_a.verbosity > 0) {
 #ifdef _MSC_VER
-	printf("Total bytes sent: %I64u\n", session_size);
+  printf("Total bytes sent: %I64u\n", session_size);
 #else
-	printf("Total bytes sent: %llu\n", session_size);
+  printf("Total bytes sent: %llu\n", session_size);
 #endif
       }
     }
@@ -402,7 +402,7 @@ int main(int argc, char **argv) {
     */
   }
   
-	
+  
   //Malek El Khatib 15.05.2014
   //Start
   //Closing log file

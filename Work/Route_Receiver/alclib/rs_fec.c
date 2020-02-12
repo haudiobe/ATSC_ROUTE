@@ -40,7 +40,7 @@
 #include "fec.h"
 
 trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsigned int sbn,
-									   unsigned short es_len, int rs, unsigned int max_sb_len) {
+                     unsigned short es_len, int rs, unsigned int max_sb_len) {
 
     trans_block_t *tr_block;                /* transport block struct */
     trans_unit_t *tr_unit;                  /* transport unit struct */
@@ -57,7 +57,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
     div_t div_max_n;
     div_t div_n;
 
-	data_left = len;
+  data_left = len;
     max_k = max_sb_len;
 
     div_k = div((unsigned int)len, es_len);
@@ -76,7 +76,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
     n = (unsigned int)div_n.quot;
 
     code =  fec_new(k, n);
-	tr_block = create_block();
+  tr_block = create_block();
 
     if(tr_block == NULL) {
             return tr_block;
@@ -159,84 +159,84 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
     return tr_block;
 }
 
-char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							  unsigned short es_len, int rs) {
+char* rs_fec_decode_src_block(
+  trans_block_t *tr_block,
+  unsigned long long *block_len,
+  unsigned short es_len, int rs)
+{
+  char *buf = NULL; /* buffer where to construct the source block from data units */
+  trans_unit_t *next_tu;
+  trans_unit_t *tu;
 
-    char *buf = NULL; /* buffer where to construct the source block from data units */
-    trans_unit_t *next_tu;
-    trans_unit_t *tu;
+  unsigned long long len;
+  void *code;
+  char *dst[GF_SIZE];
+  int index[GF_SIZE];
+  unsigned int i = 0;
+  unsigned int k; /* number of source symbols */
+  unsigned int n; /* number of encoding symbols */
+  div_t div_n;
+  div_t div_max_n;
+  unsigned int max_n;
 
-    unsigned long long len;
-    void    *code;
-    char    *dst[GF_SIZE];
-    int             index[GF_SIZE];
-    unsigned int i = 0;
-    unsigned int k; /* number of source symbols */
-    unsigned int n; /* number of encoding symbols */
-    div_t div_n;
-    div_t div_max_n;
-    unsigned int max_n;
+  k = tr_block->k;
+  div_max_n = div((tr_block->max_k * (100 + rs)), 100);
+  max_n = (unsigned int) div_max_n.quot;
 
-    k = tr_block->k;
-    div_max_n = div((tr_block->max_k * (100 + rs)), 100);
-    max_n = (unsigned int)div_max_n.quot;
+  //div_n = div((k * tr_block->max_n), tr_block->max_k); [FRV]: this was the original line but does not match the calculation done in the encoder side
+  div_n = div((k * max_n), tr_block->max_k);
+  n = (unsigned int) div_n.quot;
 
-    //div_n = div((k * tr_block->max_n), tr_block->max_k); [FRV]: this was the original line but does not match the calculation done in the encoder side
-    div_n = div((k * max_n), tr_block->max_k);
-    n = (unsigned int)div_n.quot;
+  len = es_len * tr_block->k;
 
-    len = es_len*tr_block->k;
+  code = fec_new(k, n);
 
-    code =  fec_new(k, n);
+  /* Allocate memory for buf */
+  if (!(buf = (char*) calloc((unsigned int) (len + 1), sizeof(char)))) {
+    printf("Could not alloc memory for buf!\n");
+    *block_len = 0;
+    return NULL;
+  }
 
-    /* Allocate memory for buf */
-    if(!(buf = (char*)calloc((unsigned int)(len + 1), sizeof(char)))) {
-            printf("Could not alloc memory for buf!\n");
-            *block_len = 0;
-            return NULL;
-    }
+  next_tu = tr_block->unit_list;
 
-    next_tu = tr_block->unit_list;
+  while (next_tu != NULL) {
 
-    while(next_tu != NULL) {
+    tu = next_tu;
+    dst[i] = tu->data;
+    index[i] = tu->esi;
 
-            tu = next_tu;
-            dst[i] = tu->data;
-            index[i] = tu->esi;
+    next_tu = tu->next;
+    i++;
+  }
 
-            next_tu = tu->next;
-            i++;
-    }
+  /* Let's decode source block using Reed-Solomon FEC */
 
-    /* Let's decode source block using Reed-Solomon FEC */
+  fec_decode(code, (void**) dst, index, es_len);
 
-    fec_decode(code, (void**)dst, index, es_len);
+  fec_free(code);
 
-    fec_free(code);
+  /* Copy decoded encoding symbols to buffer */
 
-    /* Copy decoded encoding symbols to buffer */
+  for (i = 0; i < k; i++) {
+    memcpy(buf + i * es_len, dst[i], es_len);
+  }
 
-    for(i = 0; i < k; i++) {
-            memcpy(buf + i*es_len, dst[i], es_len);
-    }
-
-    next_tu = tr_block->unit_list;
+  next_tu = tr_block->unit_list;
 
 #ifndef USE_RETRIEVE_UNIT
     while(next_tu != NULL) {
-		tu = next_tu;
-		free(tu->data);
-		tu->data = NULL;
+    tu = next_tu;
+    free(tu->data);
+    tu->data = NULL;
         next_tu = tu->next;
     }
 #endif
 
-   *block_len = len;
+  *block_len = len;
 
-    return buf;
+  return buf;
 }
-
-
 
 char *rs_fec_decode_object(trans_obj_t *to, unsigned long long *data_len, alc_session_t *s) {
 

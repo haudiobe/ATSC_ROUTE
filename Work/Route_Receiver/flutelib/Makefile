@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS += -Wall -O3 -g -fPIC -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE \
+CFLAGS += -Wall -g3 -fPIC -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 -D_GNU_SOURCE \
 	-I/usr/local/ssl/include 
 
 SOURCES = flute.c sender.c receiver.c fdt.c efdt.c fdt_gen.c mad_md5.c uri.c getdnsname.c mad_zlib.c \

@@ -58,33 +58,33 @@ extern "C" {
 
 typedef struct def_lct_hdr {
 #ifdef _BIT_FIELDS_LTOH
-  unsigned short flag_b:1;		/**< close session flag */
-  unsigned short flag_a:1;		/**< close object flag */
-  unsigned short flag_r:1;		/**< expected residual time present flag */ 
-  unsigned short flag_t:1;		/**< sender current time present flag */
-  unsigned short flag_h:1;		/**< half word flag */
-  unsigned short flag_o:2;		/**< transport object identifier flag */
-  unsigned short flag_s:1;		/**< transport session identifier flag */
-  unsigned short reserved:2;	/**< reserved; must be zero */
-  unsigned short flag_c:2;		/**< congestion control flag */
-  unsigned short version:4;		/**< LCT version number */
-  unsigned char	hdr_len;		/**< total length of LCT header */
-  unsigned char	codepoint;		/**< identifier used by payload decoder */
+  unsigned short flag_b:1;    /**< close session flag */
+  unsigned short flag_a:1;    /**< close object flag */
+  unsigned short flag_r:1;    /**< expected residual time present flag */ 
+  unsigned short flag_t:1;    /**< sender current time present flag */
+  unsigned short flag_h:1;    /**< half word flag */
+  unsigned short flag_o:2;    /**< transport object identifier flag */
+  unsigned short flag_s:1;    /**< transport session identifier flag */
+  unsigned short reserved:2;  /**< reserved; must be zero */
+  unsigned short flag_c:2;    /**< congestion control flag */
+  unsigned short version:4;    /**< LCT version number */
+  unsigned char  hdr_len;    /**< total length of LCT header */
+  unsigned char  codepoint;    /**< identifier used by payload decoder */
 #else
-  unsigned short version:4;		/**< LCT version number */
-  unsigned short flag_c:2;		/**< congestion control flag */
-  unsigned short reserved:2;	/**< reserved; must be zero */
-  unsigned short flag_s:1;		/**< transport session identifier flag */
-  unsigned short flag_o:2;		/**< transport object identifier flag */
-  unsigned short flag_h:1;		/**< half word flag */
-  unsigned short flag_t:1;		/**< sender current time present flag */
-  unsigned short flag_r:1;		/**< expected residual time present flag */
-  unsigned short flag_a:1;		/**< close object flag */
-  unsigned short flag_b:1;		/**< close session flag */
-  unsigned char	hdr_len;		/**< total length of LCT header */
-  unsigned char	codepoint;		/**< identifier used by payload decoder */
+  unsigned short version:4;    /**< LCT version number */
+  unsigned short flag_c:2;    /**< congestion control flag */
+  unsigned short reserved:2;  /**< reserved; must be zero */
+  unsigned short flag_s:1;    /**< transport session identifier flag */
+  unsigned short flag_o:2;    /**< transport object identifier flag */
+  unsigned short flag_h:1;    /**< half word flag */
+  unsigned short flag_t:1;    /**< sender current time present flag */
+  unsigned short flag_r:1;    /**< expected residual time present flag */
+  unsigned short flag_a:1;    /**< close object flag */
+  unsigned short flag_b:1;    /**< close session flag */
+  unsigned char  hdr_len;    /**< total length of LCT header */
+  unsigned char  codepoint;    /**< identifier used by payload decoder */
 #endif
-  unsigned int cci;				/**< congestion control header */
+  unsigned int cci;        /**< congestion control header */
 } def_lct_hdr_t;
 
 /**
@@ -159,7 +159,7 @@ int add_cenc_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned char conten
  */
 
 int add_fti_0_2_128_130_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned long long transferlen,
-								unsigned short fec_inst_id, unsigned short eslen, unsigned int max_sblen);
+                unsigned short fec_inst_id, unsigned short eslen, unsigned int max_sblen);
  
 /**
  * This function adds FTI (FEC Encoding ID 3) LCT extension header to FLUTE's header.
@@ -193,8 +193,8 @@ int add_fti_0_2_128_130_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned 
  */
 
 int add_fti_3_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned long long transferlen,
-					unsigned char m, unsigned char G, unsigned short eslen, unsigned short max_sblen,
-					unsigned short mxnbofes);
+          unsigned char m, unsigned char G, unsigned short eslen, unsigned short max_sblen,
+          unsigned short mxnbofes);
 
 /*
  * This function adds FTI (FEC Encoding ID 129) LCT extension header to FLUTE's header.
@@ -227,8 +227,8 @@ int add_fti_3_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned long long 
  */
 
 int add_fti_129_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned long long transferlen,
-						unsigned short fec_inst_id, unsigned short eslen, unsigned short max_sblen,
-						unsigned short mxnbofes);
+            unsigned short fec_inst_id, unsigned short eslen, unsigned short max_sblen,
+            unsigned short mxnbofes);
 
 /**
  * This function adds NOP LCT extension header to FLUTE's header.

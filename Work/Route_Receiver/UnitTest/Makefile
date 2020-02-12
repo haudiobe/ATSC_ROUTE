@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS += -Wall -O3 -g -DLINUX -D__VXWORKS_OS__ -DHAVE_CONFIG_H \
+CFLAGS += -Wall -g3 -DLINUX -D__VXWORKS_OS__ -DHAVE_CONFIG_H \
 	-D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99_SOURCE -D_XOPEN_SOURCE=500 \
 	-I../flutelib -I/usr/local/ssl/include -I/usr/local/include/boost-1_33_1\
 	-I.

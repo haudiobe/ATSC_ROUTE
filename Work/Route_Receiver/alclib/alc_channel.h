@@ -56,49 +56,49 @@ extern "C" {
  */
 
 typedef struct alc_channel {
-	
-	int ch_id;							/**< session level identifier for the channel */
-	struct alc_session *s;				/**< pointer to the parent session */
+  
+  int ch_id;              /**< session level identifier for the channel */
+  struct alc_session *s;        /**< pointer to the parent session */
 
-	const char *port;					/**< channel's port */ 
-	const char *addr;					/**< channel's address */
-	const char *intface;				/**< channel's interface */
-	const char *intface_name;			/**< the name of channel's interface */
-	
-	int tx_rate;						/**< transmission rate in kbit/s on this channel */
-	int nb_tx_units;					/**< number of sent units per one loop */
-	BOOL start_sending;					/**< start sending when TRUE in RLC CC */
-	BOOL ready;							/**< channel ready when TRUE */
-	int wait_after_sp;					/**< wait this number of loops before start sending in RLC CC */
+  const char *port;          /**< channel's port */ 
+  const char *addr;          /**< channel's address */
+  const char *intface;        /**< channel's interface */
+  const char *intface_name;      /**< the name of channel's interface */
+  
+  int tx_rate;            /**< transmission rate in kbit/s on this channel */
+  int nb_tx_units;          /**< number of sent units per one loop */
+  BOOL start_sending;          /**< start sending when TRUE in RLC CC */
+  BOOL ready;              /**< channel ready when TRUE */
+  int wait_after_sp;          /**< wait this number of loops before start sending in RLC CC */
 
-	BOOL previous_lost;					/**< is previous packet lost (with -P option) */
+  BOOL previous_lost;          /**< is previous packet lost (with -P option) */
 
 #ifdef _MSC_VER
-	SOCKET	rx_sock;					/**< receiving socket */
-	SOCKET	tx_sock;					/**< transmitting socket */	
+  SOCKET  rx_sock;          /**< receiving socket */
+  SOCKET  tx_sock;          /**< transmitting socket */  
 #else
-	int	rx_sock;						/**< receiving socket */
-	int	tx_sock;						/**< transmitting socket */	
+  int  rx_sock;            /**< receiving socket */
+  int  tx_sock;            /**< transmitting socket */  
 #endif
 
 #ifdef SSM
-	struct ip_mreq_source source_imr;	/**< for SSM join/leave */
+  struct ip_mreq_source source_imr;  /**< for SSM join/leave */
 
 #ifdef LINUX
-	struct group_source_req greqs;		/**< for MLDv2 SSM join/leave */
+  struct group_source_req greqs;    /**< for MLDv2 SSM join/leave */
 #endif
 
 #endif
 
-	struct ip_mreq imr;					/**< for join/leave */
-	struct ipv6_mreq imr6;				/**< for IPv6 join/leave*/
+  struct ip_mreq imr;          /**< for join/leave */
+  struct ipv6_mreq imr6;        /**< for IPv6 join/leave*/
 
-	struct sockaddr_in remote;			/**< remote multicast address */
-	struct sockaddr_in6 remote6;		/**< remote IPv6 multicast address */
-	struct addrinfo *addrinfo;			/**< structure which provides hints concerning the type of socket */
-	struct tx_queue_struct *queue_ptr;  /**< list which stores packets to be sent */
+  struct sockaddr_in remote;      /**< remote multicast address */
+  struct sockaddr_in6 remote6;    /**< remote IPv6 multicast address */
+  struct addrinfo *addrinfo;      /**< structure which provides hints concerning the type of socket */
+  struct tx_queue_struct *queue_ptr;  /**< list which stores packets to be sent */
 
-	struct alc_list *receiving_list;    /**< list which stores received packets */
+  struct alc_list *receiving_list;    /**< list which stores received packets */
 
 #ifdef _MSC_VER
     HANDLE handle_rx_socket_thread;     /**< handle to thread which receives packets from the socket */
@@ -124,7 +124,7 @@ typedef struct alc_channel {
  */
 
 int open_alc_channel(alc_channel_t *ch, alc_session_t *s, const char *port,
-					 const char *addr, const char *intface, const char *intface_name, int tx_rate); 
+           const char *addr, const char *intface, const char *intface_name, int tx_rate); 
 
 /**
  * This function closes existing channel.

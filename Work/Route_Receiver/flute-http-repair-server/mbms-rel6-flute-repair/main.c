@@ -155,8 +155,8 @@ int main(void) {
       size_of_query_string = getenv("CONTENT_LENGTH");
 
       if(!(query_string = (char*)calloc((atoi(size_of_query_string) + 1), sizeof(char)))) {
-	FreeFDT(fdt);
-	return -1;
+  FreeFDT(fdt);
+  return -1;
       }
 
       read(0, query_string, atoi(size_of_query_string)); /* 0 is stdin */
@@ -220,7 +220,7 @@ int main(void) {
       free(decoded_query_string);
 
       if(strcmp(request_method, "POST") == 0) {
-	free(query_string);
+  free(query_string);
       }
 
       free_query_str(qs);
@@ -235,8 +235,8 @@ int main(void) {
     }
     else {
       while(ms_block != NULL) {
-	fprintf(ptm_repair_file, "%llu:%i\n", file->toi, ms_block->sbn);
-	ms_block = ms_block->next;
+  fprintf(ptm_repair_file, "%llu:%i\n", file->toi, ms_block->sbn);
+  ms_block = ms_block->next;
       }
     }
     
@@ -258,8 +258,8 @@ int main(void) {
     
     if(ra.base_dir != NULL) {
       if(!(strcmp(ra.base_dir, "") == 0)) {
-	strcpy(filepath, ra.base_dir);
-	strcat(filepath, "/");
+  strcpy(filepath, ra.base_dir);
+  strcat(filepath, "/");
       }
     } 
     strcat(filepath, get_uri_host_and_path(qs->fileURI));
@@ -267,7 +267,7 @@ int main(void) {
     if(file->encoding != NULL) {
 #ifdef USE_ZLIB
       if(strcmp(file->encoding, "gzip") == 0) {
-	strcat(filepath, GZ_SUFFIX);
+  strcat(filepath, GZ_SUFFIX);
       }
 #endif
     }
@@ -278,7 +278,7 @@ int main(void) {
       free(decoded_query_string);
 
       if(strcmp(request_method, "POST") == 0) {
-	free(query_string);
+  free(query_string);
       }
 
       free_query_str(qs);
@@ -291,7 +291,7 @@ int main(void) {
       free(decoded_query_string);
 
       if(strcmp(request_method, "POST") == 0) {
-	free(query_string);
+  free(query_string);
       }
 
       free_query_str(qs);
@@ -308,7 +308,7 @@ int main(void) {
       free(decoded_query_string);
 
       if(strcmp(request_method, "POST") == 0) {
-	free(query_string);
+  free(query_string);
       }
 
       free_query_str(qs);
@@ -322,7 +322,7 @@ int main(void) {
       free(decoded_query_string);
 
       if(strcmp(request_method, "POST") == 0) {
-	free(query_string);
+  free(query_string);
       }
 
       free_query_str(qs);
@@ -344,34 +344,34 @@ int main(void) {
     if(ms_block == NULL) {
      
       while(sbn < bs->N) {
-	
-	if(sbn < bs->I) {
+  
+  if(sbn < bs->I) {
           nbytes = file->es_len * (bs->A_large);
         }
         else {
           nbytes = file->es_len * (bs->A_small);
         }
-	
-	memset(buf, 0, (file->es_len * file->max_sb_len));
+  
+  memset(buf, 0, (file->es_len * file->max_sb_len));
         nbytes = read(fp, buf, (unsigned int)nbytes);
-	
-	if(nbytes < 0) {
-	  free(decoded_query_string);
+  
+  if(nbytes < 0) {
+    free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
           free_query_str(qs);
           free(buf);
           free(bs);
           close(fp);
           FreeFDT(fdt);
-	  return -1;
-	}
-	
-	/* all could use null_fec_encode_src_block() functions, because FEC symbols are not transmitted */
-	
+    return -1;
+  }
+  
+  /* all could use null_fec_encode_src_block() functions, because FEC symbols are not transmitted */
+  
         if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
           tr_block = null_fec_encode_src_block(buf, nbytes, sbn, file->es_len);
         }
@@ -384,9 +384,9 @@ int main(void) {
         else {
           free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
           free_query_str(qs);
           free(buf);
@@ -395,13 +395,13 @@ int main(void) {
           FreeFDT(fdt);
           return -1;
         }
-	
-	if(tr_block == NULL) {
+  
+  if(tr_block == NULL) {
           free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
           free_query_str(qs);
           free(buf);
@@ -410,35 +410,35 @@ int main(void) {
           FreeFDT(fdt);
           return -1;
         }
-	
-	tr_unit = tr_block->unit_list;
-	
-	add_length_indicator(tr_block->k);
+  
+  tr_unit = tr_block->unit_list;
+  
+  add_length_indicator(tr_block->k);
 
-	if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
-	  add_fec_plid_0_130((unsigned short)tr_block->sbn, (unsigned short)tr_unit->esi);
-	}
-	else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
-	  add_fec_plid_128(tr_block->sbn, tr_unit->esi);
-	}
-	else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
-	  add_fec_plid_129(tr_block->sbn, (unsigned int)tr_block->k, (unsigned int)tr_unit->esi);
-	}
-	
-	while(1) {
-	  
-	  for(i = 0; i < tr_unit->len; i++) {
-	    printf("%c", tr_unit->data[i]);
-	  }
-	  
-	  if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
-	    break;
-	  }
-	  
-	  tr_unit++;
-	}
+  if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
+    add_fec_plid_0_130((unsigned short)tr_block->sbn, (unsigned short)tr_unit->esi);
+  }
+  else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
+    add_fec_plid_128(tr_block->sbn, tr_unit->esi);
+  }
+  else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
+    add_fec_plid_129(tr_block->sbn, (unsigned int)tr_block->k, (unsigned int)tr_unit->esi);
+  }
+  
+  while(1) {
+    
+    for(i = 0; i < tr_unit->len; i++) {
+      printf("%c", tr_unit->data[i]);
+    }
+    
+    if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
+      break;
+    }
+    
+    tr_unit++;
+  }
 
-	tr_unit = tr_block->unit_list;
+  tr_unit = tr_block->unit_list;
 
         while(1) {
           free(tr_unit->data);
@@ -459,169 +459,169 @@ int main(void) {
     else {
     
       while(ms_block != NULL) {
-	
-	/* Set place where to read */
-	
-	if(ms_block->sbn < bs->I) {
-	  pos = (unsigned long long)ms_block->sbn * (unsigned long long)bs->A_large * (unsigned long long)file->es_len;
-	}
-	else {
-	  pos = ( ( ( (unsigned long long)bs->I * (unsigned long long)bs->A_large ) + 
-		    ( (unsigned long long)ms_block->sbn - (unsigned long long)bs->I ) * (unsigned long long)bs->A_small ) * (unsigned long long)file->es_len );
-	}
+  
+  /* Set place where to read */
+  
+  if(ms_block->sbn < bs->I) {
+    pos = (unsigned long long)ms_block->sbn * (unsigned long long)bs->A_large * (unsigned long long)file->es_len;
+  }
+  else {
+    pos = ( ( ( (unsigned long long)bs->I * (unsigned long long)bs->A_large ) + 
+        ( (unsigned long long)ms_block->sbn - (unsigned long long)bs->I ) * (unsigned long long)bs->A_small ) * (unsigned long long)file->es_len );
+  }
 
-	/* set correct position */
-	
-	if(lseek64(fp, pos, SEEK_SET) == -1) {
-	  free(decoded_query_string);
+  /* set correct position */
+  
+  if(lseek64(fp, pos, SEEK_SET) == -1) {
+    free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
-	  free_query_str(qs);
-	  free(buf);
-	  free(bs);
-	  close(fp);
-	  FreeFDT(fdt);
-	  return -1;
-	}
-	
-	if(ms_block->sbn < bs->I) {
-	  nbytes = file->es_len * (bs->A_large);
-	}
-	else {
-	  nbytes = file->es_len * (bs->A_small);
-	}
-	
-	memset(buf, 0, (file->es_len * file->max_sb_len));
-	nbytes = read(fp, buf, (unsigned int)nbytes);
-	
-	/* all could use null_fec_encode_src_block() functions, because FEC symbols are not transmitted */
-	
-	if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
-	  tr_block = null_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len);
-	}
-	else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
-	  tr_block = xor_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len);
-	}
-	else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
-	  tr_block = rs_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len, fec_ratio, file->max_sb_len);
-	}
-	else {
-	  free(decoded_query_string);
+    free_query_str(qs);
+    free(buf);
+    free(bs);
+    close(fp);
+    FreeFDT(fdt);
+    return -1;
+  }
+  
+  if(ms_block->sbn < bs->I) {
+    nbytes = file->es_len * (bs->A_large);
+  }
+  else {
+    nbytes = file->es_len * (bs->A_small);
+  }
+  
+  memset(buf, 0, (file->es_len * file->max_sb_len));
+  nbytes = read(fp, buf, (unsigned int)nbytes);
+  
+  /* all could use null_fec_encode_src_block() functions, because FEC symbols are not transmitted */
+  
+  if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
+    tr_block = null_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len);
+  }
+  else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
+    tr_block = xor_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len);
+  }
+  else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
+    tr_block = rs_fec_encode_src_block(buf, nbytes, ms_block->sbn, file->es_len, fec_ratio, file->max_sb_len);
+  }
+  else {
+    free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
-	  free_query_str(qs);
-	  free(buf);
-	  free(bs);
-	  close(fp);
-	  FreeFDT(fdt);
-	  return -1; 
-	}
-	
-	if(tr_block == NULL) {
-	  free(decoded_query_string);
+    free_query_str(qs);
+    free(buf);
+    free(bs);
+    close(fp);
+    FreeFDT(fdt);
+    return -1; 
+  }
+  
+  if(tr_block == NULL) {
+    free(decoded_query_string);
 
-	  if(strcmp(request_method, "POST") == 0) {
-	    free(query_string);
-	  }
+    if(strcmp(request_method, "POST") == 0) {
+      free(query_string);
+    }
 
-	  free_query_str(qs);
-	  free(buf);
-	  free(bs);
-	  close(fp);
-	  FreeFDT(fdt);
-	  return -1;
-	}
-	
-	ms_symbol = ms_block->es_list;
-	
-	if(ms_symbol == NULL) {
-	  tr_unit = tr_block->unit_list;
-	  
-	  add_length_indicator(tr_block->k);
-	  
-	  if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
-	    add_fec_plid_0_130((unsigned short)ms_block->sbn, (unsigned short)tr_unit->esi);
-	  }
-	  else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
-	    add_fec_plid_128(ms_block->sbn, tr_unit->esi);
-	  }
-	  else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
-	    add_fec_plid_129(ms_block->sbn, (unsigned int)tr_block->k, (unsigned int)tr_unit->esi);
-	  }
-	  
-	  while(1) {
-	    
-	    for(i = 0; i < tr_unit->len; i++) {
-	      printf("%c", tr_unit->data[i]);
-	    }
-	    
-	    if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
-	      break;
-	    }
-	    
-	    tr_unit++;
-	  }
-	}
-	else {
-	  
-	  while(ms_symbol != NULL) {
-	    
-	    tr_unit = tr_block->unit_list;
-	    
-	    while(1) {
-	      if(tr_unit->esi == ms_symbol->esi) {
-		add_length_indicator(1);
-		
-		if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
-		  add_fec_plid_0_130((unsigned short)ms_block->sbn, (unsigned short)ms_symbol->esi);
-		}
-		else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
-		  add_fec_plid_128(ms_block->sbn, ms_symbol->esi);
-		}
-		else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
-		  add_fec_plid_129(ms_block->sbn, (unsigned short)tr_block->k,
-				   (unsigned short)ms_symbol->esi);
-		}
-		
-		for(i = 0; i < tr_unit->len; i++) {
-		  printf("%c", tr_unit->data[i]);
-		}
-		
-		break;
-	      }
-	      
-	      if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
-		break;
-	      }
-	      
-	      tr_unit++;
-	    }
-	    ms_symbol = ms_symbol->next;
-	  }
-	}
-	
-	tr_unit = tr_block->unit_list;
-	
-	while(1) {
-	  free(tr_unit->data);
-	  
-	  if(tr_unit->esi == (tr_block->n - 1)) {
-	    break;
-	  }
-	  
-	  tr_unit++;
-	} 
-	
-	free(tr_block->unit_list);
-	free(tr_block);
-	
-	ms_block = ms_block->next;
+    free_query_str(qs);
+    free(buf);
+    free(bs);
+    close(fp);
+    FreeFDT(fdt);
+    return -1;
+  }
+  
+  ms_symbol = ms_block->es_list;
+  
+  if(ms_symbol == NULL) {
+    tr_unit = tr_block->unit_list;
+    
+    add_length_indicator(tr_block->k);
+    
+    if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
+      add_fec_plid_0_130((unsigned short)ms_block->sbn, (unsigned short)tr_unit->esi);
+    }
+    else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
+      add_fec_plid_128(ms_block->sbn, tr_unit->esi);
+    }
+    else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
+      add_fec_plid_129(ms_block->sbn, (unsigned int)tr_block->k, (unsigned int)tr_unit->esi);
+    }
+    
+    while(1) {
+      
+      for(i = 0; i < tr_unit->len; i++) {
+        printf("%c", tr_unit->data[i]);
+      }
+      
+      if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
+        break;
+      }
+      
+      tr_unit++;
+    }
+  }
+  else {
+    
+    while(ms_symbol != NULL) {
+      
+      tr_unit = tr_block->unit_list;
+      
+      while(1) {
+        if(tr_unit->esi == ms_symbol->esi) {
+    add_length_indicator(1);
+    
+    if(file->fec_enc_id == COM_NO_C_FEC_ENC_ID) {
+      add_fec_plid_0_130((unsigned short)ms_block->sbn, (unsigned short)ms_symbol->esi);
+    }
+    else if(file->fec_enc_id == SIMPLE_XOR_FEC_ENC_ID) {
+      add_fec_plid_128(ms_block->sbn, ms_symbol->esi);
+    }
+    else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) && (file->fec_inst_id == REED_SOL_FEC_INST_ID))) {
+      add_fec_plid_129(ms_block->sbn, (unsigned short)tr_block->k,
+           (unsigned short)ms_symbol->esi);
+    }
+    
+    for(i = 0; i < tr_unit->len; i++) {
+      printf("%c", tr_unit->data[i]);
+    }
+    
+    break;
+        }
+        
+        if(tr_unit->esi == (tr_block->k - 1)) { /* no FEC symbols */
+    break;
+        }
+        
+        tr_unit++;
+      }
+      ms_symbol = ms_symbol->next;
+    }
+  }
+  
+  tr_unit = tr_block->unit_list;
+  
+  while(1) {
+    free(tr_unit->data);
+    
+    if(tr_unit->esi == (tr_block->n - 1)) {
+      break;
+    }
+    
+    tr_unit++;
+  } 
+  
+  free(tr_block->unit_list);
+  free(tr_block);
+  
+  ms_block = ms_block->next;
       }
     }
 

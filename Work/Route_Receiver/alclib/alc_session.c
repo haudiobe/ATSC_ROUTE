@@ -42,6 +42,7 @@
 #include <process.h>
 #else
 #include <pthread.h>
+#include <errno.h>
 #endif
 
 #include <sys/timeb.h>
@@ -197,15 +198,15 @@ int open_alc_session(alc_arguments_t *a) {
       s->handle_tx_thread = (HANDLE)_beginthreadex(NULL, 0, (void*)tx_thread, (void*)s, 0, &s->tx_thread_id);
 
       if(s->handle_tx_thread == NULL) {
-	perror("open_alc_session: _beginthread");
-	unlock_session();
-	return -1;
+  perror("open_alc_session: _beginthread");
+  unlock_session();
+  return -1;
       }
 #else
       if(pthread_create(&s->tx_thread_id, NULL, tx_thread, (void*)s) != 0) {
-	perror("open_alc_session: pthread_create");
-	unlock_session();
-	return -1;
+  perror("open_alc_session: pthread_create");
+  unlock_session();
+  return -1;
       }
 #endif
     }
@@ -236,12 +237,12 @@ int open_alc_session(alc_arguments_t *a) {
     if(a->base_dir[0] != '/') {
       
       if(getcwd(fullpath, MAX_PATH_LENGTH) != NULL) {
-	memcpy(s->base_dir, fullpath, strlen(fullpath));
-	strcat(s->base_dir, "/");
-	strcat(s->base_dir, a->base_dir);
+  memcpy(s->base_dir, fullpath, strlen(fullpath));
+  strcat(s->base_dir, "/");
+  strcat(s->base_dir, a->base_dir);
       }
       else {
-	memcpy(s->base_dir, a->base_dir, strlen(a->base_dir));
+  memcpy(s->base_dir, a->base_dir, strlen(a->base_dir));
       }
     }
     else {
@@ -249,7 +250,7 @@ int open_alc_session(alc_arguments_t *a) {
     }
 #endif
 #else
-	 memcpy(s->base_dir, a->base_dir, strlen(a->base_dir));
+   memcpy(s->base_dir, a->base_dir, strlen(a->base_dir));
 #endif
 
     s->nb_channel = 0;
@@ -283,6 +284,14 @@ int open_alc_session(alc_arguments_t *a) {
       unlock_session();
       return -1;
     }
+
+    const int setname_rv = pthread_setname_np(s->rx_thread_id, "AlcSesConsumTh");
+    if (setname_rv)
+    {
+        errno = setname_rv;
+        perror("Could not set AlcSesConsumTh name");
+    }
+
 #endif
     
   }
@@ -328,9 +337,9 @@ void close_alc_session(int s_id) {
   /* Wait for open thread. */
 #ifdef _MSC_VER
   if(alc_session_list[s_id]->handle_rx_thread != NULL) {
-	WaitForSingleObject(alc_session_list[s_id]->handle_rx_thread, INFINITE);
-	CloseHandle(alc_session_list[s_id]->handle_rx_thread);
-	alc_session_list[s_id]->handle_rx_thread = NULL;
+  WaitForSingleObject(alc_session_list[s_id]->handle_rx_thread, INFINITE);
+  CloseHandle(alc_session_list[s_id]->handle_rx_thread);
+  alc_session_list[s_id]->handle_rx_thread = NULL;
   }
 #else
   if(alc_session_list[s_id]->rx_thread_id != 0) {   
@@ -353,16 +362,16 @@ void close_alc_session(int s_id) {
   }
 
 #ifdef USE_RETRIEVE_UNIT
-	tmp = s->unit_pool;
+  tmp = s->unit_pool;
 
-	while(tmp != NULL ) {
-		to_delete = tmp;
-		tmp = tmp->next;
-		free(to_delete->u.data);
-		free(to_delete);
-	}
+  while(tmp != NULL ) {
+    to_delete = tmp;
+    tmp = tmp->next;
+    free(to_delete->u.data);
+    free(to_delete);
+  }
 
-	s->unit_pool = NULL;
+  s->unit_pool = NULL;
 #endif
 
   /* Closing, free all uncompleted objects, uncompleted fdt instances and wanted obj list */
@@ -387,7 +396,7 @@ void close_alc_session(int s_id) {
     next_want = want->next;
     free(want);
     want = next_want;
-  } 	
+  }   
   
   instance = s->rx_fdt_instance_list;
   
@@ -433,7 +442,7 @@ alc_session_t* get_alc_session(int s_id) {
 
 
 int add_alc_channel(int s_id, const char *port, const char *addr, const char *intface, const char *intface_name) {
-	
+  
   alc_channel_t *ch;
   alc_session_t *s;
   int ret;
@@ -529,6 +538,20 @@ void set_session_state(int s_id, enum alc_session_states state) {
   unlock_session();
 }
 
+BOOL is_session_active_or_received(int s_id) {
+  BOOL session_state = FALSE;
+  lock_session();
+  if (alc_session_list[s_id]->state == SActive || alc_session_list[s_id]->state == SAFlagReceived)
+    session_state = TRUE;
+  else
+    session_state = FALSE;
+  unlock_session();
+
+  return session_state;
+}
+
+
+
 void set_all_sessions_state(enum alc_session_states state) {
 
   int i;
@@ -538,7 +561,7 @@ void set_all_sessions_state(enum alc_session_states state) {
     {
       if(alc_session_list[i] != NULL)
         {
-	  alc_session_list[i]->state = state;
+    alc_session_list[i]->state = state;
         }
     }
   unlock_session();
@@ -667,58 +690,58 @@ unsigned long long get_session_tx_toi(int s_id) {
 }
 
 void update_session_tx_rate(int s_id, int base_tx_rate) {
-	alc_session_t *s;
-	alc_channel_t *ch;
-	int i;
+  alc_session_t *s;
+  alc_channel_t *ch;
+  int i;
 
-	lock_session();
-	s = alc_session_list[s_id];
-	
-	for(i = 0; i < s->max_channel; i++) {
-		if(s->ch_list[i] != NULL) {
-			ch = s->ch_list[i];
+  lock_session();
+  s = alc_session_list[s_id];
+  
+  for(i = 0; i < s->max_channel; i++) {
+    if(s->ch_list[i] != NULL) {
+      ch = s->ch_list[i];
 
-			if(ch->ch_id == 0) {
-        			ch->tx_rate = base_tx_rate;
-        			ch->nb_tx_units = 1;
-			}
-			else {
-				ch->tx_rate = base_tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
-				ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
-			}
-			printf("new rate [channel: %i]: %i\n", ch->ch_id, ch->tx_rate);
-		}
-	}
-	unlock_session();
+      if(ch->ch_id == 0) {
+              ch->tx_rate = base_tx_rate;
+              ch->nb_tx_units = 1;
+      }
+      else {
+        ch->tx_rate = base_tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
+        ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
+      }
+      printf("new rate [channel: %i]: %i\n", ch->ch_id, ch->tx_rate);
+    }
+  }
+  unlock_session();
 }
 
 wanted_obj_t* get_wanted_object(alc_session_t *s, unsigned long long toi) {
 
-	wanted_obj_t *tmp;
+  wanted_obj_t *tmp;
 
-	lock_session();
+  lock_session();
 
-	tmp = s->wanted_obj_list;
+  tmp = s->wanted_obj_list;
 
-	while(tmp != NULL) {
-		if(tmp->toi == toi) {
-		  unlock_session();
-		  return tmp;
-		}
-		tmp = tmp->next;
-	}
+  while(tmp != NULL) {
+    if(tmp->toi == toi) {
+      unlock_session();
+      return tmp;
+    }
+    tmp = tmp->next;
+  }
 
-	unlock_session();
-	return NULL;
+  unlock_session();
+  return NULL;
 }
 
 int set_wanted_object(int s_id, unsigned long long toi,
-		      unsigned long long transfer_len,
-		      unsigned short es_len, unsigned int max_sb_len, int fec_inst_id,
-		      short fec_enc_id, unsigned short max_nb_of_es,
-		      unsigned char content_enc_algo, unsigned char finite_field,
-			  unsigned char nb_of_es_per_group) {
-	
+          unsigned long long transfer_len,
+          unsigned short es_len, unsigned int max_sb_len, int fec_inst_id,
+          short fec_enc_id, unsigned short max_nb_of_es,
+          unsigned char content_enc_algo, unsigned char finite_field,
+        unsigned char nb_of_es_per_group) {
+  
   alc_session_t *s;
   wanted_obj_t *wanted_obj;
   wanted_obj_t *tmp;
@@ -744,8 +767,8 @@ int set_wanted_object(int s_id, unsigned long long toi,
     wanted_obj->fec_enc_id = fec_enc_id;
     wanted_obj->max_nb_of_es = max_nb_of_es;
     wanted_obj->content_enc_algo = content_enc_algo;
-	wanted_obj->finite_field = finite_field;
-	wanted_obj->nb_of_es_per_group = nb_of_es_per_group;
+  wanted_obj->finite_field = finite_field;
+  wanted_obj->nb_of_es_per_group = nb_of_es_per_group;
 
     wanted_obj->prev = NULL;
     wanted_obj->next = NULL;
@@ -755,32 +778,32 @@ int set_wanted_object(int s_id, unsigned long long toi,
   else {
     for(;; tmp = tmp->next) {
       if(tmp->toi == toi) {
-	break;
+  break;
       }
       else if(tmp->next == NULL) {
-	
-	if (!(wanted_obj = (wanted_obj_t*)calloc(1, sizeof(wanted_obj_t)))) {
-	  printf("Could not alloc memory for wanted object!\n");
-	  unlock_session();
-	  return -1;
-	}
-	
-	wanted_obj->toi = toi;
-	wanted_obj->transfer_len = transfer_len;
-	wanted_obj->es_len = es_len;
-	wanted_obj->max_sb_len = max_sb_len;
-	wanted_obj->fec_inst_id = fec_inst_id;
-	wanted_obj->fec_enc_id = fec_enc_id;
-	wanted_obj->max_nb_of_es = max_nb_of_es;
-	wanted_obj->content_enc_algo = content_enc_algo;
-	wanted_obj->finite_field = finite_field;
-	wanted_obj->nb_of_es_per_group = nb_of_es_per_group;
-	
-	tmp->next = wanted_obj;
-	wanted_obj->prev = tmp;
-	wanted_obj->next = NULL;
+  
+  if (!(wanted_obj = (wanted_obj_t*)calloc(1, sizeof(wanted_obj_t)))) {
+    printf("Could not alloc memory for wanted object!\n");
+    unlock_session();
+    return -1;
+  }
+  
+  wanted_obj->toi = toi;
+  wanted_obj->transfer_len = transfer_len;
+  wanted_obj->es_len = es_len;
+  wanted_obj->max_sb_len = max_sb_len;
+  wanted_obj->fec_inst_id = fec_inst_id;
+  wanted_obj->fec_enc_id = fec_enc_id;
+  wanted_obj->max_nb_of_es = max_nb_of_es;
+  wanted_obj->content_enc_algo = content_enc_algo;
+  wanted_obj->finite_field = finite_field;
+  wanted_obj->nb_of_es_per_group = nb_of_es_per_group;
+  
+  tmp->next = wanted_obj;
+  wanted_obj->prev = tmp;
+  wanted_obj->next = NULL;
 
-	break;
+  break;
       }
     }
   }
@@ -791,105 +814,105 @@ int set_wanted_object(int s_id, unsigned long long toi,
 
 void remove_wanted_object(int s_id, unsigned long long toi) {
 
-	alc_session_t *s; 	
-	wanted_obj_t *next_want;
-	wanted_obj_t *want;
-	
-	lock_session();
+  alc_session_t *s;   
+  wanted_obj_t *next_want;
+  wanted_obj_t *want;
+  
+  lock_session();
 
-	s = alc_session_list[s_id];
-	next_want = s->wanted_obj_list;
+  s = alc_session_list[s_id];
+  next_want = s->wanted_obj_list;
 
-	while(next_want != NULL) {
-		
-		want = next_want;
-		  
-	    	if(want->toi == toi) {
-			
-	      		if(want->next != NULL) {
-					want->next->prev = want->prev;
-	      		}
-	      		if(want->prev != NULL) {
-					want->prev->next = want->next;
-	      		}
-	      		if(want == s->wanted_obj_list) {
-					s->wanted_obj_list = want->next;
-	      		}
-	      
-	      		free(want);
-	      		break;
-	    	}
-	    	next_want = want->next;
-	}
+  while(next_want != NULL) {
+    
+    want = next_want;
+      
+        if(want->toi == toi) {
+      
+            if(want->next != NULL) {
+          want->next->prev = want->prev;
+            }
+            if(want->prev != NULL) {
+          want->prev->next = want->next;
+            }
+            if(want == s->wanted_obj_list) {
+          s->wanted_obj_list = want->next;
+            }
+        
+            free(want);
+            break;
+        }
+        next_want = want->next;
+  }
 
-	unlock_session();
+  unlock_session();
 }
                                                                                                                                               
 BOOL is_received_instance(alc_session_t *s, unsigned int fdt_instance_id) {
-                                                                                                                                              
-        BOOL retval = FALSE;
-        rx_fdt_instance_t *list = s->rx_fdt_instance_list;
-                                                                                                                                              
-        while(list != NULL) {
-                if(list->fdt_instance_id == fdt_instance_id) {
-                        retval = TRUE;
-                        break;
-                }
-                list = list->next;
-        }
-                                                                                                                                              
-        return retval;
+
+  BOOL retval = FALSE;
+  rx_fdt_instance_t *list = s->rx_fdt_instance_list;
+
+  while (list != NULL) {
+    if (list->fdt_instance_id == fdt_instance_id) {
+      retval = TRUE;
+      break;
+    }
+    list = list->next;
+  }
+
+  return retval;
 }
 
 int set_received_instance(alc_session_t *s, unsigned int fdt_instance_id) {
  
-        rx_fdt_instance_t *rx_fdt_instance;
-        rx_fdt_instance_t *list;
+  rx_fdt_instance_t *rx_fdt_instance;
+  rx_fdt_instance_t *list;
         
-	lock_session();
+  lock_session();
 
-        list = s->rx_fdt_instance_list;
+  list = s->rx_fdt_instance_list;
                                                                                                                                               
-        if(list == NULL) {
+  if(list == NULL) {
                                                                                                                                               
-                if (!(rx_fdt_instance = (rx_fdt_instance_t*)calloc(1, sizeof(rx_fdt_instance_t)))) {
-                        printf("Could not alloc memory for rx_fdt_instance!\n");
-			unlock_session();
-                        return -1;
-                }
+    if (!(rx_fdt_instance = (rx_fdt_instance_t*)calloc(1, sizeof(rx_fdt_instance_t)))) {
+      printf("Could not alloc memory for rx_fdt_instance!\n");
+      unlock_session();
+      return -1;
+    }
 
-                rx_fdt_instance->fdt_instance_id = fdt_instance_id;
-                rx_fdt_instance->prev = NULL;
-                rx_fdt_instance->next = NULL;
-        
-			s->rx_fdt_instance_list = rx_fdt_instance;
-        }
-        else {
-                for(;; list = list->next) {
-                        if(list->fdt_instance_id == fdt_instance_id) {
-                                break;
-                        }
-                        else if(list->next == NULL) {
-              
-							  if (!(rx_fdt_instance = (rx_fdt_instance_t*)calloc(1, sizeof(rx_fdt_instance_t)))) {
-								printf("Could not alloc memory for rx_fdt_instance!\n");
-								unlock_session();
-								return -1;
-							  }
-			  
-							  rx_fdt_instance->fdt_instance_id = fdt_instance_id;
-							  
-							  list->next = rx_fdt_instance;
-							  rx_fdt_instance->prev = list;
-							  rx_fdt_instance->next = NULL;
+    rx_fdt_instance->fdt_instance_id = fdt_instance_id;
+    rx_fdt_instance->prev = NULL;
+    rx_fdt_instance->next = NULL;
 
-							  break;
-                        }
-                }
+    s->rx_fdt_instance_list = rx_fdt_instance;
+  }
+  else {
+    for(;; list = list->next) {
+      if(list->fdt_instance_id == fdt_instance_id) {
+        break;
+      }
+      else if(list->next == NULL) {
+
+        if (!(rx_fdt_instance = (rx_fdt_instance_t*)calloc(1, sizeof(rx_fdt_instance_t)))) {
+          printf("Could not alloc memory for rx_fdt_instance!\n");
+          unlock_session();
+          return -1;
         }
-	
-	unlock_session();
-        return 0;
+
+        rx_fdt_instance->fdt_instance_id = fdt_instance_id;
+
+        list->next = rx_fdt_instance;
+        rx_fdt_instance->prev = list;
+        rx_fdt_instance->next = NULL;
+
+        break;
+      }
+    }
+  }
+  
+  unlock_session();
+  return 0;
 }
 
 char* get_session_basedir(int s_id) {

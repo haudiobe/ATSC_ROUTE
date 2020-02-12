@@ -1,9 +1,9 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 #ifndef NDEBUG
-	#ifndef _DEBUG
-		#define _DEBUG
-	#endif
+  #ifndef _DEBUG
+    #define _DEBUG
+  #endif
 #endif
 
 /* Define to 1 to use CyaSSL as a replacement for OpenSSL. 

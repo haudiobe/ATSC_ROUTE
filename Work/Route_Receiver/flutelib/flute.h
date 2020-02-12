@@ -64,8 +64,8 @@ extern "C" {
  */
 
 typedef struct flute_sender {
-  int s_id;			/**< session identifer */
-  fdt_t *fdt;		/**< FDT structure */
+  int s_id;      /**< session identifer */
+  fdt_t *fdt;    /**< FDT structure */
   efdt_t *efdt;         /**< EFDT structure*/
 } flute_sender_t;
 
@@ -75,14 +75,14 @@ typedef struct flute_sender {
  */
 
 typedef struct flute_receiver {
-  int s_id;										/**< session identifer */
-  fdt_t *fdt;									/**< FDT structure */
-  efdt_t *efdt;									/**< EFDT structure*/
-  int rx_automatic;								/**< download files defined in the FDT automatically */
+  int s_id;                    /**< session identifer */
+  fdt_t *fdt;                  /**< FDT structure */
+  efdt_t *efdt;                  /**< EFDT structure*/
+  int rx_automatic;                /**< download files defined in the FDT automatically */
   char *file_uri_table[FILE_URI_TABLE_SIZE];    /**< file URIs for wanted files */
   char *wildcard_token;                         /**< wild card token */
-  int accept_expired_fdt_inst;					/**< accept expired FDT Instances */
-  int verbosity;								/**< verbosity level */
+  int accept_expired_fdt_inst;          /**< accept expired FDT Instances */
+  int verbosity;                /**< verbosity level */
 } flute_receiver_t;
 
 /**

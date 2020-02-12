@@ -39,127 +39,127 @@
 #include "xor_fec.h"
 
 trans_block_t* xor_fec_encode_src_block(char *data, unsigned long long len,
-										unsigned int sbn, unsigned short es_len) {
-		
-	trans_block_t *tr_block;		/* transport block struct */
-	trans_unit_t *tr_unit;			/* transport unit struct */
-	unsigned int nb_of_units;		/* number of units */
+                    unsigned int sbn, unsigned short es_len) {
+    
+  trans_block_t *tr_block;    /* transport block struct */
+  trans_unit_t *tr_unit;      /* transport unit struct */
+  unsigned int nb_of_units;    /* number of units */
 
-	unsigned int i;					/* loop variables */
-	unsigned long long data_left;
+  unsigned int i;          /* loop variables */
+  unsigned long long data_left;
 
-	char *ptr;					/* pointer to left data */
-	char *parity_symb;
+  char *ptr;          /* pointer to left data */
+  char *parity_symb;
     char *padded_symb;
-	int j;
+  int j;
 
-	data_left = len;
+  data_left = len;
 
     parity_symb = (char*)calloc(es_len, sizeof(char));
-	padded_symb = (char*)calloc(es_len, sizeof(char));
+  padded_symb = (char*)calloc(es_len, sizeof(char));
 
-	nb_of_units = (unsigned int)ceil((double)(unsigned int)len / (double)es_len);
+  nb_of_units = (unsigned int)ceil((double)(unsigned int)len / (double)es_len);
 
-	tr_block = create_block();
+  tr_block = create_block();
 
-	if(tr_block == NULL) {
-		return tr_block;
-	}
+  if(tr_block == NULL) {
+    return tr_block;
+  }
 
-	tr_unit = create_units(nb_of_units + 1); /* One parity symbol */
+  tr_unit = create_units(nb_of_units + 1); /* One parity symbol */
 
-	if(tr_unit == NULL) {
-		free(tr_block);
-		return NULL;
-	}
+  if(tr_unit == NULL) {
+    free(tr_block);
+    return NULL;
+  }
 
-	ptr = data;
+  ptr = data;
 
-	tr_block->unit_list = tr_unit;
-	tr_block->sbn = sbn;
+  tr_block->unit_list = tr_unit;
+  tr_block->sbn = sbn;
     tr_block->k = nb_of_units;
-	tr_block->n = nb_of_units + 1;
-		
-	for(i = 0; i < nb_of_units; i++) {
+  tr_block->n = nb_of_units + 1;
+    
+  for(i = 0; i < nb_of_units; i++) {
 
-		tr_unit->esi = i;
-		tr_unit->len = data_left < es_len ? (unsigned short)data_left : es_len; /*min(es_len, data_left);*/
+    tr_unit->esi = i;
+    tr_unit->len = data_left < es_len ? (unsigned short)data_left : es_len; /*min(es_len, data_left);*/
 
-		/* Alloc memory for TU data */
-		if(!(tr_unit->data = (char*)calloc(tr_unit->len, sizeof(char)))) {
-			printf("Could not alloc memory for transport unit's data!\n");
-			
-			tr_unit = tr_block->unit_list;	
+    /* Alloc memory for TU data */
+    if(!(tr_unit->data = (char*)calloc(tr_unit->len, sizeof(char)))) {
+      printf("Could not alloc memory for transport unit's data!\n");
+      
+      tr_unit = tr_block->unit_list;  
 
-			while(tr_unit != NULL) {
-				free(tr_unit->data);
-				tr_unit++;
-			}
-	
-			free(tr_block->unit_list);
-			free(tr_block);
-			free(parity_symb);
-			free(padded_symb);
-			return NULL;
-		}
+      while(tr_unit != NULL) {
+        free(tr_unit->data);
+        tr_unit++;
+      }
+  
+      free(tr_block->unit_list);
+      free(tr_block);
+      free(parity_symb);
+      free(padded_symb);
+      return NULL;
+    }
 
-		memcpy(tr_unit->data, ptr, tr_unit->len);
+    memcpy(tr_unit->data, ptr, tr_unit->len);
 
-		memset(padded_symb, 0, es_len);
-		memcpy(padded_symb, tr_unit->data, tr_unit->len);
-		
-		if(i == 0) {
-			memcpy(parity_symb, tr_unit->data, tr_unit->len);
-		}
-		else {
-			/* We need to create the parity symbol by XORing the symbols, first symbol is not XORed. */
+    memset(padded_symb, 0, es_len);
+    memcpy(padded_symb, tr_unit->data, tr_unit->len);
+    
+    if(i == 0) {
+      memcpy(parity_symb, tr_unit->data, tr_unit->len);
+    }
+    else {
+      /* We need to create the parity symbol by XORing the symbols, first symbol is not XORed. */
 
-			for(j = 0; j < es_len; j++) {
-				*(parity_symb + j) = *(parity_symb + j) ^ *(padded_symb + j);
-			}
-		}
+      for(j = 0; j < es_len; j++) {
+        *(parity_symb + j) = *(parity_symb + j) ^ *(padded_symb + j);
+      }
+    }
 
-		ptr += tr_unit->len;
-		data_left -= tr_unit->len;
-		tr_unit++;
+    ptr += tr_unit->len;
+    data_left -= tr_unit->len;
+    tr_unit++;
 
-		if (i == (nb_of_units-1)) {
-			
-	        /* Now we need to add the parity symbol to the block (XOR of all other symbols). */
+    if (i == (nb_of_units-1)) {
+      
+          /* Now we need to add the parity symbol to the block (XOR of all other symbols). */
 
-	                tr_unit->esi = i+1;
-        	        tr_unit->len = es_len;
+                  tr_unit->esi = i+1;
+                  tr_unit->len = es_len;
 
-                	/* Alloc memory for TU data */
-                	if(!(tr_unit->data = (char*)calloc(es_len, sizeof(char)))) {
-                        	printf("Could not alloc memory for transport unit's data!\n");
+                  /* Alloc memory for TU data */
+                  if(!(tr_unit->data = (char*)calloc(es_len, sizeof(char)))) {
+                          printf("Could not alloc memory for transport unit's data!\n");
 
-                        	tr_unit = tr_block->unit_list;
+                          tr_unit = tr_block->unit_list;
 
-                        	while(tr_unit != NULL) {
-                                	free(tr_unit->data);
-                                	tr_unit++;
-                        	}
+                          while(tr_unit != NULL) {
+                                  free(tr_unit->data);
+                                  tr_unit++;
+                          }
 
-                        	free(tr_block->unit_list);
-                        	free(tr_block);
-	                        free(parity_symb);
-        	                free(padded_symb);
-                        	return NULL;
-                	}
+                          free(tr_block->unit_list);
+                          free(tr_block);
+                          free(parity_symb);
+                          free(padded_symb);
+                          return NULL;
+                  }
 
-                	memcpy(tr_unit->data, parity_symb, es_len);
-		}
-	}
+                  memcpy(tr_unit->data, parity_symb, es_len);
+    }
+  }
 
         free(parity_symb);
         free(padded_symb);
 
-	return tr_block;
+  return tr_block;
 }
 
 char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							   unsigned short es_len) {
+                 unsigned short es_len) {
 
   char *buf = NULL; /* buffer where to construct the source block from data units */
 
@@ -193,11 +193,11 @@ char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *bloc
 
     tmp = 0;
 
-	/* We must first find out is there a parity symbol */
+  /* We must first find out is there a parity symbol */
 
-	next_tu = tr_block->unit_list;
+  next_tu = tr_block->unit_list;
  
-	/* We must scroll to the last symbol */
+  /* We must scroll to the last symbol */
 
         while(next_tu != NULL) {
 
@@ -206,25 +206,25 @@ char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *bloc
         }
 
         if(tu->esi == tr_block->k) { /* There is a parity symbol */
-		
-		/* We need to find out which symbol is missing */
-		
-		next_tu = tr_block->unit_list;	
+    
+    /* We need to find out which symbol is missing */
+    
+    next_tu = tr_block->unit_list;  
 
-		while(next_tu != NULL) {
+    while(next_tu != NULL) {
 
-        	        tu = next_tu;
+                  tu = next_tu;
 
-			if((int)tu->esi != (last_esi + 1)) {
-				missing_esi = (tu->esi - 1);
-				break;
-			}
+      if((int)tu->esi != (last_esi + 1)) {
+        missing_esi = (tu->esi - 1);
+        break;
+      }
 
-                	next_tu = tu->next;
-			last_esi = tu->esi;
-	        }
+                  next_tu = tu->next;
+      last_esi = tu->esi;
+          }
 
-		/* Now we need to construct the missing symbol */
+    /* Now we need to construct the missing symbol */
 
                 next_tu = tr_block->unit_list;
 
@@ -232,8 +232,8 @@ char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *bloc
 
                         tu = next_tu;
 
-	                memset(padded_symb, 0, es_len);
-			memcpy(padded_symb, tu->data, tu->len);
+                  memset(padded_symb, 0, es_len);
+      memcpy(padded_symb, tu->data, tu->len);
 
                         for(j = 0; j < es_len; j++) {
                                 *(missing_symb + j) = *(missing_symb + j) ^ *(padded_symb + j);
@@ -242,17 +242,17 @@ char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *bloc
                         next_tu = tu->next;
                 }
 
-		/* Now we need to create the missing unit */
+    /* Now we need to create the missing unit */
 
-		missing_unit = create_units(1);
+    missing_unit = create_units(1);
 
-		missing_unit->data = (char*)calloc(es_len, sizeof(char));
+    missing_unit->data = (char*)calloc(es_len, sizeof(char));
 
-		missing_unit->esi = missing_esi;
-		memcpy(missing_unit->data, missing_symb, es_len);		
-		missing_unit->len = es_len;
+    missing_unit->esi = missing_esi;
+    memcpy(missing_unit->data, missing_symb, es_len);    
+    missing_unit->len = es_len;
 
-		/* Now we need to insert the missing symbol to the block */
+    /* Now we need to insert the missing symbol to the block */
 
                 next_tu = tr_block->unit_list;
 
@@ -262,115 +262,115 @@ char *xor_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *bloc
 
                         if(missing_esi == 0) { /* The first symbol was missing */
 
-				tr_block->unit_list = missing_unit;
-				missing_unit->next = tu;
-				tu->prev = missing_unit;	
+        tr_block->unit_list = missing_unit;
+        missing_unit->next = tu;
+        tu->prev = missing_unit;  
                                 break;
                         }
 
-			if((int)tu->esi > missing_esi) { /* It was the previous symbol which was missing */
+      if((int)tu->esi > missing_esi) { /* It was the previous symbol which was missing */
 
-				tu->prev->next = missing_unit;
-			        missing_unit->prev = tu->prev;
-				missing_unit->next = tu;
-				tu->prev = missing_unit;
-				break;
-			}
+        tu->prev->next = missing_unit;
+              missing_unit->prev = tu->prev;
+        missing_unit->next = tu;
+        tu->prev = missing_unit;
+        break;
+      }
 
                         next_tu = tu->next;
                 }
 
-		/* Now we need to remove the parity symbol from the block */
+    /* Now we need to remove the parity symbol from the block */
 
-		tu = tr_block->unit_list;
-		
-        	for(j = 0; j < tr_block->k; j++) {
+    tu = tr_block->unit_list;
+    
+          for(j = 0; j < tr_block->k; j++) {
 
-			if(tu->esi == (tr_block->k - 1)) { /* Second last symbol */
+      if(tu->esi == (tr_block->k - 1)) { /* Second last symbol */
 
 #ifndef USE_RETRIEVE_UNIT
-				free(tu->next->data);
-				free(tu->next);
+        free(tu->next->data);
+        free(tu->next);
 #else
                 tu->next->used = 0;
 #endif
 
-				tu->next = NULL;
-				break;
-			}
+        tu->next = NULL;
+        break;
+      }
 
-                	tu = tu->next;
-        	}
+                  tu = tu->next;
+          }
 
-		        next_tu = tr_block->unit_list;
+            next_tu = tr_block->unit_list;
 
-	}
+  }
 
-	next_tu = tr_block->unit_list;
+  next_tu = tr_block->unit_list;
 
-	while(next_tu != NULL) {
+  while(next_tu != NULL) {
 
-        	tu = next_tu;
-        	memcpy((buf+(unsigned int)tmp), tu->data, tu->len);
+          tu = next_tu;
+          memcpy((buf+(unsigned int)tmp), tu->data, tu->len);
 
 #ifndef USE_RETRIEVE_UNIT
         free(tu->data);
         tu->data = NULL;
 #endif
-        	tmp += tu->len;
+          tmp += tu->len;
 
-        	next_tu = tu->next;
-	}
+          next_tu = tu->next;
+  }
 
-	*block_len = len;
+  *block_len = len;
 
         free(missing_symb);
         free(padded_symb);
 
-	return buf;
+  return buf;
 }
 
 char *xor_fec_decode_object(trans_obj_t *to, unsigned long long *data_len, alc_session_t *s) {
-	
-	char *object = NULL;
-	char *block = NULL;
+  
+  char *object = NULL;
+  char *block = NULL;
 
-	trans_block_t *tb;
+  trans_block_t *tb;
 
-	unsigned long long to_data_left;
-	unsigned long long len;
-	unsigned long long block_len;
-	unsigned long long position;
+  unsigned long long to_data_left;
+  unsigned long long len;
+  unsigned long long block_len;
+  unsigned long long position;
 
-	unsigned int i;
-	
-	/* Allocate memory for buf */
-	if(!(object = (char*)calloc((unsigned int)(to->len+1), sizeof(char)))) {
-		printf("Could not alloc memory for buf!\n");
-		return NULL;
-	}
-	
-	to_data_left = to->len;
+  unsigned int i;
+  
+  /* Allocate memory for buf */
+  if(!(object = (char*)calloc((unsigned int)(to->len+1), sizeof(char)))) {
+    printf("Could not alloc memory for buf!\n");
+    return NULL;
+  }
+  
+  to_data_left = to->len;
 
-	tb = to->block_list;
-	position = 0;
-	
-	for(i = 0; i < to->bs->N; i++) {
+  tb = to->block_list;
+  position = 0;
+  
+  for(i = 0; i < to->bs->N; i++) {
 
-		block = xor_fec_decode_src_block(tb, &block_len, (unsigned short)to->es_len);
+    block = xor_fec_decode_src_block(tb, &block_len, (unsigned short)to->es_len);
 
-		/* the last packet of the last source block might be padded with zeros */
-		len = to_data_left < block_len ? to_data_left : block_len;
+    /* the last packet of the last source block might be padded with zeros */
+    len = to_data_left < block_len ? to_data_left : block_len;
 
-		memcpy(object+(unsigned int)position, block, (unsigned int)len);
-		position += len;
-		to_data_left -= len;
+    memcpy(object+(unsigned int)position, block, (unsigned int)len);
+    position += len;
+    to_data_left -= len;
 
-		free(block);
-		tb = to->block_list+(i+1);
-	}
-	
-	*data_len = to->len;
-	return object;
+    free(block);
+    tb = to->block_list+(i+1);
+  }
+  
+  *data_len = to->len;
+  return object;
 }
 

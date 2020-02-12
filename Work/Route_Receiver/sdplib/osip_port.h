@@ -30,12 +30,12 @@
 #include <stdio.h>
 
 #if defined(__PALMOS__) && (__PALMOS__ >= 0x06000000)
-#	define STDC_HEADERS 1
-#	define HAVE_CTYPE_H 1
-#	define HAVE_STRING_H 1
-#	define HAVE_SYS_TYPES_H 1
-#	define HAVE_TIME_H 1
-#	define HAVE_STDARG_H 1
+#  define STDC_HEADERS 1
+#  define HAVE_CTYPE_H 1
+#  define HAVE_STRING_H 1
+#  define HAVE_SYS_TYPES_H 1
+#  define HAVE_TIME_H 1
+#  define HAVE_STDARG_H 1
 
 #elif defined(WIN32)
 
@@ -60,8 +60,8 @@
 #define HAVE_TIME_H 1
 #define HAVE_STDARG_H 1
 
-#define strnicmp	_strnicmp
-#define stricmp		_stricmp
+#define strnicmp  _strnicmp
+#define stricmp    _stricmp
 #define EBUSY           16
 
 #endif

@@ -78,7 +78,7 @@ int parse_repair_conf_file(char *repair_conf_file, repair_arguments_t *ra) {
       strcpy(ra->repair_method, tmp);
       
       if(ra->repair_method[strlen(ra->repair_method)-1] == '\r') {
-	ra->repair_method[strlen(ra->repair_method)-1] = '\0';
+  ra->repair_method[strlen(ra->repair_method)-1] = '\0';
       }
     }
     else if(strcmp(tmp, "RequestedBlocksFile") == 0) {
@@ -88,7 +88,7 @@ int parse_repair_conf_file(char *repair_conf_file, repair_arguments_t *ra) {
       strcpy(ra->requested_blocks_file, tmp);
       
       if(ra->requested_blocks_file[strlen(ra->requested_blocks_file)-1] == '\r') {
-	ra->requested_blocks_file[strlen(ra->requested_blocks_file)-1] = '\0';
+  ra->requested_blocks_file[strlen(ra->requested_blocks_file)-1] = '\0';
       }
     }
     else if(strcmp(tmp, "PTMRepairSDPFile") == 0) {
@@ -97,7 +97,7 @@ int parse_repair_conf_file(char *repair_conf_file, repair_arguments_t *ra) {
       strcpy(ra->ptm_repair_sdp_file, tmp);
       
       if(ra->ptm_repair_sdp_file[strlen(ra->ptm_repair_sdp_file)-1] == '\r') {
-	ra->ptm_repair_sdp_file[strlen(ra->ptm_repair_sdp_file)-1] = '\0';
+  ra->ptm_repair_sdp_file[strlen(ra->ptm_repair_sdp_file)-1] = '\0';
       }
     }
     else if(strcmp(tmp, "FluteConfFile") == 0) {
@@ -106,7 +106,7 @@ int parse_repair_conf_file(char *repair_conf_file, repair_arguments_t *ra) {
       strcpy(ra->flute_conf_file, tmp);
       
       if(ra->flute_conf_file[strlen(ra->flute_conf_file)-1] == '\r') {
-	ra->flute_conf_file[strlen(ra->flute_conf_file)-1] = '\0';
+  ra->flute_conf_file[strlen(ra->flute_conf_file)-1] = '\0';
       }
     }
     
@@ -164,7 +164,7 @@ int parse_flute_conf_file(repair_arguments_t *ra) {
       strcpy(ra->base_dir, tmp);
       
       if(ra->base_dir[strlen(ra->base_dir)-1] == '\r') {
-	ra->base_dir[strlen(ra->base_dir)-1] = '\0';
+  ra->base_dir[strlen(ra->base_dir)-1] = '\0';
       }
     }
     else if(strcmp(tmp, "FECRatio") == 0) {
@@ -178,7 +178,7 @@ int parse_flute_conf_file(repair_arguments_t *ra) {
       strcpy(ra->fdt_file, tmp);
       
       if(ra->fdt_file[strlen(ra->fdt_file)-1] == '\r') {
-	ra->fdt_file[strlen(ra->fdt_file)-1] = '\0';
+  ra->fdt_file[strlen(ra->fdt_file)-1] = '\0';
       }
     }
     

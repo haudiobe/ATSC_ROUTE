@@ -47,37 +47,37 @@ extern "C" {
  */
 
 typedef struct file {
-	
-	struct file *prev;				/**< previous item */
-	struct file *next;				/**< next item */
+  
+  struct file *prev;        /**< previous item */
+  struct file *next;        /**< next item */
 
-	int status;						/**< status of the file (0 = not wanted, 1 = downloading, 2 = downloaded) */
+  int status;            /**< status of the file (0 = not wanted, 1 = downloading, 2 = downloaded) */
 
-	unsigned long long expires;		/**< expiration time for the file */
-		
-	unsigned long long toi;			/**< transport object identifier */
-	unsigned long long content_len;	/**< length of the file */
-	char *location;					/**< content location, file URI */
-	char *md5;						/**< MD5 checksum for the file */
-	
-	/* These overwrite FDT level values */
+  unsigned long long expires;    /**< expiration time for the file */
+    
+  unsigned long long toi;      /**< transport object identifier */
+  unsigned long long content_len;  /**< length of the file */
+  char *location;          /**< content location, file URI */
+  char *md5;            /**< MD5 checksum for the file */
+  
+  /* These overwrite FDT level values */
 
-	char *encoding;					/**< content encoding */					
-	char *type;						/**< content type */
+  char *encoding;          /**< content encoding */          
+  char *type;            /**< content type */
 
-	/* FEC OTI, these overwrite FDT level values */
+  /* FEC OTI, these overwrite FDT level values */
 
-	short fec_enc_id;					/**< FEC encoding id */
-	int fec_inst_id;					/**< FEC instance id */
-	unsigned char finite_field;			/**< finite field parameter with new RS FEC */
-	unsigned char nb_of_es_per_group;	/**< number of encoding symbols in packet with new RS FEC */
-	unsigned int max_sb_len;			/**< maximum source block length */
-	unsigned short es_len;				/**< encoding symbol length */
-	unsigned short max_nb_of_es;		/**< maximum number of encoding symbols */
+  short fec_enc_id;          /**< FEC encoding id */
+  int fec_inst_id;          /**< FEC instance id */
+  unsigned char finite_field;      /**< finite field parameter with new RS FEC */
+  unsigned char nb_of_es_per_group;  /**< number of encoding symbols in packet with new RS FEC */
+  unsigned int max_sb_len;      /**< maximum source block length */
+  unsigned short es_len;        /**< encoding symbol length */
+  unsigned short max_nb_of_es;    /**< maximum number of encoding symbols */
 
-	/* FEC OTI, only at file level */
+  /* FEC OTI, only at file level */
 
-	unsigned long long transfer_len;	/**< transport length */
+  unsigned long long transfer_len;  /**< transport length */
 
 } file_t;
 
@@ -87,25 +87,25 @@ typedef struct file {
  */
 
 typedef struct fdt {
-	unsigned long long expires;	/* fdt expiration time in NTP-time */
-	BOOL complete;				/**< is complete FDT? */
-	file_t *file_list;			/**< list of files in the FDT*/
-	unsigned int nb_of_files;	/**< number of file in the FDT*/
+  unsigned long long expires;  /* fdt expiration time in NTP-time */
+  BOOL complete;        /**< is complete FDT? */
+  file_t *file_list;      /**< list of files in the FDT*/
+  unsigned int nb_of_files;  /**< number of file in the FDT*/
 
-	/* Other common parameters */
+  /* Other common parameters */
 
-	char *type;					/**< default content type */
-	char *encoding;				/**< default content encoding */
+  char *type;          /**< default content type */
+  char *encoding;        /**< default content encoding */
 
-	/* FEC OTI */
+  /* FEC OTI */
 
-	short fec_enc_id;					/**< default FEC encoding id */
-	int fec_inst_id;					/**< default FEC instance id */
-	unsigned char finite_field;			/**< default finite field parameter  with new RS FEC */
-	unsigned char nb_of_es_per_group;	/**< default number of encoding symbols in packet with new RS FEC */
-	unsigned int max_sb_len;			/**< default maximum source block length */
-	unsigned short es_len;				/**< default encoding symbol length */
-	unsigned short max_nb_of_es;		/**< default maximum number of encoding symbols */
+  short fec_enc_id;          /**< default FEC encoding id */
+  int fec_inst_id;          /**< default FEC instance id */
+  unsigned char finite_field;      /**< default finite field parameter  with new RS FEC */
+  unsigned char nb_of_es_per_group;  /**< default number of encoding symbols in packet with new RS FEC */
+  unsigned int max_sb_len;      /**< default maximum source block length */
+  unsigned short es_len;        /**< default encoding symbol length */
+  unsigned short max_nb_of_es;    /**< default maximum number of encoding symbols */
 
 } fdt_t;
 

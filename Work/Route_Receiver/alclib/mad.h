@@ -57,9 +57,9 @@ extern BOOL lib_init;
  */
 
 typedef struct alc_arguments {
-  unsigned long long tsi;				/**< transport session identifier */
-  unsigned long long start_time;			/**< start time of the session */
-  unsigned long long stop_time;			/**< stop time of the session */
+  unsigned long long tsi;        /**< transport session identifier */
+  unsigned long long start_time;      /**< start time of the session */
+  unsigned long long stop_time;      /**< stop time of the session */
   
   const char *port;                     /**< base channel port number  */
   const char *addr;                     /**< base channel multicastast address */
@@ -74,7 +74,7 @@ typedef struct alc_arguments {
   int verbosity;                        /**< verbosity level */
   const char *src_addr;                 /**< source address for the session in the receiver */
   char base_dir[MAX_PATH_LENGTH];       /**< Base directory for downloaded/sent files */
-  BOOL accept_expired_fdt_inst;			/**< accept expired FDT instances */
+  BOOL accept_expired_fdt_inst;      /**< accept expired FDT instances */
   
 #ifdef SSM
   BOOL use_ssm;                         /**< use source specific multicast */
@@ -93,8 +93,8 @@ typedef struct alc_arguments {
   unsigned short fec_inst_id;           /**< FEC instance id */
   BOOL use_fec_oti_ext_hdr;             /**< use FEC OTI extension header */
   unsigned char encode_content;         /**< encode content using zlib library (0 = no, 1 = FDT, 2 = FDT and files) */
-  BOOL half_word;						/**< use half word flag */
-  BOOL optimize_tx_rate;				/**< optimize transmission rate (use more CPU) */
+  BOOL half_word;            /**< use half word flag */
+  BOOL optimize_tx_rate;        /**< optimize transmission rate (use more CPU) */
   BOOL calculate_session_size;
 
 } alc_arguments_t;
