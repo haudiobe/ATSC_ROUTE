@@ -59,8 +59,8 @@ int flute_file_repair(flute_receiver_t *receiver, arguments_t *a, char *sdp_buf)
   unsigned short i;
   int retval = 0;
   
-  char addrs[MAX_CHANNELS_IN_SESSION][INET6_ADDRSTRLEN];	/* Mcast addresses */
-  char ports[MAX_CHANNELS_IN_SESSION][MAX_PORT_LENGTH];	/* Local port numbers  */
+  char addrs[MAX_CHANNELS_IN_SESSION][INET6_ADDRSTRLEN];  /* Mcast addresses */
+  char ports[MAX_CHANNELS_IN_SESSION][MAX_PORT_LENGTH];  /* Local port numbers  */
   
   alc_session_t *old_session;
   alc_session_t *new_session;
@@ -80,24 +80,24 @@ int flute_file_repair(flute_receiver_t *receiver, arguments_t *a, char *sdp_buf)
   unsigned long long curr_time;
   
   if(parse_sdp_file(a, addrs, ports, sdp_buf) == -1) {
-	return -1;
+  return -1;
   }
   
   if(a->alc_a.nb_channel == 0) {
-	printf("Error: No acceptable channels found in SDP.");
-	fflush(stdout);
-	return -1;
+  printf("Error: No acceptable channels found in SDP.");
+  fflush(stdout);
+  return -1;
   }
   
   if(a->alc_a.stop_time != 0) {
-	time(&systime);
-	curr_time = systime + 2208988800U;
-	
-	if(a->alc_a.stop_time <= curr_time) {
-	  printf("Session end time reached\n");
-	  fflush(stdout);
-	  return -1;
-	}
+  time(&systime);
+  curr_time = systime + 2208988800U;
+  
+  if(a->alc_a.stop_time <= curr_time) {
+    printf("Session end time reached\n");
+    fflush(stdout);
+    return -1;
+  }
   }
   
   new_s_id = open_alc_session(&a->alc_a);
@@ -121,79 +121,79 @@ int flute_file_repair(flute_receiver_t *receiver, arguments_t *a, char *sdp_buf)
   old_session->wanted_obj_list = NULL;
   
   if(a->alc_a.start_time != 0) {
-	while(1) {
-	  
-	  time(&systime);
-	  curr_time = systime + 2208988800U;
-	  
-	  if((a->alc_a.start_time - 3) > curr_time) {
-	
-	if(!is_printed) {
-	  printf("Waiting for session start time...\n");
-	  fflush(stdout);
-	  is_printed = TRUE;
-	}
+  while(1) {
+    
+    time(&systime);
+    curr_time = systime + 2208988800U;
+    
+    if((a->alc_a.start_time - 3) > curr_time) {
+  
+  if(!is_printed) {
+    printf("Waiting for session start time...\n");
+    fflush(stdout);
+    is_printed = TRUE;
+  }
 #ifdef _MSC_VER
-	Sleep(1000);
+  Sleep(1000);
 #else
-	sleep(1);
+  sleep(1);
 #endif
-	  }
-	  else {
-	break;
-	  }
-	  
-	  if(get_session_state(new_s_id) == SExiting) {
-		return -5;
-	  }
-	}
+    }
+    else {
+  break;
+    }
+    
+    if(get_session_state(new_s_id) == SExiting) {
+    return -5;
+    }
+  }
   }
   
   if(a->alc_a.cc_id == Null) {
-	
-	for(i = 0; (int)i < a->alc_a.nb_channel; i++) {
-	  
-	  if(a->alc_a.addr_type == 1) {
-	retval = add_alc_channel(new_s_id, ports[i], addrs[0], a->alc_a.intface, a->alc_a.intface_name);
-	  }
-	  else {
-	retval = add_alc_channel(new_s_id, ports[i], addrs[i], a->alc_a.intface, a->alc_a.intface_name);
-	  }
-	  
-	  if(retval == -1) {
-	close_alc_session(new_s_id);
-	return -1;
-	  }
-	}
+  
+  for(i = 0; (int)i < a->alc_a.nb_channel; i++) {
+    
+    if(a->alc_a.addr_type == 1) {
+  retval = add_alc_channel(new_s_id, ports[i], addrs[0], a->alc_a.intface, a->alc_a.intface_name);
+    }
+    else {
+  retval = add_alc_channel(new_s_id, ports[i], addrs[i], a->alc_a.intface, a->alc_a.intface_name);
+    }
+    
+    if(retval == -1) {
+  close_alc_session(new_s_id);
+  return -1;
+    }
+  }
   }
   else if(a->alc_a.cc_id == RLC) {
-	
-	retval = add_alc_channel(new_s_id, ports[0], addrs[0], a->alc_a.intface, a->alc_a.intface_name);
-	
-	if(retval == -1) {
-	  close_alc_session(new_s_id);
-	  return -1;	
-	}
+  
+  retval = add_alc_channel(new_s_id, ports[0], addrs[0], a->alc_a.intface, a->alc_a.intface_name);
+  
+  if(retval == -1) {
+    close_alc_session(new_s_id);
+    return -1;  
+  }
   }
 
   /* Create FDT receiving thread */
   
 #ifdef _MSC_VER
   handle_fdt_thread =
-	(HANDLE)_beginthreadex(NULL, 0,
-			   (void*)fdt_thread, (void*)receiver, 0, &fdt_thread_id);
+  (HANDLE)_beginthreadex(NULL, 0,
+         (void*)fdt_thread, (void*)receiver, 0, &fdt_thread_id);
   if(handle_fdt_thread==NULL) {
-	printf("Error: flute_file_repair, _beginthread\n");
-	fflush(stdout);
-	close_alc_session(new_s_id);
-	return -1;
+  printf("Error: flute_file_repair, _beginthread\n");
+  fflush(stdout);
+  close_alc_session(new_s_id);
+  return -1;
   }
 #else
   if((pthread_create(&fdt_thread_id, NULL, fdt_thread, (void*)receiver)) != 0) {
-	printf("Error: flute_file_repair, pthread_create\n");
-	fflush(stdout);
-	close_alc_session(new_s_id);
-	return -1;
+  printf("Error: flute_file_repair, pthread_create\n");
+  fflush(stdout);
+  close_alc_session(new_s_id);
+  return -1;
   }
 #endif
 

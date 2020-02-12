@@ -43,59 +43,59 @@
 
 int add_alc_fpi_2_128(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn, unsigned int es_id) {
 
-	int len = 0;
+  int len = 0;
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(sbn);
-	len += 4;
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(es_id);	
-	len += 4;
-	
-	return len;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(sbn);
+  len += 4;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(es_id);  
+  len += 4;
+  
+  return len;
 }
 
 int add_alc_fpi_129(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn, 
-					unsigned short sbl, unsigned short es_id) {
+          unsigned short sbl, unsigned short es_id) {
 
-	int len = 0;
-	unsigned int word = 0;
+  int len = 0;
+  unsigned int word = 0;
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(sbn);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(sbn);
 
-	len += 4;
-	word = ((sbl << 16) | (es_id & 0xFFFF));
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);	
-	len += 4;
+  len += 4;
+  word = ((sbl << 16) | (es_id & 0xFFFF));
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);  
+  len += 4;
 
-	return len;
+  return len;
 }
 
 int add_alc_fpi_0_130(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned short sbn, unsigned int es_id) {
 
-	int len = 0;
-	unsigned int word = 0;
-	//Malek El Khatib
-	//word = ((sbn << 16) | (es_id & 0xFFFF));
-	word = (es_id & 0xFFFFFFFF);
-	//printf("While sending, we get the following encoding symbols: %u\n",word); //Malek El Khatib 19.08.2014 Commented this
-	//End
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);	
-	len += 4;
+  int len = 0;
+  unsigned int word = 0;
+  //Malek El Khatib
+  //word = ((sbn << 16) | (es_id & 0xFFFF));
+  word = (es_id & 0xFFFFFFFF);
+  //printf("While sending, we get the following encoding symbols: %u\n",word); //Malek El Khatib 19.08.2014 Commented this
+  //End
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);  
+  len += 4;
 
-	return len;
+  return len;
 }
 
 int add_alc_fpi_3(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn,
-		  unsigned int es_id, unsigned char m) {
+      unsigned int es_id, unsigned char m) {
 
-	int len = 0;
-	unsigned int word = 0;
+  int len = 0;
+  unsigned int word = 0;
 
-	word = ((sbn << m) | (es_id & ((1 << m) - 1)));
+  word = ((sbn << m) | (es_id & ((1 << m) - 1)));
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);	
-	len += 4;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);  
+  len += 4;
 
-	return len;
+  return len;
 }
 
 

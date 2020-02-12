@@ -73,7 +73,7 @@ int file_gzip_uncompress(char* file);
  */
 
 char* buffer_zlib_compress(char *buf, unsigned long long buflen,
-						   unsigned long long *comprlen);
+               unsigned long long *comprlen);
 
 /**
  * This function uncompresses the given buffer.
@@ -87,7 +87,7 @@ char* buffer_zlib_compress(char *buf, unsigned long long buflen,
  */
 
 char* buffer_zlib_uncompress(char *buf, unsigned long long buflen,
-							 unsigned long long *uncomprlen);
+               unsigned long long *uncomprlen);
 
 /**
  * This function uncompresses the given buffer.
@@ -102,7 +102,7 @@ char* buffer_zlib_uncompress(char *buf, unsigned long long buflen,
  */
 
 char* buffer_gzip_uncompress(char *buf, unsigned long long buflen,
-							 unsigned long long uncomprlen);
+               unsigned long long uncomprlen);
 
 #endif
 

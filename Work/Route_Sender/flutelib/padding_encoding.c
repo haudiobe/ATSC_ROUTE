@@ -50,13 +50,13 @@ int compute_padding_length(unsigned long long f_size, int block_len, int es_len)
   int p_length;
 
   if(f_size <= (block_len * es_len)) {
-	  p_length = 0;
+    p_length = 0;
   }
   else if(!(f_size % (block_len * es_len))) {
-	  p_length = 0;
+    p_length = 0;
   }
   else {
-	  p_length = (int)((block_len * es_len) - f_size % (block_len * es_len));
+    p_length = (int)((block_len * es_len) - f_size % (block_len * es_len));
   }
 
   return p_length;
@@ -106,44 +106,44 @@ int padding_decoder(char *file_name, unsigned long long content_length) {
 #ifdef _MSC_VER
     retval = _chsize(fp_in, (long)content_length); /* TODO: 64 bits, how ??? */
 #else
-	  retval = ftruncate64(fp_in, content_length);
+    retval = ftruncate64(fp_in, content_length);
 #endif
 
-	  if(retval != 0) {
-		  printf("Problem in padding decoding.\n" );
-		  close(fp_in);
-		  return -1;
-	  }
+    if(retval != 0) {
+      printf("Problem in padding decoding.\n" );
+      close(fp_in);
+      return -1;
+    }
   }
 
   close(fp_in);
-	 
-	if(rename(file_name_in, file_name_out) < 0) {
+   
+  if(rename(file_name_in, file_name_out) < 0) {
 
-		if(errno == EEXIST) {
-			retval = remove(file_name_out);
-		
-			if(retval == -1) {    
-				printf("errno: %i\n", errno);
-				fflush(stdout);
-				close(fp_in);
-				return -1;
-			}
-		
-			if(rename(file_name_in, file_name_out) < 0) {
-				printf("rename() error1: %s\n", file_name_in);
-				fflush(stdout);
-				close(fp_in);
-				return -1;
-			}
-		}
-		else {
-			printf("rename() error2: %s\n", file_name_in);
-			fflush(stdout);
-			close(fp_in);
-			return -1;
-		}
-	}
+    if(errno == EEXIST) {
+      retval = remove(file_name_out);
+    
+      if(retval == -1) {    
+        printf("errno: %i\n", errno);
+        fflush(stdout);
+        close(fp_in);
+        return -1;
+      }
+    
+      if(rename(file_name_in, file_name_out) < 0) {
+        printf("rename() error1: %s\n", file_name_in);
+        fflush(stdout);
+        close(fp_in);
+        return -1;
+      }
+    }
+    else {
+      printf("rename() error2: %s\n", file_name_in);
+      fflush(stdout);
+      close(fp_in);
+      return -1;
+    }
+  }
 
   return 0;
 }

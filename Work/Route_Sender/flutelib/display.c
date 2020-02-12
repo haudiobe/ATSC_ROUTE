@@ -90,11 +90,11 @@ void print_sender_info(flute_sender_t *sender) {
     
       if(get_session_tx_toi(sender->s_id) == file->toi) {
       
-	printf("%-7.2f", (double)((double)100 *
-				  ((double)(long long)get_object_sent_bytes(sender->s_id)/(double)(long long)file->content_len)));
+  printf("%-7.2f", (double)((double)100 *
+          ((double)(long long)get_object_sent_bytes(sender->s_id)/(double)(long long)file->content_len)));
       }
       else {
-	printf("%-7.s", "");
+  printf("%-7.s", "");
       }
     }
       
@@ -221,7 +221,7 @@ void* receiver_file_table_output_thread(void *a) {
   receiver = (flute_receiver_t*)a;
   
   while(get_session_state(receiver->s_id) == SActive ||
-		get_session_state(receiver->s_id) == SAFlagReceived) {
+    get_session_state(receiver->s_id) == SAFlagReceived) {
 
     if(receiver->fdt != NULL) { 
       print_receiver_info(receiver);

@@ -48,11 +48,11 @@
 
 #include "fdt.h"
 #include "mad_utf8.h"
-	
-fdt_t *fdt;				/**< FDT */
-file_t *file;			/**< file */
-file_t *prev;			/**< previous parsed file */
-BOOL is_first_toi;		/**< is first TOI parsed or not? */
+  
+fdt_t *fdt;        /**< FDT */
+file_t *file;      /**< file */
+file_t *prev;      /**< previous parsed file */
+BOOL is_first_toi;    /**< is first TOI parsed or not? */
 
 /**
  * Global variables semaphore
@@ -71,9 +71,9 @@ pthread_mutex_t global_variables_semaphore = PTHREAD_MUTEX_INITIALIZER;
 
 void lock_fdt(void) {
 #ifdef _MSC_VER
-	EnterCriticalSection(&global_variables_semaphore);
+  EnterCriticalSection(&global_variables_semaphore);
 #else
-	pthread_mutex_lock(&global_variables_semaphore);
+  pthread_mutex_lock(&global_variables_semaphore);
 #endif
 }
 
@@ -84,9 +84,9 @@ void lock_fdt(void) {
 
 void unlock_fdt(void) {
 #ifdef _MSC_VER
-	LeaveCriticalSection(&global_variables_semaphore);
+  LeaveCriticalSection(&global_variables_semaphore);
 #else
-	pthread_mutex_unlock(&global_variables_semaphore);
+  pthread_mutex_unlock(&global_variables_semaphore);
 #endif
 }
 
@@ -102,131 +102,131 @@ void unlock_fdt(void) {
 
 int copy_file_info(file_t *src, file_t *dest) {
 
-	int updated = 0;
+  int updated = 0;
 
-	/* Copy only if particular field is not present in destination, so file description can be only
-	complemented not modified */
+  /* Copy only if particular field is not present in destination, so file description can be only
+  complemented not modified */
 
-	if(src->toi != 0) {
-		if(dest->toi == 0) {
-			dest->toi = src->toi;
-			updated = 1;
-		}
-	}
+  if(src->toi != 0) {
+    if(dest->toi == 0) {
+      dest->toi = src->toi;
+      updated = 1;
+    }
+  }
 
-	if(src->expires != 0) {
-		if(dest->expires == 0) {
-			dest->expires = src->expires;
-			updated = 1;
-		}
-	}
+  if(src->expires != 0) {
+    if(dest->expires == 0) {
+      dest->expires = src->expires;
+      updated = 1;
+    }
+  }
 
-	if(src->transfer_len != 0) {
-		if(dest->transfer_len == 0) {
-			dest->transfer_len = src->transfer_len;
-			updated = 1;
-		}
-	}
+  if(src->transfer_len != 0) {
+    if(dest->transfer_len == 0) {
+      dest->transfer_len = src->transfer_len;
+      updated = 1;
+    }
+  }
 
-	if(src->content_len != 0) {
-		if(dest->content_len == 0) {
-			dest->content_len = src->content_len;
-			updated = 1;
-		}
-	}
+  if(src->content_len != 0) {
+    if(dest->content_len == 0) {
+      dest->content_len = src->content_len;
+      updated = 1;
+    }
+  }
 
-	if(src->fec_enc_id != -1) {
-		if(dest->fec_enc_id == -1) {
-			dest->fec_enc_id = src->fec_enc_id;
-			updated = 1;
-		}
-	}
+  if(src->fec_enc_id != -1) {
+    if(dest->fec_enc_id == -1) {
+      dest->fec_enc_id = src->fec_enc_id;
+      updated = 1;
+    }
+  }
 
-	if(src->fec_inst_id != -1) {
-		if(dest->fec_inst_id == -1) {
-			dest->fec_inst_id = src->fec_inst_id;
-			updated = 1;
-		}
-	}
+  if(src->fec_inst_id != -1) {
+    if(dest->fec_inst_id == -1) {
+      dest->fec_inst_id = src->fec_inst_id;
+      updated = 1;
+    }
+  }
 
-	if(src->max_sb_len != 0) {
-		if(dest->max_sb_len == 0) {
-			dest->max_sb_len = src->max_sb_len;
-			updated = 1;
-		}
-	}
+  if(src->max_sb_len != 0) {
+    if(dest->max_sb_len == 0) {
+      dest->max_sb_len = src->max_sb_len;
+      updated = 1;
+    }
+  }
 
-	if(src->es_len != 0) {
-		if(dest->es_len == 0) {
-			dest->es_len = src->es_len;
-			updated = 1;
-		}
-	}
+  if(src->es_len != 0) {
+    if(dest->es_len == 0) {
+      dest->es_len = src->es_len;
+      updated = 1;
+    }
+  }
 
-	if(src->max_nb_of_es != 0) {
-		if(dest->max_nb_of_es == 0) {
-			dest->max_nb_of_es = src->max_nb_of_es;
-			updated = 1;
-		}
-	}
+  if(src->max_nb_of_es != 0) {
+    if(dest->max_nb_of_es == 0) {
+      dest->max_nb_of_es = src->max_nb_of_es;
+      updated = 1;
+    }
+  }
 
-	if(src->location != NULL) {
+  if(src->location != NULL) {
 
-		if(dest->location == NULL) {
+    if(dest->location == NULL) {
 
-			if(!(dest->location  = (char*)calloc((strlen(src->location) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->location!\n");
-				return -1;
-			}
+      if(!(dest->location  = (char*)calloc((strlen(src->location) + 1), sizeof(char)))) {
+        printf("Could not alloc memory for file->location!\n");
+        return -1;
+      }
 
-			memcpy(dest->location, src->location, strlen(src->location));
-			updated = 1;
-		}
-	}
+      memcpy(dest->location, src->location, strlen(src->location));
+      updated = 1;
+    }
+  }
 
-	if(src->type != NULL) {
+  if(src->type != NULL) {
 
-		if(dest->type == NULL) {
+    if(dest->type == NULL) {
 
-			if(!(dest->type  = (char*)calloc((strlen(src->type) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->type!\n");
-				return -1;
-			}
+      if(!(dest->type  = (char*)calloc((strlen(src->type) + 1), sizeof(char)))) {
+        printf("Could not alloc memory for file->type!\n");
+        return -1;
+      }
 
-			memcpy(dest->type, src->type, strlen(src->type));
-			updated = 1;
-		}
-	}
+      memcpy(dest->type, src->type, strlen(src->type));
+      updated = 1;
+    }
+  }
 
-	if(src->md5 != NULL) {
+  if(src->md5 != NULL) {
 
-		if(dest->md5 == NULL) {
+    if(dest->md5 == NULL) {
 
-			if(!(dest->md5 = (char*)calloc((strlen(src->md5) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->md5!\n");
-				return -1;
-			}
+      if(!(dest->md5 = (char*)calloc((strlen(src->md5) + 1), sizeof(char)))) {
+        printf("Could not alloc memory for file->md5!\n");
+        return -1;
+      }
 
-			memcpy(dest->md5, src->md5, strlen(src->md5));
-			updated = 1;
-		}
-	}
+      memcpy(dest->md5, src->md5, strlen(src->md5));
+      updated = 1;
+    }
+  }
 
-	if(src->encoding != NULL) {
+  if(src->encoding != NULL) {
 
-		if(dest->encoding == NULL) {
+    if(dest->encoding == NULL) {
 
-			if(!(dest->encoding = (char*)calloc((strlen(src->encoding) + 1), sizeof(char)))) {
-				printf("Could not alloc memory for file->encoding!\n");
-				return -1;
-			}
+      if(!(dest->encoding = (char*)calloc((strlen(src->encoding) + 1), sizeof(char)))) {
+        printf("Could not alloc memory for file->encoding!\n");
+        return -1;
+      }
 
-			memcpy(dest->encoding, src->encoding, strlen(src->encoding));
-			updated = 1;
-		}
-	}
+      memcpy(dest->encoding, src->encoding, strlen(src->encoding));
+      updated = 1;
+    }
+  }
 
-	return updated;
+  return updated;
 }
 
 /**
@@ -241,338 +241,338 @@ int copy_file_info(file_t *src, file_t *dest) {
 static void startElement_FDT(void *userData, const char *name, const char **atts) {
 
 #ifndef _MSC_VER
-	char *ep;
+  char *ep;
 #endif
 
-	char *mbstr;
+  char *mbstr;
 
-	while(*atts != NULL) {
-		if(!strcmp(name, "File")) {
+  while(*atts != NULL) {
+    if(!strcmp(name, "File")) {
 
-			if(file == NULL) {
-				if(!(file = (file_t*)calloc(1, sizeof(file_t)))) {
-					printf("Could not alloc memory for mad_fdt file!\n");
-					return;
-				}
+      if(file == NULL) {
+        if(!(file = (file_t*)calloc(1, sizeof(file_t)))) {
+          printf("Could not alloc memory for mad_fdt file!\n");
+          return;
+        }
 
-				/* initialise file parameters */
-				file->prev = NULL;
-				file->next = NULL;
-				file->toi = 0;
-				file->status = 0;
-				file->transfer_len = 0;
-				file->content_len = 0;
-				file->location = NULL;
-				file->md5 = NULL;
-				file->type = NULL;
-				file->encoding = NULL;
+        /* initialise file parameters */
+        file->prev = NULL;
+        file->next = NULL;
+        file->toi = 0;
+        file->status = 0;
+        file->transfer_len = 0;
+        file->content_len = 0;
+        file->location = NULL;
+        file->md5 = NULL;
+        file->type = NULL;
+        file->encoding = NULL;
 
-				file->expires = fdt->expires;
+        file->expires = fdt->expires;
 
-				file->fec_enc_id = fdt->fec_enc_id;
-				file->fec_inst_id = fdt->fec_inst_id;
-				file->finite_field = fdt->finite_field;
-				file->nb_of_es_per_group = fdt->nb_of_es_per_group;
-				file->max_sb_len = fdt->max_sb_len;
-				file->es_len = fdt->es_len;
-				file->max_nb_of_es = fdt->max_nb_of_es;
+        file->fec_enc_id = fdt->fec_enc_id;
+        file->fec_inst_id = fdt->fec_inst_id;
+        file->finite_field = fdt->finite_field;
+        file->nb_of_es_per_group = fdt->nb_of_es_per_group;
+        file->max_sb_len = fdt->max_sb_len;
+        file->es_len = fdt->es_len;
+        file->max_nb_of_es = fdt->max_nb_of_es;
 
-				fdt->nb_of_files++;
-			}
+        fdt->nb_of_files++;
+      }
 
-			if(!strcmp(*atts, "TOI")) {
+      if(!strcmp(*atts, "TOI")) {
 
 #ifdef _MSC_VER    
-				file->toi = _atoi64(*(++atts));
+        file->toi = _atoi64(*(++atts));
 
-				if(file->toi > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
-					printf("TOI too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(file->toi > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
+          printf("TOI too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #else               
-				file->toi = strtoull(*(++atts), &ep, 10);
+        file->toi = strtoull(*(++atts), &ep, 10);
 
-				if(*(atts) == '\0' || *ep != '\0') {
-					printf("TOI not a number\n");
-					fflush(stdout);
-					return;
-				}
+        if(*(atts) == '\0' || *ep != '\0') {
+          printf("TOI not a number\n");
+          fflush(stdout);
+          return;
+        }
 
-				if(errno == ERANGE && file->toi == 0xFFFFFFFFFFFFFFFFULL) {
-					printf("TOI too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(errno == ERANGE && file->toi == 0xFFFFFFFFFFFFFFFFULL) {
+          printf("TOI too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #endif
 
-				if(is_first_toi) {
-					fdt->file_list = file;
-					is_first_toi = FALSE;
-				}
-				else {
-					prev->next = file;
-					file->prev = prev;
-				}
+        if(is_first_toi) {
+          fdt->file_list = file;
+          is_first_toi = FALSE;
+        }
+        else {
+          prev->next = file;
+          file->prev = prev;
+        }
 
-				prev = file;
-			}
-			else if(!strcmp(*atts, "Content-Location")) {
+        prev = file;
+      }
+      else if(!strcmp(*atts, "Content-Location")) {
 
-				atts++;
+        atts++;
 
-				if(!(mbstr = (char*)calloc((strlen(*atts)+ 1), sizeof(char)))) {
-					printf("Could not alloc memory for mbstr!\n");
-					return;
-				}
+        if(!(mbstr = (char*)calloc((strlen(*atts)+ 1), sizeof(char)))) {
+          printf("Could not alloc memory for mbstr!\n");
+          return;
+        }
 
-				x_utf8s_to_iso_8859_1s(mbstr, *atts, strlen(*atts));
+        x_utf8s_to_iso_8859_1s(mbstr, *atts, strlen(*atts));
 
-				if(!(file->location = (char*)calloc((size_t)(strlen(mbstr) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for file->location!\n");
-					return;
-				}
+        if(!(file->location = (char*)calloc((size_t)(strlen(mbstr) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for file->location!\n");
+          return;
+        }
 
-				memcpy(file->location, mbstr, strlen(mbstr));
-				free(mbstr);
+        memcpy(file->location, mbstr, strlen(mbstr));
+        free(mbstr);
 
-			}
-			else if(!strcmp(*atts, "Content-Length")) {
+      }
+      else if(!strcmp(*atts, "Content-Length")) {
 
 #ifdef _MSC_VER     
-				file->content_len = _atoi64(*(++atts));
+        file->content_len = _atoi64(*(++atts));
 
-				if(file->content_len > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
-					printf("Content-Length too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(file->content_len > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
+          printf("Content-Length too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #else               
-				file->content_len = strtoull(*(++atts), &ep, 10);
+        file->content_len = strtoull(*(++atts), &ep, 10);
 
-				if(*(atts) == '\0' || *ep != '\0') {
-					printf("Content-Length not a number\n");
-					fflush(stdout);
-					return;
-				}
+        if(*(atts) == '\0' || *ep != '\0') {
+          printf("Content-Length not a number\n");
+          fflush(stdout);
+          return;
+        }
 
-				if(errno == ERANGE && file->content_len == 0xFFFFFFFFFFFFFFFFULL) {
-					printf("Content-Length too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}	
+        if(errno == ERANGE && file->content_len == 0xFFFFFFFFFFFFFFFFULL) {
+          printf("Content-Length too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }  
 #endif
-				if(file->transfer_len == 0) {
-					file->transfer_len = file->content_len;
-				}
-			}
-			else if(!strcmp(*atts, "Transfer-Length")) {
+        if(file->transfer_len == 0) {
+          file->transfer_len = file->content_len;
+        }
+      }
+      else if(!strcmp(*atts, "Transfer-Length")) {
 
-#ifdef _MSC_VER			  
-				file->transfer_len = _atoi64(*(++atts));
+#ifdef _MSC_VER        
+        file->transfer_len = _atoi64(*(++atts));
 
-				if(file->transfer_len > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
-					printf("Transfer-Length too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(file->transfer_len > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
+          printf("Transfer-Length too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #else
-				file->transfer_len = strtoull(*(++atts), &ep, 10);
+        file->transfer_len = strtoull(*(++atts), &ep, 10);
 
-				if(*(atts) == '\0' || *ep != '\0') {
-					printf("Transfer-Length not a number\n");
-					fflush(stdout);
-					return;
-				}
+        if(*(atts) == '\0' || *ep != '\0') {
+          printf("Transfer-Length not a number\n");
+          fflush(stdout);
+          return;
+        }
 
-				if(errno == ERANGE && file->transfer_len == 0xFFFFFFFFFFFFFFFFULL) {
-					printf("Transfer-Length too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(errno == ERANGE && file->transfer_len == 0xFFFFFFFFFFFFFFFFULL) {
+          printf("Transfer-Length too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #endif 
 
 #ifdef _MSC_VER
-				if(file->transfer_len > (unsigned long long)0xFFFFFFFFFFFF) {
-					printf("Transfer-Length too big (max=%I64u)\n", (unsigned long long)0xFFFFFFFFFFFF);
+        if(file->transfer_len > (unsigned long long)0xFFFFFFFFFFFF) {
+          printf("Transfer-Length too big (max=%I64u)\n", (unsigned long long)0xFFFFFFFFFFFF);
 #else
-				if(file->transfer_len > 0xFFFFFFFFFFFFULL) {
-					printf("Transfer-Length too big (max=%llu)\n", 0xFFFFFFFFFFFFULL);
+        if(file->transfer_len > 0xFFFFFFFFFFFFULL) {
+          printf("Transfer-Length too big (max=%llu)\n", 0xFFFFFFFFFFFFULL);
 #endif
-					fflush(stdout);
-					return;
-				}
-			}
-			else if(!strcmp(*atts, "Content-Type")) {
+          fflush(stdout);
+          return;
+        }
+      }
+      else if(!strcmp(*atts, "Content-Type")) {
 
-				atts++;
+        atts++;
 
-				if(!(file->type = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for file->type!\n");
-					return;
-				}
+        if(!(file->type = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for file->type!\n");
+          return;
+        }
 
-				memcpy(file->type, *atts, strlen(*atts));
-			}
-			else if(!strcmp(*atts, "Content-Encoding")) {
+        memcpy(file->type, *atts, strlen(*atts));
+      }
+      else if(!strcmp(*atts, "Content-Encoding")) {
 
-				atts++;
+        atts++;
 
-				if(!(file->encoding = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for file->encoding!\n");
-					return;
-				}
+        if(!(file->encoding = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for file->encoding!\n");
+          return;
+        }
 
-				memcpy(file->encoding, *atts, strlen(*atts));
-			}
-			else if(!strcmp(*atts, "Content-MD5")) {
+        memcpy(file->encoding, *atts, strlen(*atts));
+      }
+      else if(!strcmp(*atts, "Content-MD5")) {
 
-				atts++;
+        atts++;
 
-				if(!(file->md5 = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for file->md5!\n");
-					return;
-				}
+        if(!(file->md5 = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for file->md5!\n");
+          return;
+        }
 
-				memcpy(file->md5, *atts, strlen(*atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-FEC-Encoding-ID")) {
-				file->fec_enc_id = (unsigned char)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-FEC-Instance-ID")) {
-				file->fec_inst_id = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Maximum-Source-Block-Length")) {
-				file->max_sb_len = (unsigned int)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Encoding-Symbol-Length")) {
-				file->es_len = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Max-Number-of-Encoding-Symbols")) {
-				file->max_nb_of_es = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Number-of-Encoding-Symbols-per-Group")) {
-				file->nb_of_es_per_group = (unsigned char)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Finite-Field-Parameter")) {
-				file->finite_field = (unsigned char)atoi(*(++atts));
-			}
-			else {			  
-				atts++;
-			}
+        memcpy(file->md5, *atts, strlen(*atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-FEC-Encoding-ID")) {
+        file->fec_enc_id = (unsigned char)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-FEC-Instance-ID")) {
+        file->fec_inst_id = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Maximum-Source-Block-Length")) {
+        file->max_sb_len = (unsigned int)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Encoding-Symbol-Length")) {
+        file->es_len = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Max-Number-of-Encoding-Symbols")) {
+        file->max_nb_of_es = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Number-of-Encoding-Symbols-per-Group")) {
+        file->nb_of_es_per_group = (unsigned char)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Finite-Field-Parameter")) {
+        file->finite_field = (unsigned char)atoi(*(++atts));
+      }
+      else {        
+        atts++;
+      }
 
-			atts++;
+      atts++;
 
-			/* copy common parameters from FDT to File when we are leaving File element */
+      /* copy common parameters from FDT to File when we are leaving File element */
 
-			if(*atts == NULL) {
+      if(*atts == NULL) {
 
-				if(file->type == NULL && fdt->type != NULL) {
-					if(!(file->type = (char*)calloc((strlen(fdt->type) + 1), sizeof(char)))) {
-						printf("Could not alloc memory for file->type!\n");
-						return;
-					}
-					memcpy(file->type, fdt->type, strlen(fdt->type));
-				}
-				if(file->encoding == NULL && fdt->encoding != NULL) {
-					if(!(file->encoding = (char*)calloc((strlen(fdt->encoding) + 1), sizeof(char)))) {
-						printf("Could not alloc memory for file->encoding!\n");
-						return;
-					}
-					memcpy(file->encoding, fdt->encoding, strlen(fdt->encoding));
-				}
-			}
+        if(file->type == NULL && fdt->type != NULL) {
+          if(!(file->type = (char*)calloc((strlen(fdt->type) + 1), sizeof(char)))) {
+            printf("Could not alloc memory for file->type!\n");
+            return;
+          }
+          memcpy(file->type, fdt->type, strlen(fdt->type));
+        }
+        if(file->encoding == NULL && fdt->encoding != NULL) {
+          if(!(file->encoding = (char*)calloc((strlen(fdt->encoding) + 1), sizeof(char)))) {
+            printf("Could not alloc memory for file->encoding!\n");
+            return;
+          }
+          memcpy(file->encoding, fdt->encoding, strlen(fdt->encoding));
+        }
+      }
 
-		}
-		else if(!strcmp(name, "FDT-Instance")) {
+    }
+    else if(!strcmp(name, "FDT-Instance")) {
 
-			if(!strcmp(*atts, "Expires")) {  
+      if(!strcmp(*atts, "Expires")) {  
 #ifdef _MSC_VER
-				fdt->expires = _atoi64(*(++atts));
+        fdt->expires = _atoi64(*(++atts));
 
-				if(fdt->expires > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
-					printf("Expires too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(fdt->expires > (unsigned long long)0xFFFFFFFFFFFFFFFF) {
+          printf("Expires too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #else
-				/*fdt->expires = atoll(*(++atts));*/
+        /*fdt->expires = atoll(*(++atts));*/
 
-				fdt->expires = strtoull(*(++atts), &ep, 10);
+        fdt->expires = strtoull(*(++atts), &ep, 10);
 
-				if(*(atts) == '\0' || *ep != '\0') {
-					printf("Expires not a number\n");
-					fflush(stdout);
-					return;
-				}
+        if(*(atts) == '\0' || *ep != '\0') {
+          printf("Expires not a number\n");
+          fflush(stdout);
+          return;
+        }
 
-				if(errno == ERANGE && fdt->expires == 0xFFFFFFFFFFFFFFFFULL) {
-					printf("Expires too big for unsigned long long (64 bits)\n");
-					fflush(stdout);
-					return;
-				}
+        if(errno == ERANGE && fdt->expires == 0xFFFFFFFFFFFFFFFFULL) {
+          printf("Expires too big for unsigned long long (64 bits)\n");
+          fflush(stdout);
+          return;
+        }
 #endif
-			}
-			else if(!strcmp(*atts, "Complete")) {
-				if(!strcmp("true", *(++atts))) {
-					fdt->complete = TRUE;
-				}
-				else {
-					fdt->complete = FALSE;
-				}
-			}
-			else if(!strcmp(*atts, "FEC-OTI-FEC-Encoding-ID")) {
-				fdt->fec_enc_id = (unsigned char)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-FEC-Instance-ID")) {
-				fdt->fec_inst_id = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Maximum-Source-Block-Length")) {
-				fdt->max_sb_len = (unsigned int)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Encoding-Symbol-Length")) {
-				fdt->es_len = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Max-Number-of-Encoding-Symbols")) {
-				fdt->max_nb_of_es = (unsigned short)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Number-of-Encoding-Symbols-per-Group")) {
-				fdt->nb_of_es_per_group = (unsigned char)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "FEC-OTI-Finite-Field-Parameter")) {
-				fdt->finite_field = (unsigned char)atoi(*(++atts));
-			}
-			else if(!strcmp(*atts, "Content-Type")) {
-				atts++;
+      }
+      else if(!strcmp(*atts, "Complete")) {
+        if(!strcmp("true", *(++atts))) {
+          fdt->complete = TRUE;
+        }
+        else {
+          fdt->complete = FALSE;
+        }
+      }
+      else if(!strcmp(*atts, "FEC-OTI-FEC-Encoding-ID")) {
+        fdt->fec_enc_id = (unsigned char)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-FEC-Instance-ID")) {
+        fdt->fec_inst_id = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Maximum-Source-Block-Length")) {
+        fdt->max_sb_len = (unsigned int)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Encoding-Symbol-Length")) {
+        fdt->es_len = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Max-Number-of-Encoding-Symbols")) {
+        fdt->max_nb_of_es = (unsigned short)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Number-of-Encoding-Symbols-per-Group")) {
+        fdt->nb_of_es_per_group = (unsigned char)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "FEC-OTI-Finite-Field-Parameter")) {
+        fdt->finite_field = (unsigned char)atoi(*(++atts));
+      }
+      else if(!strcmp(*atts, "Content-Type")) {
+        atts++;
 
-				if(!(fdt->type = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for fdt->type!\n");
-					return;
-				}
+        if(!(fdt->type = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for fdt->type!\n");
+          return;
+        }
 
-				memcpy(fdt->type, *atts, strlen(*atts));
-			}
-			else if(!strcmp(*atts, "Content-Encoding")) {
-				atts++;
+        memcpy(fdt->type, *atts, strlen(*atts));
+      }
+      else if(!strcmp(*atts, "Content-Encoding")) {
+        atts++;
 
-				if(!(fdt->encoding = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
-					printf("Could not alloc memory for fdt->encoding!\n");
-					return;
-				}
+        if(!(fdt->encoding = (char*)calloc((strlen(*atts) + 1), sizeof(char)))) {
+          printf("Could not alloc memory for fdt->encoding!\n");
+          return;
+        }
 
-				memcpy(fdt->encoding, *atts, strlen(*atts));
-			}
-			else {
-				atts++;
-			}
-			atts++;
-		}
-		else {
-			atts += 2;
-		}
-	}
+        memcpy(fdt->encoding, *atts, strlen(*atts));
+      }
+      else {
+        atts++;
+      }
+      atts++;
+    }
+    else {
+      atts += 2;
+    }
+  }
 
-	file = NULL;
+  file = NULL;
 }
 
 void initialize_fdt_parser(void) {
@@ -591,184 +591,184 @@ void release_fdt_parser(void) {
 
 fdt_t* decode_fdt_payload(char *fdt_payload) {
 
-	XML_Parser parser;
-	size_t len;
+  XML_Parser parser;
+  size_t len;
 
-	lock_fdt();
+  lock_fdt();
 
-	parser = XML_ParserCreate(NULL);
-	/* parser = XML_ParserCreate("iso-8859-1"); */
+  parser = XML_ParserCreate(NULL);
+  /* parser = XML_ParserCreate("iso-8859-1"); */
 
-	len = strlen(fdt_payload);
-	fdt = NULL;
+  len = strlen(fdt_payload);
+  fdt = NULL;
 
-	if(!(fdt = (fdt_t*)calloc(1, sizeof(fdt_t)))) {
-		printf("Could not alloc memory for fdt!\n");
-		XML_ParserFree(parser);
-		unlock_fdt();
-		return NULL;
-	}
+  if(!(fdt = (fdt_t*)calloc(1, sizeof(fdt_t)))) {
+    printf("Could not alloc memory for fdt!\n");
+    XML_ParserFree(parser);
+    unlock_fdt();
+    return NULL;
+  }
 
-	/* initialise fdt parameters */
+  /* initialise fdt parameters */
 
-	fdt->expires = 0;
-	fdt->complete = FALSE;
-	fdt->fec_enc_id = -1;
-	fdt->fec_inst_id = -1;
-	fdt->finite_field = GF_BITS;
-	fdt->nb_of_es_per_group = 1;
-	fdt->max_sb_len = 0;
-	fdt->es_len = 0;
-	fdt->max_nb_of_es = 0;
-	fdt->nb_of_files = 0;
-	fdt->type = NULL;
-	fdt->encoding = NULL;
-	fdt->file_list = NULL;  
+  fdt->expires = 0;
+  fdt->complete = FALSE;
+  fdt->fec_enc_id = -1;
+  fdt->fec_inst_id = -1;
+  fdt->finite_field = GF_BITS;
+  fdt->nb_of_es_per_group = 1;
+  fdt->max_sb_len = 0;
+  fdt->es_len = 0;
+  fdt->max_nb_of_es = 0;
+  fdt->nb_of_files = 0;
+  fdt->type = NULL;
+  fdt->encoding = NULL;
+  fdt->file_list = NULL;  
 
-	file = NULL;
-	prev = NULL;
-	is_first_toi = TRUE;
+  file = NULL;
+  prev = NULL;
+  is_first_toi = TRUE;
 
-	XML_SetStartElementHandler(parser, startElement_FDT);
+  XML_SetStartElementHandler(parser, startElement_FDT);
 
-	if(XML_Parse(parser, fdt_payload, len, 1) == XML_STATUS_ERROR) {
-		fprintf(stderr, "%s at line %ld\n",
-			XML_ErrorString(XML_GetErrorCode(parser)),
-			XML_GetCurrentLineNumber(parser));
-		XML_ParserFree(parser);
-		unlock_fdt();
-		return NULL;
-	}
+  if(XML_Parse(parser, fdt_payload, len, 1) == XML_STATUS_ERROR) {
+    fprintf(stderr, "%s at line %ld\n",
+      XML_ErrorString(XML_GetErrorCode(parser)),
+      XML_GetCurrentLineNumber(parser));
+    XML_ParserFree(parser);
+    unlock_fdt();
+    return NULL;
+  }
 
-	XML_ParserFree(parser);
-	unlock_fdt();
-	return fdt;
+  XML_ParserFree(parser);
+  unlock_fdt();
+  return fdt;
 }
 
 void FreeFDT(fdt_t *fdt) {
 
-	file_t *next_file;
-	file_t *file;
+  file_t *next_file;
+  file_t *file;
 
-	lock_fdt();
+  lock_fdt();
 
-	/**** Free FDT struct ****/
+  /**** Free FDT struct ****/
 
-	next_file = fdt->file_list;
+  next_file = fdt->file_list;
 
-	while(next_file != NULL) {
-		file = next_file;
+  while(next_file != NULL) {
+    file = next_file;
 
-		if(file->encoding != NULL) {
-			free(file->encoding);
-		}
+    if(file->encoding != NULL) {
+      free(file->encoding);
+    }
 
-		if(file->location != NULL) {
-			free(file->location);
-		}
+    if(file->location != NULL) {
+      free(file->location);
+    }
 
-		if(file->md5 != NULL) {
-			free(file->md5);
-		}
+    if(file->md5 != NULL) {
+      free(file->md5);
+    }
 
-		if(file->type != NULL) {
-			free(file->type);
-		}
+    if(file->type != NULL) {
+      free(file->type);
+    }
 
-		next_file = file->next;
-		free(file);
-	}
+    next_file = file->next;
+    free(file);
+  }
 
-	if(fdt->encoding != NULL) {
-		free(fdt->encoding);
-	}
-	if(fdt->type != NULL) {
-		free(fdt->type);
-	}
+  if(fdt->encoding != NULL) {
+    free(fdt->encoding);
+  }
+  if(fdt->type != NULL) {
+    free(fdt->type);
+  }
 
-	free(fdt);
-	unlock_fdt();
+  free(fdt);
+  unlock_fdt();
 }
 
 int update_fdt(fdt_t *fdt_db, fdt_t *instance) {
 
-	file_t *tmp_file;
-	file_t *fdt_file;
-	file_t *new_file;
-	int retval = 0;
-	int updated = 0;
+  file_t *tmp_file;
+  file_t *fdt_file;
+  file_t *new_file;
+  int retval = 0;
+  int updated = 0;
 
-	assert (fdt_db != NULL);
-	assert (instance != NULL);
+  assert (fdt_db != NULL);
+  assert (instance != NULL);
 
-	lock_fdt();
+  lock_fdt();
 
-	tmp_file = instance->file_list;
+  tmp_file = instance->file_list;
 
-	while(tmp_file != NULL) {
+  while(tmp_file != NULL) {
 
-		fdt_file = fdt_db->file_list;
+    fdt_file = fdt_db->file_list;
 
-		for(;; fdt_file = fdt_file->next) {
+    for(;; fdt_file = fdt_file->next) {
 
-			if(tmp_file->toi == fdt_file->toi) {
+      if(tmp_file->toi == fdt_file->toi) {
 
-				retval = copy_file_info(tmp_file, fdt_file);
+        retval = copy_file_info(tmp_file, fdt_file);
 
-				if(retval < 0) {
-					unlock_fdt();
-					return -1;
-				}
-				else if(((retval == 1)&&(updated != 2))) {
-					updated = 1;
-				}
+        if(retval < 0) {
+          unlock_fdt();
+          return -1;
+        }
+        else if(((retval == 1)&&(updated != 2))) {
+          updated = 1;
+        }
 
-				break;
-			}
-			else if(fdt_file->next != NULL) {
-				continue;
-			}
-			else {
+        break;
+      }
+      else if(fdt_file->next != NULL) {
+        continue;
+      }
+      else {
 
-				if(!(new_file = (file_t*)calloc(1, sizeof(file_t)))) {
-					printf("Could not alloc memory for mad_fdt file!\n");
-					unlock_fdt();
-					return -1;
-				}
+        if(!(new_file = (file_t*)calloc(1, sizeof(file_t)))) {
+          printf("Could not alloc memory for mad_fdt file!\n");
+          unlock_fdt();
+          return -1;
+        }
 
-				new_file->fec_enc_id = -1;
-				new_file->fec_inst_id = -1;
+        new_file->fec_enc_id = -1;
+        new_file->fec_inst_id = -1;
 
-				retval = copy_file_info(tmp_file, new_file);
+        retval = copy_file_info(tmp_file, new_file);
 
-				if(retval < 0) {
-					unlock_fdt();
-					return -1;
-				}
-				else if(retval == 1) {
-					updated = 2;
-				}
+        if(retval < 0) {
+          unlock_fdt();
+          return -1;
+        }
+        else if(retval == 1) {
+          updated = 2;
+        }
 
-				new_file->next = fdt_file->next;
-				new_file->prev = fdt_file;
-				fdt_file->next = new_file;
+        new_file->next = fdt_file->next;
+        new_file->prev = fdt_file;
+        fdt_file->next = new_file;
 
-				break;
-			}
-		}
+        break;
+      }
+    }
 
-		tmp_file = tmp_file->next;
-	}
-	unlock_fdt();
-	return updated;
+    tmp_file = tmp_file->next;
+  }
+  unlock_fdt();
+  return updated;
 }
 
 file_t* find_file_with_toi(fdt_t *fdt, unsigned long long toi) {
     file_t* file = fdt->file_list;
 
     while(file != NULL) {
-		if(file->toi == toi) {
-			return file;
+    if(file->toi == toi) {
+      return file;
         }
 
         file = file->next;
@@ -779,53 +779,53 @@ file_t* find_file_with_toi(fdt_t *fdt, unsigned long long toi) {
 
 void PrintFDT(fdt_t *fdt, int s_id) {
 
-	file_t *next_file;
-	file_t *file;
+  file_t *next_file;
+  file_t *file;
 
-	lock_fdt();
+  lock_fdt();
 
-	next_file = fdt->file_list;
+  next_file = fdt->file_list;
 
-	while(next_file != NULL) {	
-		file = next_file;
+  while(next_file != NULL) {  
+    file = next_file;
 
-		if(file->encoding != NULL) {
-			//enc = file->encoding;
-		}
+    if(file->encoding != NULL) {
+      //enc = file->encoding;
+    }
 
 #ifdef _MSC_VER
-		printf("URI: %s (TOI=%I64u)\n",  file->location, file->toi);
+    printf("URI: %s (TOI=%I64u)\n",  file->location, file->toi);
 #else
-		printf("URI: %s (TOI=%llu)\n",  file->location, file->toi);
+    printf("URI: %s (TOI=%llu)\n",  file->location, file->toi);
 #endif
-		fflush(stdout);
+    fflush(stdout);
 
-		next_file = file->next;
-	}
-	unlock_fdt();
+    next_file = file->next;
+  }
+  unlock_fdt();
 }
 
 /*void free_file(file_t *file) {
 
-	lock_fdt();
+  lock_fdt();
 
-	if(file->encoding != NULL) {
-		free(file->encoding);
-	}
+  if(file->encoding != NULL) {
+    free(file->encoding);
+  }
 
-	if(file->location != NULL) {
-		free(file->location);
-	}
+  if(file->location != NULL) {
+    free(file->location);
+  }
 
-	if(file->md5 != NULL) {
-		free(file->md5);
-	}
+  if(file->md5 != NULL) {
+    free(file->md5);
+  }
 
-	if(file->type != NULL) {
-		free(file->type);
-	}
+  if(file->type != NULL) {
+    free(file->type);
+  }
 
-	free(file);
-	unlock_fdt();
+  free(file);
+  unlock_fdt();
 }
 */

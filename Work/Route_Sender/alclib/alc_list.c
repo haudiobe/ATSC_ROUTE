@@ -120,7 +120,7 @@ void unlock_list(alc_list_t *a_list) {
 */
 
 int is_empty_private(const alc_list_t *a_list) {
-	return a_list->first_elem == NULL;
+  return a_list->first_elem == NULL;
 }
 
 /**
@@ -248,9 +248,9 @@ int is_empty(const alc_list_t *a_list) {
   
   my_ret = (a_list->first_elem == NULL);
   
-	unlock_list((alc_list_t*)a_list);
-	
-	return my_ret;
+  unlock_list((alc_list_t*)a_list);
+  
+  return my_ret;
 }
 
 alc_list_t* build_list(void) {

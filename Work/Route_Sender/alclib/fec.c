@@ -407,7 +407,7 @@ matmul(gf *a, gf *b, gf *c, int n, int k, int m)
 }
 #ifdef DEBUG
 /*
- * returns 1 if the square matrix is identiy
+ * returns 1 if the square matrix is identity
  * (only for test)
  */
 /*

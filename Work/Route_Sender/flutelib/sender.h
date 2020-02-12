@@ -44,11 +44,11 @@
 //extern unsigned long video_segment; /**< Video Segment Duration. Populated with value entered as argument -y:value >*/
 //extern unsigned long audio_segment; /**< Audio Segment Duration. Populated with value entered as argument -Y:value >*/
 
-extern char* sendingTimesFile;		 /**<If no file is passed using -y:value, no delays would be introduced while sending segments>*/
+extern char* sendingTimesFile;     /**<If no file is passed using -y:value, no delays would be introduced while sending segments>*/
 extern unsigned short numEncSymbPerPacket; /**< The number of symbols per packet. Populated with value entered as argument -Y:value. If zero, use input file to determine chunks to send >*/
 
 //This is defined in parse_args.c;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //extern char* logFile;
 extern BOOL sendFDTAfterObj;
 //END

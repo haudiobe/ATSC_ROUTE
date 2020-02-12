@@ -59,7 +59,7 @@ int s_id; /**< session identifier */
 //Start
 //This is defined in main;
 extern char* logFile;
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //END
 
 /**
@@ -246,7 +246,7 @@ void usage(void) {
   printf("   -B:str           Base directory for downloaded files,\n");
   printf("                    default: %s\n", DEF_BASE_DIR);
   printf("   -c:int           Maximum number of channels, default: %i\n", DEF_NB_CHANNEL);
-  printf("   -D:ull           Reveiver will quit after this time (in seconds) if no\n");
+  printf("   -D:ull           Receiver will quit after this time (in seconds) if no\n");
   printf("                    packets is received from the session, default: %i\n", DEF_RECEIVER_TIMEOUT);
   printf("   -E               Accept expired FDT Instances\n");   
   printf("   -F:str,str,...   Files to be received\n");

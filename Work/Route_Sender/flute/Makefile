@@ -8,7 +8,9 @@ CFLAGS += -Wall -O3 -g -DLINUX -D_LARGE_FILE_API -D_LARGEFILE64_SOURCE -D_ISOC99
 
 LFLAGS += -L../lib -lflutelib -lalc -lsdp \
 	-lexpat -lpthread -lm -lz -lcurl \
-	-L/usr/local/ssl/lib -lcrypto
+	-L/usr/local/ssl/lib -lcrypto \
+
+
 
 SOURCES = main.c
 

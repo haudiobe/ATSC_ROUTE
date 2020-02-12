@@ -20,30 +20,30 @@ extern "C" {
  */
 
 typedef struct efdt {
-	unsigned int tsi;
-	char *idRef;
-	unsigned int version;
-	unsigned int maxExpiresDelta;
-	unsigned int maxTransportSize;
-	unsigned long long expires;	/* efdt expiration time in NTP-time */
-	BOOL complete;				/**< is complete EFDT? */
-	file_t *file_list;			/**< list of files in the EFDT*/
-	unsigned int nb_of_files;	/**< number of file in the EFDT*/
+  unsigned int tsi;
+  char *idRef;
+  unsigned int version;
+  unsigned int maxExpiresDelta;
+  unsigned int maxTransportSize;
+  unsigned long long expires;  /* efdt expiration time in NTP-time */
+  BOOL complete;        /**< is complete EFDT? */
+  file_t *file_list;      /**< list of files in the EFDT*/
+  unsigned int nb_of_files;  /**< number of file in the EFDT*/
 
-	/* Other common parameters */
+  /* Other common parameters */
 
-	char *type;					/**< default content type */
-	char *encoding;				/**< default content encoding */
+  char *type;          /**< default content type */
+  char *encoding;        /**< default content encoding */
 
-	/* FEC OTI */
+  /* FEC OTI */
 
-	short fec_enc_id;					/**< default FEC encoding id */
-	int fec_inst_id;					/**< default FEC instance id */
-	unsigned char finite_field;			/**< default finite field parameter  with new RS FEC */
-	unsigned char nb_of_es_per_group;	/**< default number of encoding symbols in packet with new RS FEC */
-	unsigned int max_sb_len;			/**< default maximum source block length */
-	unsigned short es_len;				/**< default encoding symbol length */
-	unsigned short max_nb_of_es;		/**< default maximum number of encoding symbols */
+  short fec_enc_id;          /**< default FEC encoding id */
+  int fec_inst_id;          /**< default FEC instance id */
+  unsigned char finite_field;      /**< default finite field parameter  with new RS FEC */
+  unsigned char nb_of_es_per_group;  /**< default number of encoding symbols in packet with new RS FEC */
+  unsigned int max_sb_len;      /**< default maximum source block length */
+  unsigned short es_len;        /**< default encoding symbol length */
+  unsigned short max_nb_of_es;    /**< default maximum number of encoding symbols */
 
 } efdt_t;
 

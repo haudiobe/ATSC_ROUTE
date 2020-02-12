@@ -55,15 +55,15 @@ extern "C" {
 typedef struct rlc_hdr {
 
 #ifdef  _BIT_FIELDS_LTOH
-	unsigned char	reserved:7;		/**< Unused, must be 0x55 (1010101) */
-	unsigned char	sp:1;			/**< Is this packet a Synchronisation Point (SP) ? */
+  unsigned char  reserved:7;    /**< Unused, must be 0x55 (1010101) */
+  unsigned char  sp:1;      /**< Is this packet a Synchronisation Point (SP) ? */
 #else
-	unsigned char	sp:1;			/**< Is this packet a Synchronisation Point (SP) ? */
-	unsigned char	reserved:7;		/**< Unused, must be 0x55 (1010101) */
+  unsigned char  sp:1;      /**< Is this packet a Synchronisation Point (SP) ? */
+  unsigned char  reserved:7;    /**< Unused, must be 0x55 (1010101) */
 #endif
 
-	unsigned char	layer;			/**< packet's layer */
-	unsigned short	seqid;			/**< packet's sequence number (per layer sequence) */
+  unsigned char  layer;      /**< packet's layer */
+  unsigned short  seqid;      /**< packet's sequence number (per layer sequence) */
 
 } rlc_hdr_t;
 
@@ -73,9 +73,9 @@ typedef struct rlc_hdr {
  */
 
 typedef struct late_list {
-	struct late_list *next;	/**< next late packet */
-	unsigned short seq_num;	/**< RLC sequence number */
-	double losttime;		/**< time when packet is considering lost */
+  struct late_list *next;  /**< next late packet */
+  unsigned short seq_num;  /**< RLC sequence number */
+  double losttime;    /**< time when packet is considering lost */
 } late_list_t;
 
 /**
@@ -84,8 +84,8 @@ typedef struct late_list {
  */
 
 typedef struct lost_list {
-	struct lost_list *next;		/**< next missing packet */
-	int pkt_remaining;			/**< number of packets to receive before we forget this one */
+  struct lost_list *next;    /**< next missing packet */
+  int pkt_remaining;      /**< number of packets to receive before we forget this one */
 } lost_list_t;
 
 /**
@@ -94,45 +94,45 @@ typedef struct lost_list {
  */
 
 typedef struct mad_rlc {
-	int sp_cycle;		/**< interval between two syncronisation points at layer 0 */
-	int pkt_timeout; 	/**< default time to wait for a late packet before assuming it's lost */
-	int deaf_period;	/**< time for deaf period after a dropped layer */
-	int late_accepted;	/**< if the amount of late packets between two syncronisation points at
-						the toplayer is <= RLC_LATE_ACCEPTED then a layer can be added */
-	int loss_accepted;	/**< if the amount of lost packets between two syncronisation points at
-						the toplayer is	<= RLC_LOSS_ACCEPTED then a layer can be added */
+  int sp_cycle;    /**< interval between two syncronisation points at layer 0 */
+  int pkt_timeout;   /**< default time to wait for a late packet before assuming it's lost */
+  int deaf_period;  /**< time for deaf period after a dropped layer */
+  int late_accepted;  /**< if the amount of late packets between two syncronisation points at
+            the toplayer is <= RLC_LATE_ACCEPTED then a layer can be added */
+  int loss_accepted;  /**< if the amount of lost packets between two syncronisation points at
+            the toplayer is  <= RLC_LOSS_ACCEPTED then a layer can be added */
 
-	int loss_limit;		/**< RLC_LOSS_LIMIT / RLC_LOSS_TIMEOUT is the max loss rate for packet.
-						If this rate is reached then we should drop the highest layer. */
-	int loss_timeout;	/**< RLC_LOSS_LIMIT / RLC_LOSS_TIMEOUT is the max loss rate for packet.
-						If this rate is reached then we should drop the highest layer. */
-	
-	/** value of current sequence number for each layer */
-	unsigned short tx_layers_seq[MAX_CHANNELS_IN_SESSION];
+  int loss_limit;    /**< RLC_LOSS_LIMIT / RLC_LOSS_TIMEOUT is the max loss rate for packet.
+            If this rate is reached then we should drop the highest layer. */
+  int loss_timeout;  /**< RLC_LOSS_LIMIT / RLC_LOSS_TIMEOUT is the max loss rate for packet.
+            If this rate is reached then we should drop the highest layer. */
+  
+  /** value of current sequence number for each layer */
+  unsigned short tx_layers_seq[MAX_CHANNELS_IN_SESSION];
 
-	/** time for the next syncronisation point for each layer */
-	double tx_next_sp[MAX_CHANNELS_IN_SESSION];
+  /** time for the next syncronisation point for each layer */
+  double tx_next_sp[MAX_CHANNELS_IN_SESSION];
 
-	/** =1 if waiting for the first packet (for each layer) */
-	char rx_first_pkt[MAX_CHANNELS_IN_SESSION];
+  /** =1 if waiting for the first packet (for each layer) */
+  char rx_first_pkt[MAX_CHANNELS_IN_SESSION];
 
-	/** =1 if waiting for the first syncronisation
-	point after deaf period (for each layer) */
-	char rx_first_sp[MAX_CHANNELS_IN_SESSION];
+  /** =1 if waiting for the first syncronisation
+  point after deaf period (for each layer) */
+  char rx_first_sp[MAX_CHANNELS_IN_SESSION];
 
-	/** seq number of the next packet to receive for each layer */
-	unsigned short rx_wait_for[MAX_CHANNELS_IN_SESSION];
+  /** seq number of the next packet to receive for each layer */
+  unsigned short rx_wait_for[MAX_CHANNELS_IN_SESSION];
 
-	/** list of missing sequence numbers for each layer */
-	late_list_t	rx_missing[MAX_CHANNELS_IN_SESSION];
-	
-	unsigned short rx_nblate_since_sp;	/**< amount of late packets since the last syncronisation point */
-	unsigned short	rx_nblate;			/**< amount of recent late packets */
-	unsigned short	rx_nblost_since_sp;	/**< amount of lost packets since the last syncronisation point */
-	unsigned short	rx_nblost;			/**< amount of recent lost packets */
-	lost_list_t	rx_lost;				/**< Current list of lost packets */
-	double rx_deaf_wait;				/**< when in deaf period, specify deaf period end time */	
-	BOOL drop_highest_layer;			/**< if TRUE receiver will drop highest layer */
+  /** list of missing sequence numbers for each layer */
+  late_list_t  rx_missing[MAX_CHANNELS_IN_SESSION];
+  
+  unsigned short rx_nblate_since_sp;  /**< amount of late packets since the last syncronisation point */
+  unsigned short  rx_nblate;      /**< amount of recent late packets */
+  unsigned short  rx_nblost_since_sp;  /**< amount of lost packets since the last syncronisation point */
+  unsigned short  rx_nblost;      /**< amount of recent lost packets */
+  lost_list_t  rx_lost;        /**< Current list of lost packets */
+  double rx_deaf_wait;        /**< when in deaf period, specify deaf period end time */  
+  BOOL drop_highest_layer;      /**< if TRUE receiver will drop highest layer */
 
 } mad_rlc_t;
 
@@ -194,7 +194,7 @@ int mad_rlc_fill_header(alc_session_t *s, rlc_hdr_t *rlc_hdr, int layer);
  * This function analyzes ALC packet's CCI field.
  *
  * @param s pointer to the session
- * @param rlc_hdr pointer to the RLC header		
+ * @param rlc_hdr pointer to the RLC header    
  *
  * @return 0 in success, -1 otherwise
  *

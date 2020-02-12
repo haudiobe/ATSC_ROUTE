@@ -52,7 +52,7 @@
  */
 
 int generate_fdt(char *file_token, char *base_dir, int *s_id, char* fdt_file_name,
-				 int complete_fdt, int verbosity);
+         int complete_fdt, int verbosity);
 
 #endif
 

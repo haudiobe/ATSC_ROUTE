@@ -41,11 +41,11 @@
  */
 
 typedef struct sf {
-    char *filter_mode;	/**< filter mode ("incl") */
-    char *net_type;		/**< network type */
-    char *addr_type;	/**< address type */
-    char *dest_addr;	/**< destination address */
-    char *src_addr;		/**< source address */
+    char *filter_mode;  /**< filter mode ("incl") */
+    char *net_type;    /**< network type */
+    char *addr_type;  /**< address type */
+    char *dest_addr;  /**< destination address */
+    char *src_addr;    /**< source address */
 } sf_t;
 
 /**
@@ -54,10 +54,10 @@ typedef struct sf {
  */
 
 typedef struct fec_dec {
-	unsigned int index;		/**< internal identifier for FEC declaration */	
-	short fec_enc_id;		/**< FEC encoding id */
-	int fec_inst_id;		/**< FEC instance id */
-	struct fec_dec* next;	/**< next declaration */
+  unsigned int index;    /**< internal identifier for FEC declaration */  
+  short fec_enc_id;    /**< FEC encoding id */
+  int fec_inst_id;    /**< FEC instance id */
+  struct fec_dec* next;  /**< next declaration */
 } fec_dec_t;
 
 /**
@@ -65,7 +65,7 @@ typedef struct fec_dec {
  *
  * @param sdp pointer to sdp_t structure
  * @param attr_name name of wanted attribute
- *	
+ *  
  * @return pointer to buffer containing value of wanted attribute, NULL in error cases
  *
  */
@@ -96,7 +96,7 @@ void sf_free(sf_t *sf) ;
  * This function returns FEC declaration structure list from sdp_t structure.
  *
  * @param sdp pointer to sdp_t structure
- *	
+ *  
  * @return pointer to FEC declaration structure list, NULL in error cases
  *
  */

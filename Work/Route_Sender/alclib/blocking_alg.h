@@ -46,10 +46,10 @@ extern "C" {
  */
 
 typedef struct blocking_struct {
-        unsigned int N;  	/**< The total number of source blocks */
+        unsigned int N;    /**< The total number of source blocks */
         unsigned int I;         /**< The first number of source blocks */
-        unsigned int A_large;	/**< The larger source block length, this is for I number of source block */
-        unsigned int A_small;	/**< The smaller source block length, this is for N - I number of source block */
+        unsigned int A_large;  /**< The larger source block length, this is for I number of source block */
+        unsigned int A_small;  /**< The smaller source block length, this is for N - I number of source block */
 
 } blocking_struct_t;
 

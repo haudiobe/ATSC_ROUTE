@@ -47,12 +47,12 @@
 #endif
 
 #if defined(__PALMOS__) && (__PALMOS__ < 0x06000000)
-#	include <TimeMgr.h>
-#	include <SysUtils.h>
-#	include <SystemMgr.h>
-#	include <StringMgr.h>
+#  include <TimeMgr.h>
+#  include <SysUtils.h>
+#  include <SystemMgr.h>
+#  include <StringMgr.h>
 #else
-#	include <time.h>
+#  include <time.h>
 #endif
 
 #if defined(__VXWORKS_OS__)
@@ -64,10 +64,10 @@
   #include <string.h>
 
 #elif defined(__PALMOS__)
-#	if __PALMOS__ >= 0x06000000
-#		include <sys/time.h>
-#		include <SysThread.h>
-#	endif
+#  if __PALMOS__ >= 0x06000000
+#    include <sys/time.h>
+#    include <SysThread.h>
+#  endif
 #elif (!defined(WIN32) && !defined(_WIN32_WCE))
 #include <sys/time.h>
 #elif defined(WIN32)
@@ -124,15 +124,15 @@ osip_fallback_random_number ()
       unsigned int ticks;
 
 #ifdef __PALMOS__
-#	if __PALMOS__ < 0x06000000
+#  if __PALMOS__ < 0x06000000
       SysRandom ((Int32) TimGetTicks ());
-#	else
+#  else
       struct timeval tv;
 
       gettimeofday (&tv, NULL);
       srand (tv.tv_usec);
       ticks = tv.tv_sec + tv.tv_usec;
-#	endif
+#  endif
 #elif defined(WIN32)
       LARGE_INTEGER lCount;
 

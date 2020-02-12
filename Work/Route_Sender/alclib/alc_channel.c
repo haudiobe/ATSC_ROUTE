@@ -51,7 +51,7 @@
 #include "alc_rx.h"
 
 int open_alc_channel(alc_channel_t *ch, alc_session_t *s, const char *port,
-		     const char *addr, const char *intface, const char *intface_name, int tx_rate) {
+         const char *addr, const char *intface, const char *intface_name, int tx_rate) {
   
   int ret_val;
   
@@ -67,37 +67,37 @@ int open_alc_channel(alc_channel_t *ch, alc_session_t *s, const char *port,
     if(ch->ch_id == 0) {
       
       if(ch->s->cc_id == Null) {
-	ch->tx_rate = tx_rate;
-	ch->nb_tx_units = 1;
-	ch->ready = FALSE;
-	
-	s->nb_sending_channel++;
+  ch->tx_rate = tx_rate;
+  ch->nb_tx_units = 1;
+  ch->ready = FALSE;
+  
+  s->nb_sending_channel++;
       }
       else if(ch->s->cc_id == RLC) {
-	ch->tx_rate = tx_rate;
-	ch->nb_tx_units = 1;
-	ch->start_sending = TRUE;
-	ch->ready = FALSE;
-	ch->wait_after_sp = 0;
-	
-	s->nb_sending_channel++;
+  ch->tx_rate = tx_rate;
+  ch->nb_tx_units = 1;
+  ch->start_sending = TRUE;
+  ch->ready = FALSE;
+  ch->wait_after_sp = 0;
+  
+  s->nb_sending_channel++;
       }
     }
     else {
       
       if(ch->s->cc_id == Null) {
-	ch->tx_rate = tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
-	ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
-	ch->ready = FALSE;
-	
-	s->nb_sending_channel++;
-      }			
+  ch->tx_rate = tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
+  ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
+  ch->ready = FALSE;
+  
+  s->nb_sending_channel++;
+      }      
       else if(ch->s->cc_id == RLC) {
-	ch->tx_rate = tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
-	ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
-	ch->start_sending = FALSE;
-	ch->ready = FALSE;
-	ch->wait_after_sp = RLC_WAIT_AFTER_SP;
+  ch->tx_rate = tx_rate * (int)pow(2.0, (double)(ch->ch_id - 1));
+  ch->nb_tx_units = (int)pow(2.0, (double)(ch->ch_id - 1));
+  ch->start_sending = FALSE;
+  ch->ready = FALSE;
+  ch->wait_after_sp = RLC_WAIT_AFTER_SP;
       }
     }
     
@@ -124,23 +124,23 @@ int open_alc_channel(alc_channel_t *ch, alc_session_t *s, const char *port,
 
   if(s->mode == RECEIVER) {
 
-	assert(ch->receiving_list == 0);
-	ch->receiving_list = build_list();
+  assert(ch->receiving_list == 0);
+  ch->receiving_list = build_list();
 
-	/* Create receiving socket thread */
+  /* Create receiving socket thread */
 #ifdef _MSC_VER
-	ch->handle_rx_socket_thread = (HANDLE)_beginthreadex(NULL, 0, (void*)rx_socket_thread,
-								  (void*)ch, 0, &ch->rx_socket_thread_id);
+  ch->handle_rx_socket_thread = (HANDLE)_beginthreadex(NULL, 0, (void*)rx_socket_thread,
+                  (void*)ch, 0, &ch->rx_socket_thread_id);
 
-	if(ch->handle_rx_socket_thread == NULL) {
-		perror("open_alc_channel: _beginthread");
-		return -1;
-	}
+  if(ch->handle_rx_socket_thread == NULL) {
+    perror("open_alc_channel: _beginthread");
+    return -1;
+  }
 #else
-	if(pthread_create(&ch->rx_socket_thread_id, NULL, rx_socket_thread, (void*)ch) != 0) {
-		perror("open_alc_channel: pthread_create");
-		return -1;
-	}
+  if(pthread_create(&ch->rx_socket_thread_id, NULL, rx_socket_thread, (void*)ch) != 0) {
+    perror("open_alc_channel: pthread_create");
+    return -1;
+  }
 #endif
   }
 
@@ -151,7 +151,7 @@ int open_alc_channel(alc_channel_t *ch, alc_session_t *s, const char *port,
 }
 
 int close_alc_channel(alc_channel_t *ch, alc_session_t *s) {
-	
+  
   int ret_val;
   int ch_id = ch->ch_id;
   
@@ -160,15 +160,15 @@ int close_alc_channel(alc_channel_t *ch, alc_session_t *s) {
   /* trying again if ret_val == -1 */
   if(ret_val == -1) {
     ret_val = close_alc_socket(ch);
-  }	
+  }  
   
   assert(s->ch_list[ch_id] == ch);
   freeaddrinfo(ch->addrinfo);
 
   if(s->mode == RECEIVER) {
-	join_rx_socket_thread(ch);
-	destroy_list(ch->receiving_list);
-	ch->receiving_list = NULL;
+  join_rx_socket_thread(ch);
+  destroy_list(ch->receiving_list);
+  ch->receiving_list = NULL;
   }
 
   assert(ch->receiving_list == NULL);

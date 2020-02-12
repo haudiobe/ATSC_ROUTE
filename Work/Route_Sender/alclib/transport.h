@@ -60,20 +60,20 @@ extern "C" {
 
 typedef struct trans_unit {
 
-  struct trans_unit	*prev;	/**< pointer to previous unit */
-  struct trans_unit	*next;	/**< pointer to next unit */
-  unsigned int esi;			/**< encoding symbol id*/
-  unsigned short len;		/**< length of this transport unit (in bytes) */
-  char *data;				/**< pointer to data buffer */
+  struct trans_unit  *prev;  /**< pointer to previous unit */
+  struct trans_unit  *next;  /**< pointer to next unit */
+  unsigned int esi;      /**< encoding symbol id*/
+  unsigned short len;    /**< length of this transport unit (in bytes) */
+  char *data;        /**< pointer to data buffer */
   
 #ifdef _MSC_VER
-  __int64 offset;			/**< data symbol offset in the temporary file */
+  __int64 offset;      /**< data symbol offset in the temporary file */
 #else
-  off64_t offset;			/**< data symbol offset in the temporaryfile */
+  off64_t offset;      /**< data symbol offset in the temporary file */
 #endif
 
 #ifdef USE_RETRIEVE_UNIT
-  unsigned char	used;       /**< is the current transport unit available inside the pool? */
+  unsigned char  used;       /**< is the current transport unit available inside the pool? */
 #endif
 
 } trans_unit_t;
@@ -86,8 +86,8 @@ typedef struct trans_unit {
  */
 
 typedef struct trans_unit_container {
-	struct trans_unit_container	*next;	/**< pointer to next container */
-	struct trans_unit u;				/**< transport unit */
+  struct trans_unit_container  *next;  /**< pointer to next container */
+  struct trans_unit u;        /**< transport unit */
 } trans_unit_container_t;
 #endif
 
@@ -98,15 +98,15 @@ typedef struct trans_unit_container {
 
 typedef struct trans_block {
 
-  unsigned int sbn;				/**< source block number */
-  struct trans_unit *unit_list;	/**< pointer to first unit for this block */
-  struct trans_unit	*last_unit;	/**< pointer to last unit for this block */
-  unsigned int nb_of_rx_units;	/**< number of received units for this block */
-  unsigned int n;				/**< number of encoding symbols for this block */
-  unsigned int k;				/**< number of source symbols for this block*/
-  unsigned int max_k;			/**< maximum source block length */
-  unsigned int max_n;			/**< maximum number of encoding symbols */
-  unsigned char finite_field;	/**< finite field parameter*/
+  unsigned int sbn;        /**< source block number */
+  struct trans_unit *unit_list;  /**< pointer to first unit for this block */
+  struct trans_unit  *last_unit;  /**< pointer to last unit for this block */
+  unsigned int nb_of_rx_units;  /**< number of received units for this block */
+  unsigned int n;        /**< number of encoding symbols for this block */
+  unsigned int k;        /**< number of source symbols for this block*/
+  unsigned int max_k;      /**< maximum source block length */
+  unsigned int max_n;      /**< maximum number of encoding symbols */
+  unsigned char finite_field;  /**< finite field parameter*/
 
   //Malek EL Khatib 11.08.2014
   unsigned int nb_of_rx_symbols;/**<Add field to determine number of rx symbols in case multiple ones are sent per packet and processed simultaneously>*/
@@ -121,24 +121,24 @@ typedef struct trans_block {
 
 typedef struct trans_obj {
 
-  struct trans_obj *prev;			/**< pointer to previous object */
-  struct trans_obj *next;			/**< pointer to next object */
-  struct trans_block *block_list;	/**< pointer to the transport block list */
-  unsigned int nb_of_ready_blocks;	/**< number of ready blocks for this object */
-  unsigned char fec_enc_id;			/**< FEC encoding id */
-  unsigned short fec_inst_id;		/**< FEC instance id */
-  unsigned char content_enc_algo;	/**< content encoding algorithm */
-  unsigned long long len;			/**< transfer length*/
-  unsigned long long rx_bytes;		/**< received bytes */
-  unsigned long long toi;			/**< transport object identifier */
-  unsigned int es_len;				/**< encoding symbol length */
-  unsigned int max_sb_len;			/**< maximum source block length */
-  struct blocking_struct  *bs;		/**< blocking structure */
-  char *tmp_filename;				/**< temporary filename for this object */
-  int fd;							/**< file descriptor to be used for file saving */
-  char *tmp_st_filename;			/**< temporary filename for the symbol store */
-  int fd_st;						/**< file descriptor for the symbol store */
-  double last_print_rx_percent;		/**< last printed received percent*/
+  struct trans_obj *prev;      /**< pointer to previous object */
+  struct trans_obj *next;      /**< pointer to next object */
+  struct trans_block *block_list;  /**< pointer to the transport block list */
+  unsigned int nb_of_ready_blocks;  /**< number of ready blocks for this object */
+  unsigned char fec_enc_id;      /**< FEC encoding id */
+  unsigned short fec_inst_id;    /**< FEC instance id */
+  unsigned char content_enc_algo;  /**< content encoding algorithm */
+  unsigned long long len;      /**< transfer length*/
+  unsigned long long rx_bytes;    /**< received bytes */
+  unsigned long long toi;      /**< transport object identifier */
+  unsigned int es_len;        /**< encoding symbol length */
+  unsigned int max_sb_len;      /**< maximum source block length */
+  struct blocking_struct  *bs;    /**< blocking structure */
+  char *tmp_filename;        /**< temporary filename for this object */
+  int fd;              /**< file descriptor to be used for file saving */
+  char *tmp_st_filename;      /**< temporary filename for the symbol store */
+  int fd_st;            /**< file descriptor for the symbol store */
+  double last_print_rx_percent;    /**< last printed received percent*/
   
 } trans_obj_t;
 
@@ -212,7 +212,7 @@ void free_units2(trans_block_t *tb);
  *
  * @param to pointer to transport object to be inserted
  * @param s pointer to the session
- * @param type type of object to be inserted (0 = FDT Instance, 1 = normal object)	
+ * @param type type of object to be inserted (0 = FDT Instance, 1 = normal object)  
  *
  */
 

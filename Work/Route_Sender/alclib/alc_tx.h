@@ -39,14 +39,14 @@
 //Malek El Khatib 14.08.2014
 #include "../flutelib/parse_args.h"
 extern unsigned short numEncSymbPerPacket; /*<This is configurable in the program parameters>*/
-extern	FILE* logFilePtr;
+extern  FILE* logFilePtr;
 //Below variables are used to retain values read from input file while sending the different segments
 extern  FILE * FLUTEInputFile;
 extern  char str[1000];
 extern  char * tok;
 extern  unsigned long long fileValue;
 extern  BOOL getNextLine;
-extern char* sendingTimesFile;		 /**<If no file is passed using -y:value, no delays would be introduced while sending segments>*/
+extern char* sendingTimesFile;     /**<If no file is passed using -y:value, no delays would be introduced while sending segments>*/
 
 //End
 
@@ -70,14 +70,14 @@ extern "C" {
  * @param fec_enc_id: FEC encoding id
  * @param fec_inst_id: FEC instance id
  *
- * Return:	int: number of sent bytes after succesfull sending, -1 -2 otherwise
+ * Return:  int: number of sent bytes after succesfull sending, -1 -2 otherwise
  *
  */
 
 int alc_send(int s_id, int tx_mode, char *buf, int buf_len,
-	     unsigned long long toi, unsigned long long transfer_len,
-	     unsigned short es_len, unsigned int max_sb_len, unsigned int sbn, 
-	     unsigned char fec_enc_id, unsigned short fec_inst_id);
+       unsigned long long toi, unsigned long long transfer_len,
+       unsigned short es_len, unsigned int max_sb_len, unsigned int sbn, 
+       unsigned char fec_enc_id, unsigned short fec_inst_id);
 
 /**
  * This function sends A flag packet to channel.
@@ -93,7 +93,7 @@ int send_session_close_packet(int s_id);
 /** 
  * This function sends packets to the all channels in the session when TX_THREAD mode is used.
  * 
- * @param s pointer to the session	
+ * @param s pointer to the session  
  *
  */
 

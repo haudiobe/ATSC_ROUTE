@@ -221,33 +221,33 @@ apd_t* decode_apd_config(char *apd_config) {
         return apd;
 }
 
-void FreeAPD(apd_t *apd) {		
+void FreeAPD(apd_t *apd) {    
 
-	serviceURI_t *tmp_serviceURI;
+  serviceURI_t *tmp_serviceURI;
 
-	if(apd->postFileRepair != NULL) {
+  if(apd->postFileRepair != NULL) {
 
-		while(1) {
+    while(1) {
 
-			tmp_serviceURI = apd->postFileRepair->serviceURI_List;
+      tmp_serviceURI = apd->postFileRepair->serviceURI_List;
 
-			if(tmp_serviceURI != NULL) {
-				apd->postFileRepair->serviceURI_List = tmp_serviceURI->next;
-				free(tmp_serviceURI);
-			}
-			else {
-				break;
-			}
-		}
+      if(tmp_serviceURI != NULL) {
+        apd->postFileRepair->serviceURI_List = tmp_serviceURI->next;
+        free(tmp_serviceURI);
+      }
+      else {
+        break;
+      }
+    }
 
-		free(apd->postFileRepair);
-	}
+    free(apd->postFileRepair);
+  }
 
-	if(apd->bmFileRepair != NULL) {
-		free(apd->bmFileRepair);
-	}
+  if(apd->bmFileRepair != NULL) {
+    free(apd->bmFileRepair);
+  }
 
-	free(apd);
+  free(apd);
 }
 
 #endif

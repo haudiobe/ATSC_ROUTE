@@ -56,7 +56,7 @@ extern "C" {
  */
 
 trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsigned int sbn,
-									   unsigned short es_len, int rs, unsigned int max_sb_len);
+                     unsigned short es_len, int rs, unsigned int max_sb_len);
 
 /**
  * This function decodes source block data to buffer using Reed-Solomon FEC.
@@ -71,7 +71,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
  */
 
 char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							  unsigned short es_len);
+                unsigned short es_len);
 
 /**
  * This function decodes object to buffer using Reed-Solomon FEC.
@@ -86,7 +86,7 @@ char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block
  */
 
 char *rs_fec_decode_object(trans_obj_t *to, unsigned long long *data_len,
-						   alc_session_t *s);
+               alc_session_t *s);
 
 #ifdef __cplusplus
 }; //extern "C"

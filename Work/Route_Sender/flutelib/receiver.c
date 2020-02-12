@@ -99,8 +99,8 @@ void set_file_received(char *file_uri_table[FILE_URI_TABLE_SIZE], char *file_uri
     
     if(file_uri_table[i] != NULL) {
       if(strcmp(file_uri, file_uri_table[i]) == 0) {
-	file_uri_table[i] = NULL;
-	break;
+  file_uri_table[i] = NULL;
+  break;
       }
     }
   }
@@ -124,8 +124,8 @@ void set_file_received(char *file_uri_table[FILE_URI_TABLE_SIZE], char *file_uri
  */
 
 int recvfile(int s_id, char *filepath, unsigned long long toi,
-	     unsigned long long file_len,
-	     char *md5, int rx_memory_mode, char *encoding, int verbosity) {
+       unsigned long long file_len,
+       char *md5, int rx_memory_mode, char *encoding, int verbosity) {
   
 #ifdef USE_ZLIB
   char *uncompr_buf = NULL;
@@ -176,7 +176,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
 
     for(j = 0; j < (int)strlen(filepath); j++) {
       if(*(filepath + j) == '\\') {
-	*(filepath + j) = '/';
+  *(filepath + j) = '/';
       }
     }
   }
@@ -194,7 +194,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
 
   if(toi == FDT_TOI) {
 
-			
+      
     buf = fdt_recv(s_id, &recvbytes, &retcode, &fdt_cont_enc_algo, &fdt_instance_id);
 
     if(buf == NULL) {
@@ -209,7 +209,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
 
 #ifdef _MSC_VER
     if((fd = open((const char*)tmp_filename,
-		  _O_WRONLY | _O_CREAT | _O_BINARY | _O_TRUNC , _S_IWRITE)) < 0) {
+      _O_WRONLY | _O_CREAT | _O_BINARY | _O_TRUNC , _S_IWRITE)) < 0) {
 #else
     if((fd = open(tmp_filename, O_WRONLY | O_CREAT | O_TRUNC , S_IRWXU)) < 0) {
 #endif
@@ -240,8 +240,8 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       uncompr_buf = buffer_zlib_uncompress(buf, recvbytes, &uncompr_buflen);
       
       if(uncompr_buf == NULL) {
-	free(buf);
-	return -1;
+  free(buf);
+  return -1;
       }
       free(buf);
       
@@ -263,13 +263,13 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
 #endif
     close(fd);
   }
-  else {	
+  else {  
     if(rx_memory_mode == 1) {
       
       tmp_file_name = alc_recv3(s_id, &toi, &retcode);
       
       if(tmp_file_name == NULL) {
-	return retcode;
+  return retcode;
       }
       
       memset(tmp_filename, 0, MAX_PATH_LENGTH);
@@ -286,7 +286,7 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       buf = alc_recv(s_id, toi, &recvbytes, &retcode);
       
       if(buf == NULL) {
-	return retcode;
+  return retcode;
       }
 
       /* open tmp file */
@@ -294,45 +294,45 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       memset(tmp_filename, 0, MAX_PATH_LENGTH);
 
       if(encoding == NULL) {
-	   sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
-	   mktemp(tmp_filename);
+     sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
+     mktemp(tmp_filename);
       }
 #ifdef USE_ZLIB
       else if(strcmp(encoding, "gzip") == 0) {
-	   sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
-	   strcat(tmp_filename, GZ_SUFFIX);
-	   mktemp(tmp_filename);
+     sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
+     strcat(tmp_filename, GZ_SUFFIX);
+     mktemp(tmp_filename);
       }
 #endif
       else if(strcmp(encoding, "pad") == 0) {
-	   sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
-	   strcat(filename, PAD_SUFFIX);
-	   mktemp(tmp_filename);
+     sprintf(tmp_filename, "%s/%s", session_basedir, "object_XXXXXX");
+     strcat(filename, PAD_SUFFIX);
+     mktemp(tmp_filename);
       }
 
 #ifdef _MSC_VER
       if((fd = open((const char*)tmp_filename,
-		    _O_WRONLY | _O_CREAT | _O_BINARY | _O_TRUNC , _S_IWRITE)) < 0) {
+        _O_WRONLY | _O_CREAT | _O_BINARY | _O_TRUNC , _S_IWRITE)) < 0) {
 #else
       if((fd = open(tmp_filename, O_WRONLY | O_CREAT | O_TRUNC , S_IRWXU)) < 0) {
 #endif
-	printf("Error: unable to open file %s\n", tmp_filename);
-	fflush(stdout);
-	return -1;
+  printf("Error: unable to open file %s\n", tmp_filename);
+  fflush(stdout);
+  return -1;
       }
       
       /* write buffer to tmp file */
       
       if(write(fd, buf, (unsigned int)recvbytes) == -1) {
 #ifdef _MSC_VER
-	printf("write error, toi: %I64u\n", toi);
+  printf("write error, toi: %I64u\n", toi);
 #else
-	printf("write error, toi: %llu\n", toi);
+  printf("write error, toi: %llu\n", toi);
 #endif
-	fflush(stdout);
-	free(buf);
-	close(fd);
-	return -1;
+  fflush(stdout);
+  free(buf);
+  close(fd);
+  return -1;
       }
       
       free(buf);
@@ -341,81 +341,81 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       
 #ifdef USE_OPENSSL
     if(md5 != NULL) {
-	    
+      
       md5_digest = file_md5(tmp_filename);
       
       if(md5_digest == NULL) {
-	printf("MD5 check failed!\n");
-	fflush(stdout);
-	remove(tmp_filename);
-	return -4;
+  printf("MD5 check failed!\n");
+  fflush(stdout);
+  remove(tmp_filename);
+  return -4;
       }
       else{
-	if(strcmp(md5, md5_digest) != 0) {
-	  printf("MD5 check failed!\n");
-	  fflush(stdout);
-	  remove(tmp_filename);
-	  free(md5_digest);
-	  return -4;
-	}
-	
-	free(md5_digest);
+  if(strcmp(md5, md5_digest) != 0) {
+    printf("MD5 check failed!\n");
+    fflush(stdout);
+    remove(tmp_filename);
+    free(md5_digest);
+    return -4;
+  }
+  
+  free(md5_digest);
       }
     }
 #endif
     if(encoding != NULL) {
       
       if(strcmp(encoding, "pad") == 0) {
-	
-	retcode = padding_decoder(tmp_filename, (int)file_len);
-	
-	if(retcode == -1) {
-	  return -1;             
-	}
-	
-	*(tmp_filename + (strlen(tmp_filename) - PAD_SUFFIX_LEN)) = '\0';
-	
-	if(file_len != 0) {
-	  
-	  if(stat(tmp_filename, &file_stats) == -1) {
-	    printf("Error: %s is not valid file name\n", tmp_filename);
-	    fflush(stdout);
-	    return -1;
-	  }
-	  if(file_stats.st_size != file_len) {
-	    printf("Error: padding decoding failed\n");
-	    remove(tmp_filename);
-	    fflush(stdout);
-	    return -1;
-	  }
-	}
+  
+  retcode = padding_decoder(tmp_filename, (int)file_len);
+  
+  if(retcode == -1) {
+    return -1;             
+  }
+  
+  *(tmp_filename + (strlen(tmp_filename) - PAD_SUFFIX_LEN)) = '\0';
+  
+  if(file_len != 0) {
+    
+    if(stat(tmp_filename, &file_stats) == -1) {
+      printf("Error: %s is not valid file name\n", tmp_filename);
+      fflush(stdout);
+      return -1;
+    }
+    if(file_stats.st_size != file_len) {
+      printf("Error: padding decoding failed\n");
+      remove(tmp_filename);
+      fflush(stdout);
+      return -1;
+    }
+  }
       }
 #ifdef USE_ZLIB
       else if(strcmp(encoding, "gzip") == 0) {
-	
-	retcode = file_gzip_uncompress(tmp_filename);
-	
-	if(retcode == -1) {
-	  return -1;
-	}
-	
-	*(tmp_filename + (strlen(tmp_filename) - GZ_SUFFIX_LEN)) = '\0';
-	
-	if(file_len != 0) {
-	  
-	  if(stat(tmp_filename, &file_stats) == -1) {
-	    printf("Error: %s is not valid file name\n", tmp_filename);
-	    fflush(stdout);
-	    return -1;
-	  }
-	  
-	  if(file_stats.st_size != file_len) {
-	    printf("Error: uncompression failed\n");
-	    remove(tmp_filename);
-	    fflush(stdout);
-	    return -1;
-	  }
-	}
+  
+  retcode = file_gzip_uncompress(tmp_filename);
+  
+  if(retcode == -1) {
+    return -1;
+  }
+  
+  *(tmp_filename + (strlen(tmp_filename) - GZ_SUFFIX_LEN)) = '\0';
+  
+  if(file_len != 0) {
+    
+    if(stat(tmp_filename, &file_stats) == -1) {
+      printf("Error: %s is not valid file name\n", tmp_filename);
+      fflush(stdout);
+      return -1;
+    }
+    
+    if(file_stats.st_size != file_len) {
+      printf("Error: uncompression failed\n");
+      remove(tmp_filename);
+      fflush(stdout);
+      return -1;
+    }
+  }
       }
 #endif
     }
@@ -463,36 +463,36 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       memcpy(filename, (tmp + point + 1), (strlen(tmp) - (point + 1)));
       
 #ifdef _MSC_VER
-      if(mkdir(fullpath) < 0) {					
-#else		
+      if(mkdir(fullpath) < 0) {          
+#else    
       if(mkdir(fullpath, S_IRWXU) < 0) {
 #endif
-	if(errno != EEXIST) {
-	  printf("mkdir failed: cannot create directory %s (errno=%i)\n", fullpath, errno);
-	  fflush(stdout);
-	  
-	  if(toi == FDT_TOI) {
+  if(errno != EEXIST) {
+    printf("mkdir failed: cannot create directory %s (errno=%i)\n", fullpath, errno);
+    fflush(stdout);
+    
+    if(toi == FDT_TOI) {
 #ifdef USE_ZLIB
-	    if(fdt_cont_enc_algo == ZLIB) {
-	      free(uncompr_buf);
-	    }
-	    else {
-	      free(buf);
-	    }
+      if(fdt_cont_enc_algo == ZLIB) {
+        free(uncompr_buf);
+      }
+      else {
+        free(buf);
+      }
 #else
-	    free(buf);
+      free(buf);
 #endif
-	  }
-	  free(tmp);
-	  return -1;
-	}
+    }
+    free(tmp);
+    return -1;
+  }
       }
       
       strcpy(tmp, filename);
       ptr = strchr(tmp, ch);
     }
     memcpy((fullpath + strlen(fullpath)), "/", 1);
-	memcpy((fullpath + strlen(fullpath)), filename, strlen(filename));
+  memcpy((fullpath + strlen(fullpath)), filename, strlen(filename));
   }
   else{
     memcpy((fullpath + strlen(fullpath)), "/", 1);
@@ -505,11 +505,11 @@ int recvfile(int s_id, char *filepath, unsigned long long toi,
       retval = remove(fullpath);
       
       if(retval == -1) {
-	printf("errno: %i\n", errno);
+  printf("errno: %i\n", errno);
       }
       
       if(rename(tmp_filename, fullpath) < 0) {
-	printf("rename() error1\n");
+  printf("rename() error1\n");
       }
     }
     else {
@@ -574,7 +574,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
 
   //Malek El Khatib 07.05.2014
   //Start
-  unsigned long long timeInUsec = 0L;		//Used later for timing purposes
+  unsigned long long timeInUsec = 0L;    //Used later for timing purposes
   struct timeval processing_time;
   //End
  
@@ -617,43 +617,43 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       i = 0;
       
       if(((file->expires < curr_time) && (!receiver->accept_expired_fdt_inst))) {
-	
-	if(file->next != NULL) {
-	  file->next->prev = file->prev;
-	}
-	
-	if(file->prev != NULL) {
-	  file->prev->next = file->next;
-	}
-	
-	if(file == receiver->fdt->file_list) {
-	  receiver->fdt->file_list = file->next;
-	}
-	
-	if(file->encoding != NULL) {
-	  free(file->encoding);
-	}					
-	
-	if(file->location != NULL) {
-	  free(file->location);
-	}							
-	
-	if(file->md5 != NULL) {
-	  free(file->md5);
-	}
-	
-	if(file->type != NULL) {
-	  free(file->type);
-	}
-	
-	next_file = file->next;
-	free(file);
+  
+  if(file->next != NULL) {
+    file->next->prev = file->prev;
+  }
+  
+  if(file->prev != NULL) {
+    file->prev->next = file->next;
+  }
+  
+  if(file == receiver->fdt->file_list) {
+    receiver->fdt->file_list = file->next;
+  }
+  
+  if(file->encoding != NULL) {
+    free(file->encoding);
+  }          
+  
+  if(file->location != NULL) {
+    free(file->location);
+  }              
+  
+  if(file->md5 != NULL) {
+    free(file->md5);
+  }
+  
+  if(file->type != NULL) {
+    free(file->type);
+  }
+  
+  next_file = file->next;
+  free(file);
 
-	continue;
+  continue;
       }
       
       if(receiver->rx_automatic) {
-	if(file->status != 2) {
+  if(file->status != 2) {
           is_all_files_received = FALSE;
           is_printed = FALSE;
         }
@@ -662,7 +662,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
         }
       }
       else if(receiver->wildcard_token != NULL && strstr(file->location, receiver->wildcard_token) != NULL) {
-	if(file->status != 2) {
+  if(file->status != 2) {
           is_all_files_received = FALSE;
           is_printed = FALSE;
         }
@@ -671,9 +671,9 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
         }
       }
       else {
-	if(all_files_received(receiver->file_uri_table)){
-	  return -2;
-	}
+  if(all_files_received(receiver->file_uri_table)){
+    return -2;
+  }
       }
       
       next_file = file->next;
@@ -690,43 +690,43 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
     if(receiver->rx_automatic || receiver->wildcard_token != NULL) { 
     
       if(is_all_files_received) {
-	
-	if(receiver->fdt->complete) {
-	  
-	  if(any_files_received) {
-	    if(receiver->verbosity > 0) {
-	      printf("All files received\n");
-	      fflush(stdout);
-	    }
-	  }
-	  else {
-	    if(receiver->verbosity > 0) {
-	      printf("No wanted files in the session\n");
-	      fflush(stdout);
-	    }
-	  }
-	
-	  return 1;
-	}
-	else {
-	
-	  if(((!is_printed) && (any_files_received))) {
-	    
-	    if(receiver->verbosity > 0) {
-	      printf("All files received, waiting for new files\n");
-	      fflush(stdout);
-	    }
-	    
-	    is_printed = TRUE;
-	  }
-	  
+  
+  if(receiver->fdt->complete) {
+    
+    if(any_files_received) {
+      if(receiver->verbosity > 0) {
+        printf("All files received\n");
+        fflush(stdout);
+      }
+    }
+    else {
+      if(receiver->verbosity > 0) {
+        printf("No wanted files in the session\n");
+        fflush(stdout);
+      }
+    }
+  
+    return 1;
+  }
+  else {
+  
+    if(((!is_printed) && (any_files_received))) {
+      
+      if(receiver->verbosity > 0) {
+        printf("All files received, waiting for new files\n");
+        fflush(stdout);
+      }
+      
+      is_printed = TRUE;
+    }
+    
 #ifdef _MSC_VER
-	  Sleep(1);
+    Sleep(1);
 #else
-	  usleep(1000);
+    usleep(1000);
 #endif
-	  continue;
-	}
+    continue;
+  }
       }
     }
 
@@ -735,7 +735,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       tmp_file_name = alc_recv3(receiver->s_id, &toi, &retcode);
       
       if(tmp_file_name == NULL) {
-		return retcode;
+    return retcode;
       }
       memset(tmp_filename, 0, MAX_PATH_LENGTH);
       memcpy(tmp_filename, tmp_file_name, strlen(tmp_file_name));
@@ -746,14 +746,14 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       /* Find correct file structure, to get the file->location for file creation purpose */
       
       while(next_file != NULL) {
-		file = next_file;
-	
-		if(file->toi == toi) {
-		file->status = 2;
-		break;
-		}
-	
-		next_file = file->next;
+    file = next_file;
+  
+    if(file->toi == toi) {
+    file->status = 2;
+    break;
+    }
+  
+    next_file = file->next;
       }
     }
     else {
@@ -761,7 +761,7 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       buf = alc_recv2(receiver->s_id, &toi, &transfer_len, &retcode);
       
       if(buf == NULL) {
-	return retcode;
+  return retcode;
       }
       
       next_file = receiver->fdt->file_list;
@@ -769,14 +769,14 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       /* Find correct file structure, to get the file->location for file creation purpose */
 
       while(next_file != NULL) {
-	file = next_file;
+  file = next_file;
 
-	if(file->toi == toi) {
-	  file->status = 2;
-	  break;
-	}
+  if(file->toi == toi) {
+    file->status = 2;
+    break;
+  }
 
-	next_file = file->next;
+  next_file = file->next;
       }
 
       /* open tmp file and write buffer to it */
@@ -828,129 +828,129 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       close(fd);
     }
 
-	//Malek El Khatib 06.05.2014
-	//Start
-	//Processing time starts when all bytes are received but not yet used to generate segment and store it in the directory
-	//Start of File Processing
-	gettimeofday(&processing_time, NULL);
-	timeInUsec = (unsigned long long)processing_time.tv_sec*1000000 + (unsigned long long)processing_time.tv_usec;
-	fprintf(logFilePtr,"%s %llu ", file->location, timeInUsec);
-	//END Malek El Khatib
+  //Malek El Khatib 06.05.2014
+  //Start
+  //Processing time starts when all bytes are received but not yet used to generate segment and store it in the directory
+  //Start of File Processing
+  gettimeofday(&processing_time, NULL);
+  timeInUsec = (unsigned long long)processing_time.tv_sec*1000000 + (unsigned long long)processing_time.tv_usec;
+  fprintf(logFilePtr,"%s %llu ", file->location, timeInUsec);
+  //END Malek El Khatib
     
     if(file->encoding == NULL) {
       content_enc_algo = 0;
     }
     else {
       if(strcmp(file->encoding, "pad") == 0) {
-		content_enc_algo = PAD;
+    content_enc_algo = PAD;
       }
 #ifdef USE_ZLIB
       else if(strcmp(file->encoding, "gzip") == 0) {
-		content_enc_algo = GZIP;
+    content_enc_algo = GZIP;
       }
 #endif
     }
 
 #ifdef USE_OPENSSL
     if(file->md5 != NULL) {
-	
+  
       md5 = file_md5(tmp_filename);
-	
+  
       if(md5 == NULL) {
-	  
+    
 #ifdef _MSC_VER
-	printf("MD5 check failed (TOI=%I64u)!\n", file->toi);
+  printf("MD5 check failed (TOI=%I64u)!\n", file->toi);
 #else
-	printf("MD5 check failed (TOI=%llu)!\n", file->toi);
+  printf("MD5 check failed (TOI=%llu)!\n", file->toi);
 #endif
-	fflush(stdout);
-	remove(tmp_filename);
-	file->status = 1;
-	  
-	set_wanted_object(receiver->s_id, file->toi, file->transfer_len, file->es_len,
-			  file->max_sb_len,
-			  file->fec_inst_id, file->fec_enc_id,
-			  file->max_nb_of_es, content_enc_algo, file->finite_field,
-			  file->nb_of_es_per_group
-			  );
-	continue;
+  fflush(stdout);
+  remove(tmp_filename);
+  file->status = 1;
+    
+  set_wanted_object(receiver->s_id, file->toi, file->transfer_len, file->es_len,
+        file->max_sb_len,
+        file->fec_inst_id, file->fec_enc_id,
+        file->max_nb_of_es, content_enc_algo, file->finite_field,
+        file->nb_of_es_per_group
+        );
+  continue;
       }
       else{
-	if(strcmp(md5, file->md5) != 0) {
+  if(strcmp(md5, file->md5) != 0) {
 #ifdef _MSC_VER
-	  printf("MD5 check failed (TOI=%I64u)!\n", file->toi);
+    printf("MD5 check failed (TOI=%I64u)!\n", file->toi);
 #else
-	  printf("MD5 check failed (TOI=%llu)!\n", file->toi);
+    printf("MD5 check failed (TOI=%llu)!\n", file->toi);
 #endif
-	  fflush(stdout);
-	  remove(tmp_filename);
-	  free(md5);
-	  file->status = 1;
-	  
-	  set_wanted_object(receiver->s_id, file->toi, file->transfer_len, file->es_len,
-			    file->max_sb_len,
-			    file->fec_inst_id, file->fec_enc_id,
-			    file->max_nb_of_es,
-				content_enc_algo, file->finite_field, file->nb_of_es_per_group
-			    );
-	  continue;
-	}
-	
-	free(md5);
+    fflush(stdout);
+    remove(tmp_filename);
+    free(md5);
+    file->status = 1;
+    
+    set_wanted_object(receiver->s_id, file->toi, file->transfer_len, file->es_len,
+          file->max_sb_len,
+          file->fec_inst_id, file->fec_enc_id,
+          file->max_nb_of_es,
+        content_enc_algo, file->finite_field, file->nb_of_es_per_group
+          );
+    continue;
+  }
+  
+  free(md5);
       }
     }
 #endif
 
     if(file->encoding != NULL) {
-	
+  
       if(strcmp(file->encoding, "pad") == 0) {
-	  
-	retcode = padding_decoder(tmp_filename, (int)file->content_len);
-	  
-	if(retcode == -1) {
-	  free(tmp_filename);
-	  return -1;
-	}
-	
-	*(tmp_filename + (strlen(tmp_filename) - PAD_SUFFIX_LEN)) = '\0';
-	  
-	if(stat(tmp_filename, &file_stats) == -1) {
-	  printf("Error: %s is not valid file name\n", tmp_filename);
-	  fflush(stdout);
-	  return -1;
-	}
-	
-	if(file_stats.st_size != file->content_len) {
-	  printf("stats: %i file: %i\n", (int)file_stats.st_size, (int)file->content_len);
-	  printf("Error: padding decoding failed, file size not ok.\n");   
-	  fflush(stdout);
-	  remove(tmp_filename);
-	  return -1;
-	}
+    
+  retcode = padding_decoder(tmp_filename, (int)file->content_len);
+    
+  if(retcode == -1) {
+    free(tmp_filename);
+    return -1;
+  }
+  
+  *(tmp_filename + (strlen(tmp_filename) - PAD_SUFFIX_LEN)) = '\0';
+    
+  if(stat(tmp_filename, &file_stats) == -1) {
+    printf("Error: %s is not valid file name\n", tmp_filename);
+    fflush(stdout);
+    return -1;
+  }
+  
+  if(file_stats.st_size != file->content_len) {
+    printf("stats: %i file: %i\n", (int)file_stats.st_size, (int)file->content_len);
+    printf("Error: padding decoding failed, file size not ok.\n");   
+    fflush(stdout);
+    remove(tmp_filename);
+    return -1;
+  }
       }
 #ifdef USE_ZLIB
       else if(strcmp(file->encoding, "gzip") == 0) {
-	  
-	retcode = file_gzip_uncompress(tmp_filename);
-	  
-	if(retcode == -1) {
-	  return -1;
-	}
-	
-	*(tmp_filename + (strlen(tmp_filename) - GZ_SUFFIX_LEN)) = '\0';
-	
-	if(stat(tmp_filename, &file_stats) == -1) {
-	  printf("Error: %s is not valid file name\n", tmp_filename);
-	  fflush(stdout);
-	  return -1;
-	}
-	
-	if(file_stats.st_size != file->content_len) {
-	  printf("Error: uncompression failed, file-size not ok.\n");
-	  fflush(stdout);
-	  remove(tmp_filename);
-	  return -1;
-	}
+    
+  retcode = file_gzip_uncompress(tmp_filename);
+    
+  if(retcode == -1) {
+    return -1;
+  }
+  
+  *(tmp_filename + (strlen(tmp_filename) - GZ_SUFFIX_LEN)) = '\0';
+  
+  if(stat(tmp_filename, &file_stats) == -1) {
+    printf("Error: %s is not valid file name\n", tmp_filename);
+    fflush(stdout);
+    return -1;
+  }
+  
+  if(file_stats.st_size != file->content_len) {
+    printf("Error: uncompression failed, file-size not ok.\n");
+    fflush(stdout);
+    remove(tmp_filename);
+    return -1;
+  }
       }
 #endif
     }
@@ -978,35 +978,35 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
     if(ptr != NULL) {
       
       while(ptr != NULL) {
-	
-	i++;
-	
-	point = (int)(ptr - tmp);
-	
-	memset(filename, 0, MAX_PATH_LENGTH);
-	memcpy((fullpath + strlen(fullpath)), "/", 1);
-	memcpy((fullpath + strlen(fullpath)), tmp, point);
-	
-	memcpy(filename, (tmp + point + 1), (strlen(tmp) - (point + 1)));
-	
+  
+  i++;
+  
+  point = (int)(ptr - tmp);
+  
+  memset(filename, 0, MAX_PATH_LENGTH);
+  memcpy((fullpath + strlen(fullpath)), "/", 1);
+  memcpy((fullpath + strlen(fullpath)), tmp, point);
+  
+  memcpy(filename, (tmp + point + 1), (strlen(tmp) - (point + 1)));
+  
 #ifdef _MSC_VER
-	if(_mkdir(fullpath) != 0) {					
-#else		
-	if(mkdir(fullpath, S_IRWXU) != 0) {
+  if(_mkdir(fullpath) != 0) {          
+#else    
+  if(mkdir(fullpath, S_IRWXU) != 0) {
 #endif
-	  if(errno != EEXIST) {
-	    printf("mkdir failed: cannot create directory %s (errno=%i)\n", fullpath, errno);
-	    fflush(stdout);
-	    
-	    free(tmp);
-	    free(filepath);
-	    free_uri(uri);
-	    return -1;
-	  }
-	}
-	
-	strcpy(tmp, filename);
-	ptr = strchr(tmp, ch);
+    if(errno != EEXIST) {
+      printf("mkdir failed: cannot create directory %s (errno=%i)\n", fullpath, errno);
+      fflush(stdout);
+      
+      free(tmp);
+      free(filepath);
+      free_uri(uri);
+      return -1;
+    }
+  }
+  
+  strcpy(tmp, filename);
+  ptr = strchr(tmp, ch);
       }
       memcpy((fullpath + strlen(fullpath)), "/", 1);
       memcpy((fullpath + strlen(fullpath)), filename, strlen(filename));
@@ -1019,24 +1019,24 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
     if(rename(tmp_filename, fullpath) != 0) {
 
       if(errno == EEXIST) {
-	
-		retval = remove(fullpath);
-	
-		if(retval == -1) {
-			printf("errno: %i\n", errno);
-			fflush(stdout);
-		}
-	
-		if(rename(tmp_filename, fullpath) < 0) {
-		  printf("rename() error1: %s\n", tmp_filename);
-		  fflush(stdout);
-		}
+  
+    retval = remove(fullpath);
+  
+    if(retval == -1) {
+      printf("errno: %i\n", errno);
+      fflush(stdout);
+    }
+  
+    if(rename(tmp_filename, fullpath) < 0) {
+      printf("rename() error1: %s\n", tmp_filename);
+      fflush(stdout);
+    }
       }
       else {
-		printf("rename() error2: %s\n", tmp_filename);
-		printf("fullpath: %s\n", fullpath);
-		printf("errno: %i\n", errno);
-		fflush(stdout);
+    printf("rename() error2: %s\n", tmp_filename);
+    printf("fullpath: %s\n", fullpath);
+    printf("errno: %i\n", errno);
+    fflush(stdout);
       }
     }
     
@@ -1053,28 +1053,28 @@ int fdtbasedrecv(int rx_memory_mode, BOOL openfile, flute_receiver_t *receiver) 
       set_file_received(receiver->file_uri_table, file->location);
     }
 
-    free_uri(uri);		
+    free_uri(uri);    
     free(tmp);
     free(filepath);
     
 #ifdef _MSC_VER
     if(openfile) {
-		ShellExecute(NULL, "Open", fullpath, NULL, NULL, SW_SHOWNORMAL);
+    ShellExecute(NULL, "Open", fullpath, NULL, NULL, SW_SHOWNORMAL);
     }
 #endif      
     
-	//Malek El Khatib 06.05.2014
-	//START
+  //Malek El Khatib 06.05.2014
+  //START
 
-	//S_IRWXU |S_IRWXG|S_IRWXO is used to set read, write, execute permissions for all users
-	if (chmod(fullpath,S_IRWXU |S_IRWXG|S_IRWXO ) == 0 )
+  //S_IRWXU |S_IRWXG|S_IRWXO is used to set read, write, execute permissions for all users
+  if (chmod(fullpath,S_IRWXU |S_IRWXG|S_IRWXO ) == 0 )
 
-	//Processing time starts when all bytes are received but not yet used to generate segment and store it in the directory
-	//End of File processing. Segment is now available for DASH Reference Client
-	gettimeofday(&processing_time, NULL);
-	timeInUsec = (unsigned long long)processing_time.tv_sec*1000000 + (unsigned long long)processing_time.tv_usec;
-	fprintf(logFilePtr,"%llu\n", timeInUsec);  
-	//END Malek El Khatib
+  //Processing time starts when all bytes are received but not yet used to generate segment and store it in the directory
+  //End of File processing. Segment is now available for DASH Reference Client
+  gettimeofday(&processing_time, NULL);
+  timeInUsec = (unsigned long long)processing_time.tv_sec*1000000 + (unsigned long long)processing_time.tv_usec;
+  fprintf(logFilePtr,"%llu\n", timeInUsec);  
+  //END Malek El Khatib
 
 #ifdef _MSC_VER
     Sleep(1);
@@ -1139,11 +1139,11 @@ int receiver_in_fdt_based_mode(arguments_t *a, flute_receiver_t *receiver) {
   
   retcode = fdtbasedrecv(a->alc_a.rx_memory_mode,
 #ifdef _MSC_VER
-			 a->open_file,
+       a->open_file,
 #else 
-			 0,
+       0,
 #endif
-			 receiver);
+       receiver);
   
   if(retcode == -1) {
     printf("Error: fdtbasedrecv() failed\n");
@@ -1161,307 +1161,307 @@ int receiver_in_fdt_based_mode(arguments_t *a, flute_receiver_t *receiver) {
 }
 
 int receiver_in_ui_mode(arguments_t *a, flute_receiver_t *receiver) {
-	
-	file_t *file;
-	char input[100];
+  
+  file_t *file;
+  char input[100];
 
-	unsigned long long rec_toi;
+  unsigned long long rec_toi;
 
-	char command;
-	BOOL valid_toi = FALSE;
-	BOOL expired_toi = FALSE;
-	char *filepath = NULL;
-	uri_t *uri = NULL;
+  char command;
+  BOOL valid_toi = FALSE;
+  BOOL expired_toi = FALSE;
+  char *filepath = NULL;
+  uri_t *uri = NULL;
 
-	int retval = 0;
-	int retcode = 0;
+  int retval = 0;
+  int retcode = 0;
 
-	time_t systime;
-	unsigned long long curr_time;
+  time_t systime;
+  unsigned long long curr_time;
 
-	int content_enc_algo = -1;
+  int content_enc_algo = -1;
 
-	char *cont_desc = NULL;
+  char *cont_desc = NULL;
 
-	if(strcmp(a->sdp_file, "") != 0) {
-	  cont_desc = sdp_attr_get(a->sdp, "content-desc");
-	}
+  if(strcmp(a->sdp_file, "") != 0) {
+    cont_desc = sdp_attr_get(a->sdp, "content-desc");
+  }
 
-	printf("FLUTE Receiver in UI-mode\n");
+  printf("FLUTE Receiver in UI-mode\n");
 
-	if(cont_desc != NULL) {
-	  printf("Session content information available at:\n");
-	  printf("%s\n", cont_desc);
-	}
-	
-	fflush(stdout);
+  if(cont_desc != NULL) {
+    printf("Session content information available at:\n");
+    printf("%s\n", cont_desc);
+  }
+  
+  fflush(stdout);
 
-	while(receiver->fdt == NULL) {
+  while(receiver->fdt == NULL) {
 
-		if(get_session_state(receiver->s_id) == SExiting) {
-			return -2;
-		}
-		else if(get_session_state(receiver->s_id) == STxStopped) {
-			return -3;
-		}
+    if(get_session_state(receiver->s_id) == SExiting) {
+      return -2;
+    }
+    else if(get_session_state(receiver->s_id) == STxStopped) {
+      return -3;
+    }
 
 #ifdef _MSC_VER
-		Sleep(1);
+    Sleep(1);
 #else
-		usleep(1000);
+    usleep(1000);
 #endif
-		continue;
-	}
+    continue;
+  }
 
-	while(1) {
+  while(1) {
 
-		if(get_session_state(receiver->s_id) == SExiting) {			
-			return -2;
-		}
-		else if(get_session_state(receiver->s_id) == STxStopped) {
-			return -3;
-		}
-	
-		printf(">> Command: (D)ownload file (Q)uit\n");
-		printf("-> ");
+    if(get_session_state(receiver->s_id) == SExiting) {      
+      return -2;
+    }
+    else if(get_session_state(receiver->s_id) == STxStopped) {
+      return -3;
+    }
+  
+    printf(">> Command: (D)ownload file (Q)uit\n");
+    printf("-> ");
 
-		if(fgets(input, 100, stdin) != NULL) {
+    if(fgets(input, 100, stdin) != NULL) {
 
-			if(sscanf(input, "%c", &command) != EOF) {
+      if(sscanf(input, "%c", &command) != EOF) {
 
-				command = tolower(command);
-							
-				if(command == 'd') {
-					printf("Files to download:\n");
-					fflush(stdout);
-					
-					file = receiver->fdt->file_list;
+        command = tolower(command);
+              
+        if(command == 'd') {
+          printf("Files to download:\n");
+          fflush(stdout);
+          
+          file = receiver->fdt->file_list;
 
-					while(file != NULL) {
+          while(file != NULL) {
 #ifdef _MSC_VER
-						printf("\t%I64u) %s\n", file->toi, file->location);
+            printf("\t%I64u) %s\n", file->toi, file->location);
 #else
-						printf("\t%llu) %s\n", file->toi, file->location);
+            printf("\t%llu) %s\n", file->toi, file->location);
 #endif
-						fflush(stdout);
-						file = file->next;
-					}
+            fflush(stdout);
+            file = file->next;
+          }
 
-					printf("\nWhich one to download: ");
-					fflush(stdout);
+          printf("\nWhich one to download: ");
+          fflush(stdout);
 
-					if(fgets(input, 100, stdin) != NULL) {
-						
+          if(fgets(input, 100, stdin) != NULL) {
+            
 #ifdef _MSC_VER
-						retcode = sscanf(input, "%I64u", &rec_toi);
+            retcode = sscanf(input, "%I64u", &rec_toi);
 #else
-						retcode = sscanf(input, "%llu", &rec_toi);
+            retcode = sscanf(input, "%llu", &rec_toi);
 #endif
-						if(!((retcode == 0) || (retcode == EOF))) {
-				
-							file = receiver->fdt->file_list;
+            if(!((retcode == 0) || (retcode == EOF))) {
+        
+              file = receiver->fdt->file_list;
 
-							valid_toi = FALSE;
-							expired_toi = FALSE;
-			
-							while(file != NULL) {
+              valid_toi = FALSE;
+              expired_toi = FALSE;
+      
+              while(file != NULL) {
 
-								if(file->toi == rec_toi) {
+                if(file->toi == rec_toi) {
 
-									time(&systime);
-									curr_time = systime + 2208988800U;
+                  time(&systime);
+                  curr_time = systime + 2208988800U;
 
-									if(file->expires < curr_time) {
-													
-										if(!a->alc_a.accept_expired_fdt_inst) {
+                  if(file->expires < curr_time) {
+                          
+                    if(!a->alc_a.accept_expired_fdt_inst) {
 
-											expired_toi = TRUE;
+                      expired_toi = TRUE;
 #ifdef _MSC_VER
-											printf("\nToi: %I64u Expired.\n", rec_toi);        
+                      printf("\nToi: %I64u Expired.\n", rec_toi);        
 #else
-											printf("\nToi: %llu Expired.\n", rec_toi);  
+                      printf("\nToi: %llu Expired.\n", rec_toi);  
 #endif
-											if(file->next != NULL) {
-												file->next->prev = file->prev;
-											}
-											if(file->prev != NULL) {
-												file->prev->next = file->next;
-											}
-											if(file == receiver->fdt->file_list) {
-												receiver->fdt->file_list = file->next;
-											}
+                      if(file->next != NULL) {
+                        file->next->prev = file->prev;
+                      }
+                      if(file->prev != NULL) {
+                        file->prev->next = file->next;
+                      }
+                      if(file == receiver->fdt->file_list) {
+                        receiver->fdt->file_list = file->next;
+                      }
 
-											free_file(file);
-											break;
-										}
-										else {
+                      free_file(file);
+                      break;
+                    }
+                    else {
 #ifdef _MSC_VER
-											printf("\nToi: %I64u Expired, receiving anyway.\n", rec_toi);        
+                      printf("\nToi: %I64u Expired, receiving anyway.\n", rec_toi);        
 #else
-											printf("\nToi: %llu Expired, receiving anyway.\n", rec_toi);  
-#endif											
-										}
-									}
+                      printf("\nToi: %llu Expired, receiving anyway.\n", rec_toi);  
+#endif                      
+                    }
+                  }
 
-									valid_toi = TRUE;
+                  valid_toi = TRUE;
 
-									uri = parse_uri(file->location, strlen(file->location));
-	
-									filepath = get_uri_host_and_path(uri);
-																						
-									if(file->encoding == NULL) {
-										content_enc_algo = 0;	
-									}
-									else {
+                  uri = parse_uri(file->location, strlen(file->location));
+  
+                  filepath = get_uri_host_and_path(uri);
+                                            
+                  if(file->encoding == NULL) {
+                    content_enc_algo = 0;  
+                  }
+                  else {
                                                                                 if(strcmp(file->encoding, "pad") == 0) {
                                                                                         content_enc_algo = PAD;
                                                                                 }
 #ifdef USE_ZLIB
-										else if(strcmp(file->encoding, "gzip") == 0) {
-											content_enc_algo = GZIP;	
-										}
+                    else if(strcmp(file->encoding, "gzip") == 0) {
+                      content_enc_algo = GZIP;  
+                    }
 #endif
-										else {
-											content_enc_algo = -1;
-											break;
-										}
-									}
+                    else {
+                      content_enc_algo = -1;
+                      break;
+                    }
+                  }
 
-									retval = set_wanted_object(receiver->s_id, file->toi,
-												   file->transfer_len,
-												   file->es_len,
-												   file->max_sb_len,
-												   file->fec_inst_id,
-												   file->fec_enc_id,
-												   file->max_nb_of_es,
-												   content_enc_algo,
-												   file->finite_field,
-												   file->nb_of_es_per_group
-												   );
-									break;
-								}
-								file = file->next;
-							}
+                  retval = set_wanted_object(receiver->s_id, file->toi,
+                           file->transfer_len,
+                           file->es_len,
+                           file->max_sb_len,
+                           file->fec_inst_id,
+                           file->fec_enc_id,
+                           file->max_nb_of_es,
+                           content_enc_algo,
+                           file->finite_field,
+                           file->nb_of_es_per_group
+                           );
+                  break;
+                }
+                file = file->next;
+              }
 
-							if(expired_toi) {
-								free_uri(uri);
-								free(filepath);
-								continue;
+              if(expired_toi) {
+                free_uri(uri);
+                free(filepath);
+                continue;
                             }
 
-							if(!valid_toi) {
+              if(!valid_toi) {
 #ifdef _MSC_VER
-								printf("\nToi: %I64u invalid.\n", rec_toi);        
+                printf("\nToi: %I64u invalid.\n", rec_toi);        
 #else
-								printf("\nToi: %llu invalid.\n", rec_toi);  
+                printf("\nToi: %llu invalid.\n", rec_toi);  
 #endif       
-								fflush(stdout);
-								continue;
+                fflush(stdout);
+                continue;
                             }
 
-							if(content_enc_algo == -1) {
-								printf("Content-Encoding: %s not supported\n", file->encoding);
-								fflush(stdout);
-								continue;
-							}
-							retcode = recvfile(receiver->s_id, filepath, file->toi, file->content_len, file->md5,
-									   a->alc_a.rx_memory_mode, file->encoding, a->alc_a.verbosity);
-													
-							if(retcode == -1) {
-								free(filepath);
-								free_uri(uri);
-								printf("\nError: recvfile() failed\n");
-								fflush(stdout);
-								return -1;
-							}
-							else if(retcode == -2) {
-								free(filepath);
-								free_uri(uri);
-								return -2;
-							}
-							else if(retcode == -3) {
-								free(filepath);
-								free_uri(uri);
-								return -3;
-							}
+              if(content_enc_algo == -1) {
+                printf("Content-Encoding: %s not supported\n", file->encoding);
+                fflush(stdout);
+                continue;
+              }
+              retcode = recvfile(receiver->s_id, filepath, file->toi, file->content_len, file->md5,
+                     a->alc_a.rx_memory_mode, file->encoding, a->alc_a.verbosity);
+                          
+              if(retcode == -1) {
+                free(filepath);
+                free_uri(uri);
+                printf("\nError: recvfile() failed\n");
+                fflush(stdout);
+                return -1;
+              }
+              else if(retcode == -2) {
+                free(filepath);
+                free_uri(uri);
+                return -2;
+              }
+              else if(retcode == -3) {
+                free(filepath);
+                free_uri(uri);
+                return -3;
+              }
 
 #ifdef _MSC_VER
-							if(((retcode != -4) && (a->open_file))) {
-								ShellExecute(NULL, "Open", filepath, NULL, NULL, SW_SHOWNORMAL); 
-							}
+              if(((retcode != -4) && (a->open_file))) {
+                ShellExecute(NULL, "Open", filepath, NULL, NULL, SW_SHOWNORMAL); 
+              }
 #endif
-							free(filepath);
-						}
-					}
-				}
-				else if(command == 'q') {
-					break;
-				}
-				else {
-					continue;
-				}
-			}
-		}
-	}
+              free(filepath);
+            }
+          }
+        }
+        else if(command == 'q') {
+          break;
+        }
+        else {
+          continue;
+        }
+      }
+    }
+  }
 
-	return 0;
+  return 0;
 }
 
 int receiver_in_object_mode(int *s_id, arguments_t *a) {
 
-	int retval = 0;
-	int retcode;
-	div_t div_max_n;
-	unsigned short max_n;
+  int retval = 0;
+  int retcode;
+  div_t div_max_n;
+  unsigned short max_n;
 
-	char *cont_desc = NULL;
-	
-	div_max_n = div((a->alc_a.max_sb_len * (100 + a->alc_a.fec_ratio)), 100);
-	max_n = (unsigned short)div_max_n.quot;
+  char *cont_desc = NULL;
+  
+  div_max_n = div((a->alc_a.max_sb_len * (100 + a->alc_a.fec_ratio)), 100);
+  max_n = (unsigned short)div_max_n.quot;
 
-	if(strcmp(a->sdp_file, "") != 0) {
-		cont_desc = sdp_attr_get(a->sdp, "content-desc");
-	}
+  if(strcmp(a->sdp_file, "") != 0) {
+    cont_desc = sdp_attr_get(a->sdp, "content-desc");
+  }
 
-	if(a->alc_a.verbosity > 0) {
-	  printf("FLUTE Receiver in object mode\n");
-	}
+  if(a->alc_a.verbosity > 0) {
+    printf("FLUTE Receiver in object mode\n");
+  }
 
-	if(cont_desc != NULL) {
-	  if(a->alc_a.verbosity > 0) {
-	    printf("Session content information available at:\n");
-	    printf("%s\n", cont_desc);
-	  }
-	}
+  if(cont_desc != NULL) {
+    if(a->alc_a.verbosity > 0) {
+      printf("Session content information available at:\n");
+      printf("%s\n", cont_desc);
+    }
+  }
 
-	fflush(stdout);
+  fflush(stdout);
 
-	set_wanted_object(*s_id, a->toi, 0, a->alc_a.es_len, a->alc_a.max_sb_len,
-			  a->alc_a.fec_inst_id, a->alc_a.fec_enc_id, max_n, 0, 0, 0
-			  );
+  set_wanted_object(*s_id, a->toi, 0, a->alc_a.es_len, a->alc_a.max_sb_len,
+        a->alc_a.fec_inst_id, a->alc_a.fec_enc_id, max_n, 0, 0, 0
+        );
 
-	retcode = recvfile(*s_id, NULL, a->toi, 0, NULL, a->alc_a.rx_memory_mode, NULL, a->alc_a.verbosity);	
+  retcode = recvfile(*s_id, NULL, a->toi, 0, NULL, a->alc_a.rx_memory_mode, NULL, a->alc_a.verbosity);  
 
-	if(retcode == -1) {
-		printf("\nError: recvfile() failed\n");
-		fflush(stdout);
-		retval = -1;
-	}
-	else if(retcode == -2) {
-		retval =  -2;
-	}
-	else if(retcode == -3) {
-		retval =  -3;
-	}
-	else {
+  if(retcode == -1) {
+    printf("\nError: recvfile() failed\n");
+    fflush(stdout);
+    retval = -1;
+  }
+  else if(retcode == -2) {
+    retval =  -2;
+  }
+  else if(retcode == -3) {
+    retval =  -3;
+  }
+  else {
 #ifdef _MSC_VER
-		if(a->open_file) {
-			ShellExecute(NULL, "Open", a->file_path, NULL, NULL, SW_SHOWNORMAL); 
-		}
+    if(a->open_file) {
+      ShellExecute(NULL, "Open", a->file_path, NULL, NULL, SW_SHOWNORMAL); 
+    }
 #endif
-	}
+  }
 
-	return retval;
+  return retval;
 }
 
 void* fdt_thread(void *s) {
@@ -1507,36 +1507,36 @@ void* fdt_thread(void *s) {
       buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo, &fdt_instance_id);
        
  
-		
+    
       if(buf == NULL) {
 
-	
-		
-	    if(retval == -1) {
-	      continue;
-	    }
+  
+    
+      if(retval == -1) {
+        continue;
+      }
 
 #ifdef _MSC_VER
-	    _endthread();
+      _endthread();
 #else
-	    pthread_exit(0);
+      pthread_exit(0);
 #endif
       }
 
 #ifdef USE_ZLIB
       if(fdt_content_enc_algo == ZLIB) {
-	    uncompr_buf = buffer_zlib_uncompress(buf, buflen, &uncompr_buflen);
-	
-	    if(uncompr_buf == NULL) {
-	      free(buf);
-	      continue;
-	    }
-	    efdt_instance = decode_efdt_payload(uncompr_buf);
-	      free(uncompr_buf);
+      uncompr_buf = buffer_zlib_uncompress(buf, buflen, &uncompr_buflen);
+  
+      if(uncompr_buf == NULL) {
+        free(buf);
+        continue;
+      }
+      efdt_instance = decode_efdt_payload(uncompr_buf);
+        free(uncompr_buf);
         }
         else {
-	     efdt_instance = decode_efdt_payload(buf);
-	      
+       efdt_instance = decode_efdt_payload(buf);
+        
         }
 #else 
       efdt_instance = decode_efdt_payload(buf);
@@ -1545,30 +1545,30 @@ void* fdt_thread(void *s) {
   
       
       if(efdt_instance == NULL) {
-		
-	free(buf);
-	continue;
+    
+  free(buf);
+  continue;
       }
       
       if(efdt_instance->expires < curr_time) {
-	
-	if(!receiver->accept_expired_fdt_inst) {
-	  
-	  if(receiver->verbosity == 4) {
-	    printf("Expired EFDT Instance received, discarding\n");
-	    fflush(stdout);
-	  }
-	  
-	  free(buf);
-	  FreeEFDT(efdt_instance);
-	  continue;
-	}
-	else {
-	  if(receiver->verbosity == 4) {
-	    printf("Expired EFDT Instance received, using it anyway\n");
-	    fflush(stdout);
-	  }
-	}
+  
+  if(!receiver->accept_expired_fdt_inst) {
+    
+    if(receiver->verbosity == 4) {
+      printf("Expired EFDT Instance received, discarding\n");
+      fflush(stdout);
+    }
+    
+    free(buf);
+    FreeEFDT(efdt_instance);
+    continue;
+  }
+  else {
+    if(receiver->verbosity == 4) {
+      printf("Expired EFDT Instance received, using it anyway\n");
+      fflush(stdout);
+    }
+  }
       }
       
  /*Copy efdt to fdt accordingly */
@@ -1591,10 +1591,10 @@ void* fdt_thread(void *s) {
       receiver->efdt = efdt_instance;
       
       if(receiver->verbosity == 4) {
-	printf("FDT Instance received (ID=%i)\n", fdt_instance_id);
-	printf("FDT updated, new file description(s) added\n");
-	fflush(stdout);
-	PrintFDT(fdt_instance, receiver->s_id);
+  printf("FDT Instance received (ID=%i)\n", fdt_instance_id);
+  printf("FDT updated, new file description(s) added\n");
+  fflush(stdout);
+  PrintFDT(fdt_instance, receiver->s_id);
       }
       
       free(buf);
@@ -1602,174 +1602,174 @@ void* fdt_thread(void *s) {
       next_file = receiver->fdt->file_list;
       
       while(next_file != NULL) {
-	i = 0;
-	file = next_file;
-	
-	if(file->status == 0) {
-	  
-	  if(file->encoding == NULL) {
-	    content_enc_algo = 0;
-	  }
-	  else {
-	    if(strcmp(file->encoding, "pad") == 0) {
-	      content_enc_algo = PAD;	
-	    }
+  i = 0;
+  file = next_file;
+  
+  if(file->status == 0) {
+    
+    if(file->encoding == NULL) {
+      content_enc_algo = 0;
+    }
+    else {
+      if(strcmp(file->encoding, "pad") == 0) {
+        content_enc_algo = PAD;  
+      }
 #ifdef USE_ZLIB
-	    else if(strcmp(file->encoding, "gzip") == 0) {
-	      content_enc_algo = GZIP;
-	    }
+      else if(strcmp(file->encoding, "gzip") == 0) {
+        content_enc_algo = GZIP;
+      }
 #endif
-	    else {
-	      printf("Content-Encoding: %s not supported\n", file->encoding);
-	      fflush(stdout);
-	      file->status = 2;
-	      next_file = file->next;
-	      continue;
-	    }
-	  }
-	  
-	  if(receiver->rx_automatic) {
-	    
-	    retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-				       file->es_len,
-				       file->max_sb_len,
-				       file->fec_inst_id,
-				       file->fec_enc_id,
-				       file->max_nb_of_es, content_enc_algo,
-					   file->finite_field, file->nb_of_es_per_group
-				       );
-	    
-	    if(retval < 0) {
-	      /* Memory error */
-	    }
-	    else {
-	      file->status = 1;
-	    }
-	  }
-	  else if(receiver->wildcard_token != NULL) { 
-	    if(strstr(file->location, receiver->wildcard_token) != NULL) {
-	      retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					 file->es_len,
-					 file->max_sb_len,
-					 file->fec_inst_id,
-					 file->fec_enc_id,
-					 file->max_nb_of_es, content_enc_algo,
-					 file->finite_field, file->nb_of_es_per_group
-					 );
-	      
-	      if(retval < 0) {
-		/* Memory error */
-	      }
-	      else {
-		file->status = 1;
-	      }
-		}
-	  }
-	  else {
+      else {
+        printf("Content-Encoding: %s not supported\n", file->encoding);
+        fflush(stdout);
+        file->status = 2;
+        next_file = file->next;
+        continue;
+      }
+    }
+    
+    if(receiver->rx_automatic) {
+      
+      retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+               file->es_len,
+               file->max_sb_len,
+               file->fec_inst_id,
+               file->fec_enc_id,
+               file->max_nb_of_es, content_enc_algo,
+             file->finite_field, file->nb_of_es_per_group
+               );
+      
+      if(retval < 0) {
+        /* Memory error */
+      }
+      else {
+        file->status = 1;
+      }
+    }
+    else if(receiver->wildcard_token != NULL) { 
+      if(strstr(file->location, receiver->wildcard_token) != NULL) {
+        retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+           file->es_len,
+           file->max_sb_len,
+           file->fec_inst_id,
+           file->fec_enc_id,
+           file->max_nb_of_es, content_enc_algo,
+           file->finite_field, file->nb_of_es_per_group
+           );
+        
+        if(retval < 0) {
+    /* Memory error */
+        }
+        else {
+    file->status = 1;
+        }
+    }
+    }
+    else {
 
-	    for(i = 0; i < FILE_URI_TABLE_SIZE; i++) {
-	      
-	      if(receiver->file_uri_table[i] == NULL) {
-		continue;
-	      }
-	      
-	      if(strcmp(file->location, receiver->file_uri_table[i]) == 0) {
-		
-		retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					   file->es_len,
-					   file->max_sb_len,
-					   file->fec_inst_id,
-					   file->fec_enc_id,
-					   file->max_nb_of_es, content_enc_algo,
-					   file->finite_field, file->nb_of_es_per_group
-					   );
-		
-		if(retval < 0) {
-		  /* Memory error */
-		}
-		else {
-		  file->status = 1;
-		  break;
-		}
-	      }
-	    }
-	  }
-	}
-	
-	next_file = file->next;
-	  }
+      for(i = 0; i < FILE_URI_TABLE_SIZE; i++) {
+        
+        if(receiver->file_uri_table[i] == NULL) {
+    continue;
+        }
+        
+        if(strcmp(file->location, receiver->file_uri_table[i]) == 0) {
+    
+    retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+             file->es_len,
+             file->max_sb_len,
+             file->fec_inst_id,
+             file->fec_enc_id,
+             file->max_nb_of_es, content_enc_algo,
+             file->finite_field, file->nb_of_es_per_group
+             );
+    
+    if(retval < 0) {
+      /* Memory error */
+    }
+    else {
+      file->status = 1;
+      break;
+    }
+        }
+      }
+    }
+  }
+  
+  next_file = file->next;
+    }
 
-	set_fdt_instance_parsed(receiver->s_id);
-	}
+  set_fdt_instance_parsed(receiver->s_id);
+  }
     else { /* Receive new FDT Instance when it comes */
       updated = 0;
 
       buf = fdt_recv(receiver->s_id, &buflen, &retval, &fdt_content_enc_algo, &fdt_instance_id);
-   	
+     
       if(buf == NULL) {
-	
-	if(retval == -1) {
-	  continue;
-	}
-	
+  
+  if(retval == -1) {
+    continue;
+  }
+  
 #ifdef _MSC_VER
-	_endthread();
+  _endthread();
 #else
-	pthread_exit(0);
+  pthread_exit(0);
 #endif
       }
 
 #ifdef USE_ZLIB
       if(fdt_content_enc_algo == ZLIB) {
-	uncompr_buf = buffer_zlib_uncompress(buf, buflen, &uncompr_buflen);
-	
-	if(uncompr_buf == NULL) {
-	  free(buf);
-	  continue;
-	}
-	efdt_instance = decode_efdt_payload(uncompr_buf);
-	free(uncompr_buf);
+  uncompr_buf = buffer_zlib_uncompress(buf, buflen, &uncompr_buflen);
+  
+  if(uncompr_buf == NULL) {
+    free(buf);
+    continue;
+  }
+  efdt_instance = decode_efdt_payload(uncompr_buf);
+  free(uncompr_buf);
       }
       else {
-	efdt_instance = decode_efdt_payload(buf);
-	 
+  efdt_instance = decode_efdt_payload(buf);
+   
       }
 #else 
       efdt_instance = decode_efdt_payload(buf);
 #endif
        
       if(efdt_instance == NULL) {
-	free(buf);
-	continue;
+  free(buf);
+  continue;
       }
       
       if(efdt_instance->expires < curr_time) {
-	if(!receiver->accept_expired_fdt_inst) {
-	  if(receiver->verbosity == 4) {
-	    printf("Expired FDT Instance received, discarding\n");
-	    fflush(stdout);
-	  }
-	  FreeEFDT(efdt_instance);
-	  free(buf);
-	  continue;
-	}
-	else {
-	  if(receiver->verbosity == 4) {
-	    printf("Expired FDT Instance received, using it anyway\n");
-	    fflush(stdout);
-	  }
-	}
+  if(!receiver->accept_expired_fdt_inst) {
+    if(receiver->verbosity == 4) {
+      printf("Expired FDT Instance received, discarding\n");
+      fflush(stdout);
+    }
+    FreeEFDT(efdt_instance);
+    free(buf);
+    continue;
+  }
+  else {
+    if(receiver->verbosity == 4) {
+      printf("Expired FDT Instance received, using it anyway\n");
+      fflush(stdout);
+    }
+  }
       }
       
       if(receiver->verbosity == 4) {
-	printf("FDT Instance received (ID=%i)\n", fdt_instance_id);
-	fflush(stdout);
+  printf("FDT Instance received (ID=%i)\n", fdt_instance_id);
+  fflush(stdout);
       }
 
       free(buf);
       
       if((efdt_instance->complete == TRUE)&&(receiver->efdt->complete == FALSE)&&(fdt_instance_id == 0)) {
-	receiver->fdt->complete = TRUE;
+  receiver->fdt->complete = TRUE;
       }
       
       //updated = update_efdt(receiver->efdt, efdt_instance);
@@ -1793,122 +1793,122 @@ void* fdt_thread(void *s) {
       //receiver->efdt= efdt_instance;
 
       if(updated < 0) {
-	continue;
+  continue;
       }
       else if(updated == 1) {
-	if(receiver->verbosity == 4) {
-	  printf("FDT updated, file description(s) complemented\n");
-	  fflush(stdout);
-	}
+  if(receiver->verbosity == 4) {
+    printf("FDT updated, file description(s) complemented\n");
+    fflush(stdout);
+  }
       }
       else if(updated == 2) {
-	if(receiver->verbosity == 4) {
-	  printf("FDT updated, new file description(s) added\n");
-	  fflush(stdout);
-	  PrintFDT(fdt_instance, receiver->s_id);
-	}
+  if(receiver->verbosity == 4) {
+    printf("FDT updated, new file description(s) added\n");
+    fflush(stdout);
+    PrintFDT(fdt_instance, receiver->s_id);
+  }
 
-	next_file = receiver->fdt->file_list;
-	
-	while(next_file != NULL) {
-	  file = next_file;
-	  
-	  if(file->status == 0) {
-	    
-	    if(file->encoding == NULL) {
-	      content_enc_algo = 0;	
-	    }
-	    else {
-	      if(strcmp(file->encoding, "pad") == 0) {
-		content_enc_algo = PAD;	
-	      }
+  next_file = receiver->fdt->file_list;
+  
+  while(next_file != NULL) {
+    file = next_file;
+    
+    if(file->status == 0) {
+      
+      if(file->encoding == NULL) {
+        content_enc_algo = 0;  
+      }
+      else {
+        if(strcmp(file->encoding, "pad") == 0) {
+    content_enc_algo = PAD;  
+        }
 #ifdef USE_ZLIB
-	      else if(strcmp(file->encoding, "gzip") == 0) { 
-		content_enc_algo = GZIP; 
-	      }
+        else if(strcmp(file->encoding, "gzip") == 0) { 
+    content_enc_algo = GZIP; 
+        }
 #endif
-	      else {
-		printf("Content-Encoding: %s not supported\n", file->encoding);
-		fflush(stdout);
-		file->status = 1;
-	      }
-	    }
+        else {
+    printf("Content-Encoding: %s not supported\n", file->encoding);
+    fflush(stdout);
+    file->status = 1;
+        }
+      }
 
-	    if(receiver->rx_automatic) {
-	      
-	      retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					 file->es_len,
-					 file->max_sb_len,
-					 file->fec_inst_id,
-					 file->fec_enc_id,
-					 file->max_nb_of_es, content_enc_algo,
-					 file->finite_field, file->nb_of_es_per_group
-					 );
-	      
-	      if(retval < 0) {
-		/* Memory error */
-	      }
-	      else {
-		file->status = 1;
-	      }
-	    }
-	    else if(receiver->wildcard_token != NULL) {
-	      if(strstr(file->location, receiver->wildcard_token) != NULL) {
-		retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					   file->es_len,
-					   file->max_sb_len,
-					   file->fec_inst_id,
-					   file->fec_enc_id,
-					   file->max_nb_of_es, content_enc_algo,
-					   file->finite_field, file->nb_of_es_per_group
-					   );
+      if(receiver->rx_automatic) {
+        
+        retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+           file->es_len,
+           file->max_sb_len,
+           file->fec_inst_id,
+           file->fec_enc_id,
+           file->max_nb_of_es, content_enc_algo,
+           file->finite_field, file->nb_of_es_per_group
+           );
+        
+        if(retval < 0) {
+    /* Memory error */
+        }
+        else {
+    file->status = 1;
+        }
+      }
+      else if(receiver->wildcard_token != NULL) {
+        if(strstr(file->location, receiver->wildcard_token) != NULL) {
+    retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+             file->es_len,
+             file->max_sb_len,
+             file->fec_inst_id,
+             file->fec_enc_id,
+             file->max_nb_of_es, content_enc_algo,
+             file->finite_field, file->nb_of_es_per_group
+             );
 
-		if(retval < 0) {
-		  /* Memory error */
-		}
-		else {
-		  file->status = 1;
-		}
-	      }
-	    }
-	    else {
-	      
-	      for(i = 0; i < FILE_URI_TABLE_SIZE; i++) {
-		
-		if(receiver->file_uri_table[i] == NULL) {
-		  continue;
-		}
+    if(retval < 0) {
+      /* Memory error */
+    }
+    else {
+      file->status = 1;
+    }
+        }
+      }
+      else {
+        
+        for(i = 0; i < FILE_URI_TABLE_SIZE; i++) {
+    
+    if(receiver->file_uri_table[i] == NULL) {
+      continue;
+    }
 
-		if(strcmp(file->location, receiver->file_uri_table[i]) == 0) {
+    if(strcmp(file->location, receiver->file_uri_table[i]) == 0) {
 
-		  retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
-					     file->es_len,
-					     file->max_sb_len,
-					     file->fec_inst_id,
-					     file->fec_enc_id,
-					     file->max_nb_of_es, content_enc_algo,
-						 file->finite_field, file->nb_of_es_per_group
-					     );
-		  
-		  if(retval < 0) {
-		    /* Memory error */
-		  }
-		  else {
-		    file->status = 1;
-		    break;
-		  }
-		}
-	      } 
-	    }
-	  }	
-	  next_file = file->next;
-	}
-	  }
+      retval = set_wanted_object(receiver->s_id, file->toi, file->transfer_len,
+               file->es_len,
+               file->max_sb_len,
+               file->fec_inst_id,
+               file->fec_enc_id,
+               file->max_nb_of_es, content_enc_algo,
+             file->finite_field, file->nb_of_es_per_group
+               );
+      
+      if(retval < 0) {
+        /* Memory error */
+      }
+      else {
+        file->status = 1;
+        break;
+      }
+    }
+        } 
+      }
+    }  
+    next_file = file->next;
+  }
+    }
 
       FreeFDT(fdt_instance);
 
-	  set_fdt_instance_parsed(receiver->s_id);
-	}
+    set_fdt_instance_parsed(receiver->s_id);
+  }
   }
 
 #ifdef _MSC_VER
@@ -1917,5 +1917,5 @@ void* fdt_thread(void *s) {
   pthread_exit(0);
 #endif
 
-	return NULL;
+  return NULL;
 }

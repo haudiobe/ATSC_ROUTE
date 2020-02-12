@@ -43,15 +43,15 @@
 
 typedef struct uri {
 
-	char* scheme;	/**< URI scheme (file, http, ftp...) */
-	char* host;		/**< hostname part (www.foo.com) */
-	char* port;		/**< port part if any (www.foo.com:8080 => 8080) */
-	char* path;		/**< path portion without params and query */
-	char* params;	/**< params part (/foo;dir/bar => foo) */
-	char* query;	/**< query part (/foo?bar=val => bar=val) */
-	char* frag;		/**< frag part (/foo#part => part) */
-	char* user;		/**< user part (http://user:pass@www.foo.com => user) */
-	char* passwd;	/**< user part (http://user:pass@www.foo.com => pass) */
+  char* scheme;  /**< URI scheme (file, http, ftp...) */
+  char* host;    /**< hostname part (www.foo.com) */
+  char* port;    /**< port part if any (www.foo.com:8080 => 8080) */
+  char* path;    /**< path portion without params and query */
+  char* params;  /**< params part (/foo;dir/bar => foo) */
+  char* query;  /**< query part (/foo?bar=val => bar=val) */
+  char* frag;    /**< frag part (/foo#part => part) */
+  char* user;    /**< user part (http://user:pass@www.foo.com => user) */
+  char* passwd;  /**< user part (http://user:pass@www.foo.com => pass) */
 
 } uri_t;
 

@@ -1015,12 +1015,18 @@ int alc_send(int s_id, int tx_mode, char *buf, int buf_len,
           correction = 1.0 - (relative_error*50.0);
         }
 
-        //printf("%f ", correction);
-        //printf("%d ", sleep_interval);
+/*
+        printf("---------------------------\n");
+        printf("correction: %f ", correction);
+        printf("sleep_interval: %ld ", sleep_interval);
+*/
 
         // Adjust the sleep interval according the diff_bit_rate value.
         sleep_interval = sleep_interval*correction;
-        //printf("%d", sleep_interval);
+/*
+        printf("new sleep_interval: %ld\n", sleep_interval);
+        printf("---------------------------\n");
+*/
 
         if(sleep_interval > 0) {
 #ifdef _MSC_VER

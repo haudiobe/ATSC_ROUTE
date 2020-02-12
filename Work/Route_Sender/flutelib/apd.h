@@ -49,9 +49,9 @@ extern "C" {
 
 typedef struct serviceURI {
 
-  char URI[MAX_HTTP_URL_LENGTH];	/**< service URI */
-  struct serviceURI *prev;			/**< previous service URI */
-  struct serviceURI *next;			/**< next service URI */
+  char URI[MAX_HTTP_URL_LENGTH];  /**< service URI */
+  struct serviceURI *prev;      /**< previous service URI */
+  struct serviceURI *next;      /**< next service URI */
 
 } serviceURI_t;
 
@@ -62,9 +62,9 @@ typedef struct serviceURI {
 
 typedef struct postFileRepair {
 
-  unsigned int offsetTime;			/**< offsetTime + randomTimePeriod is the time to wait before starting file repair */ 
-  unsigned int randomTimePeriod;	/**< offsetTime + randomTimePeriod is the time to wait before starting file repair */ 
-  serviceURI_t *serviceURI_List;	/**< service URI list */
+  unsigned int offsetTime;      /**< offsetTime + randomTimePeriod is the time to wait before starting file repair */ 
+  unsigned int randomTimePeriod;  /**< offsetTime + randomTimePeriod is the time to wait before starting file repair */ 
+  serviceURI_t *serviceURI_List;  /**< service URI list */
 
 } postFileRepair_t;
 
@@ -75,7 +75,7 @@ typedef struct postFileRepair {
 
 typedef struct bmFileRepair {
 
-  char sessionDescriptionURI[MAX_HTTP_URL_LENGTH];	/**< URI where to fecth file repair session description */
+  char sessionDescriptionURI[MAX_HTTP_URL_LENGTH];  /**< URI where to fecth file repair session description */
 
 } bmFileRepair_t;
 

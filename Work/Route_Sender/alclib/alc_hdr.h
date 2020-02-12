@@ -91,7 +91,7 @@ int add_alc_fpi_2_128(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn, 
  */
 
 int add_alc_fpi_129(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn,
-					unsigned short sbl, unsigned short es_id);
+          unsigned short sbl, unsigned short es_id);
 
 /**
  * This function adds FEC Payload ID header for FEC Encoding IDs 0 and 130 to the FLUTE header.
@@ -139,7 +139,7 @@ int add_alc_fpi_0_130(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned short sbn
  */
 
 int add_alc_fpi_3(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int sbn, unsigned int es_id,
-		  unsigned char m);
+      unsigned char m);
 
 #ifdef __cplusplus
 }; //extern "C"

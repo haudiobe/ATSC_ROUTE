@@ -41,28 +41,28 @@ extern "C" {
 #endif
 
 #ifndef min
-	/** A macro that returns the minimum of a and b if not defined in Operation System. */
+  /** A macro that returns the minimum of a and b if not defined in Operation System. */
         #define min(a,b)        ((a) <= (b) ? (a) : (b))
 #endif
 
 #ifndef max
-	/** A macro that returns the maximum of a and b if not defined in Operation System. */
+  /** A macro that returns the maximum of a and b if not defined in Operation System. */
         #define max(a,b)        ((a) >= (b) ? (a) : (b))
 #endif
 
 #ifndef BOOL
-	/** A type definition for BOOL if not defined in Operation System. */
-	typedef int BOOL;
+  /** A type definition for BOOL if not defined in Operation System. */
+  typedef int BOOL;
 #endif
 
 #ifndef TRUE
-	/** Define TRUE if not defined in Operation System. */
-	#define TRUE 1
+  /** Define TRUE if not defined in Operation System. */
+  #define TRUE 1
 #endif
 
 #ifndef FALSE
-	/** Define FALSE if not defined in Operation System. */
-	#define FALSE 0
+  /** Define FALSE if not defined in Operation System. */
+  #define FALSE 0
 #endif
 
 #ifdef __cplusplus

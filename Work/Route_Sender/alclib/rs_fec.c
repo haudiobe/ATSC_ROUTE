@@ -40,7 +40,7 @@
 #include "fec.h"
 
 trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsigned int sbn,
-									   unsigned short es_len, int rs, unsigned int max_sb_len) {
+                     unsigned short es_len, int rs, unsigned int max_sb_len) {
 
     trans_block_t *tr_block;                /* transport block struct */
     trans_unit_t *tr_unit;                  /* transport unit struct */
@@ -57,7 +57,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
     div_t div_max_n;
     div_t div_n;
 
-	data_left = len;
+  data_left = len;
     max_k = max_sb_len;
 
     div_k = div((unsigned int)len, es_len);
@@ -76,7 +76,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
     n = (unsigned int)div_n.quot;
 
     code =  fec_new(k, n);
-	tr_block = create_block();
+  tr_block = create_block();
 
     if(tr_block == NULL) {
             return tr_block;
@@ -160,7 +160,7 @@ trans_block_t* rs_fec_encode_src_block(char *data, unsigned long long len, unsig
 }
 
 char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block_len,
-							  unsigned short es_len) {
+                unsigned short es_len) {
 
     char *buf = NULL; /* buffer where to construct the source block from data units */
     trans_unit_t *next_tu;
@@ -219,9 +219,9 @@ char *rs_fec_decode_src_block(trans_block_t *tr_block, unsigned long long *block
 
 #ifndef USE_RETRIEVE_UNIT
     while(next_tu != NULL) {
-		tu = next_tu;
-		free(tu->data);
-		tu->data = NULL;
+    tu = next_tu;
+    free(tu->data);
+    tu->data = NULL;
         next_tu = tu->next;
     }
 #endif
@@ -265,9 +265,9 @@ char *rs_fec_decode_object(trans_obj_t *to, unsigned long long *data_len, alc_se
             /* the last packet of the last source block might be padded with zeros */
             len = to_data_left < block_len ? to_data_left : block_len;
 
-			assert(0 <= position);
-			assert(position < to->len+1);
-			assert(len <= (to->len-position));
+      assert(0 <= position);
+      assert(position < to->len+1);
+      assert(len <= (to->len-position));
 
             memcpy(object+(unsigned int)position, block, (unsigned int)len);
             position += len;

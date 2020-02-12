@@ -50,8 +50,8 @@
 BOOL lib_init = FALSE;
 
 #ifdef _MSC_VER
-double time_factor;				/**< local global variable for timer */
-unsigned long long start_time;	/**< local global variable for timer */
+double time_factor;        /**< local global variable for timer */
+unsigned long long start_time;  /**< local global variable for timer */
 #endif
 
 #ifdef _MSC_VER
@@ -59,37 +59,37 @@ unsigned long long start_time;	/**< local global variable for timer */
  * This function initializes timer.
  */
 
-void sec_init(void) {	
-	unsigned long long perf_cnt;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&perf_cnt);
-	time_factor = 1.0/perf_cnt;
-	QueryPerformanceCounter((LARGE_INTEGER*)&start_time);
+void sec_init(void) {  
+  unsigned long long perf_cnt;
+  QueryPerformanceFrequency((LARGE_INTEGER*)&perf_cnt);
+  time_factor = 1.0/perf_cnt;
+  QueryPerformanceCounter((LARGE_INTEGER*)&start_time);
 }
 #endif
 
 void alc_init(void) {
 
 #ifdef _MSC_VER
-	sec_init(); /* Initialize timer */
+  sec_init(); /* Initialize timer */
 #endif
-	lib_init = TRUE;
+  lib_init = TRUE;
 }
 
 #ifdef _MSC_VER
-double sec(void) {	
-	long long cur_time;
-	double time_span;         
-	QueryPerformanceCounter((LARGE_INTEGER*)&cur_time);
+double sec(void) {  
+  long long cur_time;
+  double time_span;         
+  QueryPerformanceCounter((LARGE_INTEGER*)&cur_time);
 
-	time_span = (cur_time - start_time) * time_factor;
-	return time_span;
-}	
+  time_span = (cur_time - start_time) * time_factor;
+  return time_span;
+}  
 #else
 double sec(void) {
 
-	struct timeval tv;
-	gettimeofday(&tv, 0);
-	return tv.tv_sec + tv.tv_usec / 1000000.0;
+  struct timeval tv;
+  gettimeofday(&tv, 0);
+  return tv.tv_sec + tv.tv_usec / 1000000.0;
 }
 #endif
 
@@ -159,28 +159,28 @@ int increase_ipv6_address(struct in6_addr *ipv6) {
 } 
 
 int randomloss(double lossprob) {
-	
-	int loss = 0;
+  
+  int loss = 0;
 
-	double msb;
-	double lsb;
+  double msb;
+  double lsb;
 
-	double tmp;
+  double tmp;
 
-	if(lossprob == 0.0) {
-		return loss;
-	}
-	
-	msb = (double)(rand()%100);
-	lsb = (double)(rand()%10);
-	
-	tmp = msb + (double)(lsb/(double)10);
+  if(lossprob == 0.0) {
+    return loss;
+  }
+  
+  msb = (double)(rand()%100);
+  lsb = (double)(rand()%10);
+  
+  tmp = msb + (double)(lsb/(double)10);
 
-	if(tmp < lossprob) {
-		loss = 1;
-	}
-	
-	return loss;
+  if(tmp < lossprob) {
+    loss = 1;
+  }
+  
+  return loss;
 }
 
 

@@ -44,38 +44,38 @@
 #include "transport.h"
 
 trans_obj_t* create_object(void) {
-	
-	trans_obj_t *obj = NULL;
+  
+  trans_obj_t *obj = NULL;
 
-	if (!(obj = (trans_obj_t*)calloc(1, sizeof(trans_obj_t)))) {
-		printf("Could not alloc memory for transport object!\n");
-		return NULL;
-	}
+  if (!(obj = (trans_obj_t*)calloc(1, sizeof(trans_obj_t)))) {
+    printf("Could not alloc memory for transport object!\n");
+    return NULL;
+  }
 
-	return obj;
+  return obj;
 }
 
 trans_block_t* create_block(void) {
  
-	trans_block_t *block = NULL;
+  trans_block_t *block = NULL;
 
-	if (!(block = (trans_block_t*)calloc(1, sizeof(trans_block_t)))) {
-		printf("Could not alloc memory for transport block!\n");
-		return NULL;
-	}
+  if (!(block = (trans_block_t*)calloc(1, sizeof(trans_block_t)))) {
+    printf("Could not alloc memory for transport block!\n");
+    return NULL;
+  }
 
-	return block;
+  return block;
 }
 
 trans_unit_t* create_units(unsigned int number) {
-	
-	trans_unit_t *unit = NULL;
+  
+  trans_unit_t *unit = NULL;
 
-	if (!(unit = (trans_unit_t*)calloc(number, sizeof(trans_unit_t)))) {
-		printf("Could not alloc memory for %i transport units!\n", number);
-	}
+  if (!(unit = (trans_unit_t*)calloc(number, sizeof(trans_unit_t)))) {
+    printf("Could not alloc memory for %i transport units!\n", number);
+  }
 
-	return unit;
+  return unit;
 }
 
 void free_units(trans_block_t *tb) {
@@ -104,70 +104,70 @@ void free_units(trans_block_t *tb) {
 
 trans_unit_t* retrieve_unit(alc_session_t *s, unsigned short es_len) {
 
-	trans_unit_container_t *container = NULL;
-	trans_unit_container_t *tmp;
-	trans_unit_container_t *start_search;
+  trans_unit_container_t *container = NULL;
+  trans_unit_container_t *tmp;
+  trans_unit_container_t *start_search;
 
-	if(s->last_given != NULL) {
-		start_search = s->last_given->next;
-	} else {
-		start_search = s->unit_pool;
-	}
+  if(s->last_given != NULL) {
+    start_search = s->last_given->next;
+  } else {
+    start_search = s->unit_pool;
+  }
 
-	tmp = start_search;
+  tmp = start_search;
 
-	while(tmp != NULL ) { 
-		if(tmp->u.used == 0) {
+  while(tmp != NULL ) { 
+    if(tmp->u.used == 0) {
 
-			//Malek El Khatib 12.08.2014
-			if (numEncSymbPerPacket != 0)
-			{//END
-				if(tmp->u.len < es_len) {
-					continue;
-				}
-			}
+      //Malek El Khatib 12.08.2014
+      if (numEncSymbPerPacket != 0)
+      {//END
+        if(tmp->u.len < es_len) {
+          continue;
+        }
+      }
 
-			tmp->u.used = 1;
-			s->last_given = tmp;
+      tmp->u.used = 1;
+      s->last_given = tmp;
             assert(tmp->u.data != NULL);
-			return &(tmp->u);
-		}
-		tmp = tmp->next;
-	}
-	
-	tmp = s->unit_pool;
-	while(tmp != start_search) {    
-		if(tmp->u.used == 0) {
+      return &(tmp->u);
+    }
+    tmp = tmp->next;
+  }
+  
+  tmp = s->unit_pool;
+  while(tmp != start_search) {    
+    if(tmp->u.used == 0) {
 
-			//Malek El Khatib 12.08.2014
-			if (numEncSymbPerPacket != 0)
-			{//END
-				if(tmp->u.len < es_len) {
-					continue;
-				}
-			}
+      //Malek El Khatib 12.08.2014
+      if (numEncSymbPerPacket != 0)
+      {//END
+        if(tmp->u.len < es_len) {
+          continue;
+        }
+      }
 
-			tmp->u.used = 1;
-			s->last_given = tmp;
+      tmp->u.used = 1;
+      s->last_given = tmp;
             assert(tmp->u.data != NULL);
-			return &(tmp->u);
-		}
-		tmp = tmp->next;
-	}
+      return &(tmp->u);
+    }
+    tmp = tmp->next;
+  }
 
-	if(!(container = (trans_unit_container_t*)calloc(1, sizeof(trans_unit_container_t)))) {
-		printf("Could not alloc memory for a transport unit container!\n");
-		return NULL;
-	}
+  if(!(container = (trans_unit_container_t*)calloc(1, sizeof(trans_unit_container_t)))) {
+    printf("Could not alloc memory for a transport unit container!\n");
+    return NULL;
+  }
 
-	container->next = s->unit_pool;
-	s->unit_pool = container;
-	container->u.used = 1;
-	s->last_given = s->unit_pool;
+  container->next = s->unit_pool;
+  s->unit_pool = container;
+  container->u.used = 1;
+  s->last_given = s->unit_pool;
 
     if(!(container->u.data = (char*)calloc(es_len, sizeof(char)))) { 
         printf("Could not alloc memory for transport unit's data!\n");
-		free(container);
+    free(container);
         return NULL;
     }
 
@@ -178,26 +178,26 @@ void free_units2(trans_block_t *tb) {
     trans_unit_t *tu = NULL;
     trans_unit_t *current_tu = NULL;
 
-	char *data = NULL;
-	unsigned short	data_buffer_len;
+  char *data = NULL;
+  unsigned short  data_buffer_len;
 
     current_tu = tb->unit_list;
-	
+  
     while(current_tu != NULL) {
         tu = current_tu;
 
-		/* backup the data pointer */
+    /* backup the data pointer */
 
-		data = tu->data;
-		data_buffer_len = tu->len;
+    data = tu->data;
+    data_buffer_len = tu->len;
 
-		current_tu = tu->next;
+    current_tu = tu->next;
 
-		memset(tu, 0, sizeof(trans_unit_t));
+    memset(tu, 0, sizeof(trans_unit_t));
 
-		/* reinstall the backup */
-		tu->data = data;
-		tu->len = data_buffer_len;
+    /* reinstall the backup */
+    tu->data = data;
+    tu->len = data_buffer_len;
     }
 
     tb->unit_list = NULL;
@@ -207,35 +207,35 @@ void free_units2(trans_block_t *tb) {
 
 /*
 void insert_object(trans_obj_t *to, alc_session_t *s, int type) {
-	
-	trans_obj_t *tmp;
-	
-	if(type == 0) {
-		tmp = s->fdt_list;
-	}
-	else {
-		tmp = s->obj_list;
-	}
+  
+  trans_obj_t *tmp;
+  
+  if(type == 0) {
+    tmp = s->fdt_list;
+  }
+  else {
+    tmp = s->obj_list;
+  }
 
-	if(tmp == NULL) {
+  if(tmp == NULL) {
 
-  		if(type == 0) {
-        	        s->fdt_list = to;
-        	}	
-        	else {
-                	s->obj_list = to;
-       	 	}
-	}
-	else {
-		for(;;) {
-			if(to->toi < tmp->toi) {
+      if(type == 0) {
+                  s->fdt_list = to;
+          }  
+          else {
+                  s->obj_list = to;
+            }
+  }
+  else {
+    for(;;) {
+      if(to->toi < tmp->toi) {
 
-				if(tmp->prev == NULL) {
+        if(tmp->prev == NULL) {
 
-					to->next = tmp;
-					to->prev = tmp->prev;
-				
-					tmp->prev = to;
+          to->next = tmp;
+          to->prev = tmp->prev;
+        
+          tmp->prev = to;
 
                 if(type == 0) {
                         s->fdt_list = to;
@@ -244,30 +244,30 @@ void insert_object(trans_obj_t *to, alc_session_t *s, int type) {
                         s->obj_list = to;
                 }
 
-				}
-				else {
+        }
+        else {
 
-					to->next = tmp;
-					to->prev = tmp->prev;
-				
-					tmp->prev->next = to;
-					tmp->prev = to;
-				}
-				break;
-			}
+          to->next = tmp;
+          to->prev = tmp->prev;
+        
+          tmp->prev->next = to;
+          tmp->prev = to;
+        }
+        break;
+      }
 
-			if(tmp->next == NULL) {
+      if(tmp->next == NULL) {
 
-				to->next = tmp->next;
-				to->prev = tmp;
-				
-				tmp->next = to;
-				break;
-			}
+        to->next = tmp->next;
+        to->prev = tmp;
+        
+        tmp->next = to;
+        break;
+      }
 
-			tmp = tmp->next;
-		}
-	}
+      tmp = tmp->next;
+    }
+  }
 }*/
 
 void insert_object(trans_obj_t *to, alc_session_t *s, int type) {
@@ -285,7 +285,7 @@ void insert_object(trans_obj_t *to, alc_session_t *s, int type) {
 
         if(type == 0) {
             s->fdt_list = to;
-        }	
+        }  
         else {
             s->obj_list = to;
         }
@@ -337,93 +337,93 @@ void insert_object(trans_obj_t *to, alc_session_t *s, int type) {
 /*
  * This function inserts transport unit to transport block.
  *
- * Params:	trans_unit_t *tu: Pointer to transport unit to be inserted,
- *			trans_block_t *tb: Pointer to transport block,
- *			trans_obj_t *tu: Pointer to transport object.
+ * Params:  trans_unit_t *tu: Pointer to transport unit to be inserted,
+ *      trans_block_t *tb: Pointer to transport block,
+ *      trans_obj_t *tu: Pointer to transport object.
  *
- * Return:	int: 0 when transport unit is inserted, 1 when duplicated transport unit.
+ * Return:  int: 0 when transport unit is inserted, 1 when duplicated transport unit.
  *
  */
 /*
 int insert_unit(trans_unit_t *tu, trans_block_t *tb, trans_obj_t *to) {
 
-	trans_unit_t *tmp;
-	int retval = 0;
+  trans_unit_t *tmp;
+  int retval = 0;
 
-	tmp = tb->unit_list;
+  tmp = tb->unit_list;
 
-	if(tmp == NULL) {
+  if(tmp == NULL) {
 
-		to->rx_bytes += tu->len;
-		
-		// for percentage counter
-		if(to->rx_bytes > to->len) {
-			to->rx_bytes = to->len;		
-		}
+    to->rx_bytes += tu->len;
+    
+    // for percentage counter
+    if(to->rx_bytes > to->len) {
+      to->rx_bytes = to->len;    
+    }
 
-		tb->nb_of_rx_units++;
+    tb->nb_of_rx_units++;
 
-		tb->unit_list = tu;
-	}
-	else {
-		for(;;) {
-			if(tu->esi < tmp->esi) {
-				//Delayed unit
+    tb->unit_list = tu;
+  }
+  else {
+    for(;;) {
+      if(tu->esi < tmp->esi) {
+        //Delayed unit
 
-				to->rx_bytes += tu->len;
+        to->rx_bytes += tu->len;
 
-				if(to->rx_bytes > to->len) {
-					to->rx_bytes = to->len;		
-				}
+        if(to->rx_bytes > to->len) {
+          to->rx_bytes = to->len;    
+        }
 
-				tb->nb_of_rx_units++;
-				
-				if(tmp->prev == NULL) {
-					tu->next = tmp;
-					tu->prev = tmp->prev;
-				
-					tmp->prev = tu;
+        tb->nb_of_rx_units++;
+        
+        if(tmp->prev == NULL) {
+          tu->next = tmp;
+          tu->prev = tmp->prev;
+        
+          tmp->prev = tu;
 
-					tb->unit_list = tu;
-				}
-				else {
-					tu->next = tmp;
-					tu->prev = tmp->prev;
-				
-					tmp->prev->next = tu;
-					tmp->prev = tu;
-					
-				}
-				break;
-			}
-			else if(tu->esi == tmp->esi) {
-				//Duplicated unit
-				retval = 1;
-				break;
-			}
-			if(tmp->next == NULL) {
-				// Last unit (normal order)
+          tb->unit_list = tu;
+        }
+        else {
+          tu->next = tmp;
+          tu->prev = tmp->prev;
+        
+          tmp->prev->next = tu;
+          tmp->prev = tu;
+          
+        }
+        break;
+      }
+      else if(tu->esi == tmp->esi) {
+        //Duplicated unit
+        retval = 1;
+        break;
+      }
+      if(tmp->next == NULL) {
+        // Last unit (normal order)
 
-				to->rx_bytes += tu->len;
-			
+        to->rx_bytes += tu->len;
+      
 
-				if(to->rx_bytes > to->len) {
-					to->rx_bytes = to->len;		
-				}
+        if(to->rx_bytes > to->len) {
+          to->rx_bytes = to->len;    
+        }
 
-				tb->nb_of_rx_units++;
+        tb->nb_of_rx_units++;
 
-				tu->next = tmp->next;
-				tu->prev = tmp;
-				
-				tmp->next = tu;
-				break;
-			}
-			tmp = tmp->next;
-		}
-	}
+        tu->next = tmp->next;
+        tu->prev = tmp;
+        
+        tmp->next = tu;
+        break;
+      }
+      tmp = tmp->next;
+    }
+  }
 
-	return retval;
+  return retval;
 }*/
 
 int insert_unit(trans_unit_t *tu, trans_block_t *tb, trans_obj_t *to) {
@@ -439,7 +439,7 @@ int insert_unit(trans_unit_t *tu, trans_block_t *tb, trans_obj_t *to) {
 
         // for percentage counter
         if(to->rx_bytes > to->len) {
-            to->rx_bytes = to->len;		
+            to->rx_bytes = to->len;    
         }
 
         tb->nb_of_rx_units++;
@@ -455,7 +455,7 @@ int insert_unit(trans_unit_t *tu, trans_block_t *tb, trans_obj_t *to) {
             to->rx_bytes += tu->len;
 
             if(to->rx_bytes > to->len) {
-                to->rx_bytes = to->len;		
+                to->rx_bytes = to->len;    
             }
 
             tb->nb_of_rx_units++;
@@ -490,7 +490,7 @@ int insert_unit(trans_unit_t *tu, trans_block_t *tb, trans_obj_t *to) {
 
 
             if(to->rx_bytes > to->len) {
-                to->rx_bytes = to->len;		
+                to->rx_bytes = to->len;    
             }
 
             tb->nb_of_rx_units++;
@@ -525,8 +525,8 @@ void free_object(trans_obj_t *to, alc_session_t *s, int type) {
       tu = next_tu;
       
       if(tu->data != NULL) {
-		free(tu->data);
-		tu->data = NULL;
+    free(tu->data);
+    tu->data = NULL;
       }
       
       next_tu = tu->next;
@@ -555,7 +555,7 @@ void free_object(trans_obj_t *to, alc_session_t *s, int type) {
     to->tmp_filename = NULL;
     if(type == 1) {
       if(close(to->fd) == -1) {
-		printf("close failed, errno: %i\n", errno);
+    printf("close failed, errno: %i\n", errno);
       }
     }
   }
@@ -563,7 +563,7 @@ void free_object(trans_obj_t *to, alc_session_t *s, int type) {
   if(to->tmp_st_filename != NULL) {
     if(type == 1) {
       if(close(to->fd_st) == -1) {
-		printf("close failed, errno: %i\n", errno);
+    printf("close failed, errno: %i\n", errno);
       }
     }
     remove(to->tmp_st_filename);

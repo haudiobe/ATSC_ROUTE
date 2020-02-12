@@ -41,14 +41,14 @@
 
 int add_fdt_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned int fdt_instance_id) {
 
-	unsigned int word;
-	int len = 0;
+  unsigned int word;
+  int len = 0;
 
-	word = ((EXT_FDT << 24) | ((FLUTE_VERSION & 0xF) << 20) | (fdt_instance_id & 0x000FFFFF));
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
-	len += 4;
+  word = ((EXT_FDT << 24) | ((FLUTE_VERSION & 0xF) << 20) | (fdt_instance_id & 0x000FFFFF));
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
+  len += 4;
 
-	return len;
+  return len;
 
 }
 
@@ -65,35 +65,35 @@ int add_cenc_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen, unsigned char conten
 }
 
 int add_fti_0_2_128_130_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen,
-							unsigned long long transferlen,
-							unsigned short fec_inst_id, unsigned short eslen, unsigned int max_sblen) {
+              unsigned long long transferlen,
+              unsigned short fec_inst_id, unsigned short eslen, unsigned int max_sblen) {
 
-	unsigned int word;
-	unsigned short tmp;
-	int len = 0;
-	
-	tmp = ((unsigned int)(transferlen >> 32) & 0x0000FFFF);
-	word = ((EXT_FTI << 24) | (4 << 16) | tmp);
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
-	len += 4;
+  unsigned int word;
+  unsigned short tmp;
+  int len = 0;
+  
+  tmp = ((unsigned int)(transferlen >> 32) & 0x0000FFFF);
+  word = ((EXT_FTI << 24) | (4 << 16) | tmp);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
+  len += 4;
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl((unsigned int)transferlen);
-	len += 4;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl((unsigned int)transferlen);
+  len += 4;
 
-	word = ((fec_inst_id << 16) | eslen);
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
-	len += 4;
+  word = ((fec_inst_id << 16) | eslen);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
+  len += 4;
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(max_sblen);
-	len += 4;
-	
-	return len;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(max_sblen);
+  len += 4;
+  
+  return len;
 }
 
 int add_fti_3_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen,
-					   unsigned long long transferlen,
-					   unsigned char m, unsigned char G, unsigned short eslen,
-					   unsigned short max_sblen, unsigned short mxnbofes) {
+             unsigned long long transferlen,
+             unsigned char m, unsigned char G, unsigned short eslen,
+             unsigned short max_sblen, unsigned short mxnbofes) {
 
   unsigned int word;
   unsigned short tmp;
@@ -119,47 +119,47 @@ int add_fti_3_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen,
 }
 
 int add_fti_129_lct_he(def_lct_hdr_t *def_lct_hdr, int hdrlen,
-					 unsigned long long transferlen,
-					 unsigned short fec_inst_id, unsigned short eslen,
-					 unsigned short max_sblen, unsigned short mxnbofes) {
+           unsigned long long transferlen,
+           unsigned short fec_inst_id, unsigned short eslen,
+           unsigned short max_sblen, unsigned short mxnbofes) {
 
-	unsigned int word;
-	unsigned short tmp;
-	int len = 0;
-	
-	tmp = ((unsigned int)(transferlen >> 32) & 0x0000FFFF);
-	word = ((EXT_FTI << 24) | (4 << 16) | tmp);
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
-	len += 4;
+  unsigned int word;
+  unsigned short tmp;
+  int len = 0;
+  
+  tmp = ((unsigned int)(transferlen >> 32) & 0x0000FFFF);
+  word = ((EXT_FTI << 24) | (4 << 16) | tmp);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen) = htonl(word);
+  len += 4;
 
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl((unsigned int)transferlen);
-	len += 4;
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl((unsigned int)transferlen);
+  len += 4;
 
-	word = ((fec_inst_id << 16) | eslen);
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
-	len += 4;
+  word = ((fec_inst_id << 16) | eslen);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
+  len += 4;
 
-	word = ((max_sblen << 16) | mxnbofes);
-	*(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
-	len += 4;
-	
-	return len;
+  word = ((max_sblen << 16) | mxnbofes);
+  *(unsigned int*)((unsigned char*)def_lct_hdr + hdrlen + len) = htonl(word);
+  len += 4;
+  
+  return len;
 }
 
 int add_nop_lct_he(void) {
-	int len = 0;
-	/* TODO */
-	return len;
+  int len = 0;
+  /* TODO */
+  return len;
 }
 
 int add_auth_lct_he(void) {
-	int len = 0;
-	/* TODO */
-	return len;
+  int len = 0;
+  /* TODO */
+  return len;
 }
 
 int add_time_lct_he(void) {
-	int len = 0;
-	/* TODO */
-	return len;
+  int len = 0;
+  /* TODO */
+  return len;
 }
