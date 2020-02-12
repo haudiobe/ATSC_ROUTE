@@ -113,32 +113,32 @@ void insert_miss_object(miss_obj_t *miss_obj) {
   else {
     for(;;) {
       if(miss_obj->toi < tmp->toi) {
-	
-	if(tmp->prev == NULL) {
-	  miss_obj->next = tmp;
-	  miss_obj->prev = tmp->prev;
-	  
-	  tmp->prev = miss_obj;
-	  
-	  miss_obj_list = miss_obj;
-	}
-	else {
-	  miss_obj->next = tmp;
-	  miss_obj->prev = tmp->prev;
-	  
-	  tmp->prev->next = miss_obj;
-	  tmp->prev = miss_obj;
-	}
-	break;
+  
+  if(tmp->prev == NULL) {
+    miss_obj->next = tmp;
+    miss_obj->prev = tmp->prev;
+    
+    tmp->prev = miss_obj;
+    
+    miss_obj_list = miss_obj;
+  }
+  else {
+    miss_obj->next = tmp;
+    miss_obj->prev = tmp->prev;
+    
+    tmp->prev->next = miss_obj;
+    tmp->prev = miss_obj;
+  }
+  break;
       }
       
       if(tmp->next == NULL) {
-	
-	miss_obj->next = tmp->next;
-	miss_obj->prev = tmp;
-	
-	tmp->next = miss_obj;
-	break;
+  
+  miss_obj->next = tmp->next;
+  miss_obj->prev = tmp;
+  
+  tmp->next = miss_obj;
+  break;
       }
       
       tmp = tmp->next;
@@ -166,31 +166,31 @@ void insert_miss_block(miss_block_t *miss_block, miss_obj_t *miss_obj) {
   else {
     for(;;) {
       if(miss_block->sbn < tmp->sbn) {
-	
-	if(tmp->prev == NULL) {
-	  miss_block->next = tmp;
-	  miss_block->prev = tmp->prev;
-	  
-	  tmp->prev = miss_block;
-	  
-	  miss_obj->block_list = miss_block;
-	}
-	else {
-	  miss_block->next = tmp;
-	  miss_block->prev = tmp->prev;
-	  
-	  tmp->prev->next = miss_block;
-	  tmp->prev = miss_block;
-	  
-	}
-	break;
+  
+  if(tmp->prev == NULL) {
+    miss_block->next = tmp;
+    miss_block->prev = tmp->prev;
+    
+    tmp->prev = miss_block;
+    
+    miss_obj->block_list = miss_block;
+  }
+  else {
+    miss_block->next = tmp;
+    miss_block->prev = tmp->prev;
+    
+    tmp->prev->next = miss_block;
+    tmp->prev = miss_block;
+    
+  }
+  break;
       }
       if(tmp->next == NULL) {
-	miss_block->next = tmp->next;
-	miss_block->prev = tmp;
-	
-	tmp->next = miss_block;
-	break;
+  miss_block->next = tmp->next;
+  miss_block->prev = tmp;
+  
+  tmp->next = miss_block;
+  break;
       }
       tmp = tmp->next;
     }
@@ -213,11 +213,11 @@ miss_obj_t* miss_object_exist(unsigned long long toi) {
   if(miss_obj != NULL) {
     for(;;) {
       if(miss_obj->toi == toi) {
-	break;
+  break;
       }
       if(miss_obj->next == NULL) {
-	miss_obj = NULL;
-	break;
+  miss_obj = NULL;
+  break;
       }
       miss_obj = miss_obj->next;
     }
@@ -245,11 +245,11 @@ miss_block_t* miss_block_exist(unsigned int sbn, miss_obj_t *miss_obj) {
   if(miss_block != NULL) {
     for(;;) {
       if(miss_block->sbn == sbn) {
-	break;
+  break;
       }
       if(miss_block->next == NULL) {
-	miss_block = NULL;
-	break;
+  miss_block = NULL;
+  break;
       }
       miss_block = miss_block->next;
     }
@@ -307,8 +307,8 @@ void free_miss_object_list(void) {
  */
 
 int send_repair_data(char *file_path, int *s_id, int tx_mode, unsigned long long toi, unsigned short es_len,
-					 unsigned int max_sb_len, unsigned char fec_enc_id, unsigned short fec_inst_id,
-					 miss_obj_t *miss_obj) {
+           unsigned int max_sb_len, unsigned char fec_enc_id, unsigned short fec_inst_id,
+           miss_obj_t *miss_obj) {
   
   unsigned long long transfer_len;
 
@@ -397,7 +397,7 @@ int send_repair_data(char *file_path, int *s_id, int tx_mode, unsigned long long
     else {
       nbytes = es_len * bs->A_small;
       pos = ( ( ( (unsigned long long)bs->I * (unsigned long long)bs->A_large) +
-		((unsigned long long)sbn - (unsigned long long)bs->I ) * (unsigned long long)bs->A_small )* (unsigned long long)es_len );
+    ((unsigned long long)sbn - (unsigned long long)bs->I ) * (unsigned long long)bs->A_small )* (unsigned long long)es_len );
     }
 
 #ifdef _MSC_VER
@@ -479,7 +479,7 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
   
   char path[MAX_PATH_LENGTH];
   
-  static time_t fdt_mtime = 0;					/* Time of last FDT modification */
+  static time_t fdt_mtime = 0;          /* Time of last FDT modification */
   
   unsigned short tmp_eslen = a->alc_a.es_len;
   unsigned int tmp_max_sblen = a->alc_a.max_sb_len;
@@ -499,7 +499,7 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
 
   unsigned int sbn;
   
-  struct stat	repair_file_stats;
+  struct stat  repair_file_stats;
   char *repair_file_buf = NULL;
   unsigned repair_file_nbytes;
   FILE *repair_file_fp;
@@ -543,7 +543,7 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
   tmp = strtok(repair_file_buf, ":");
   
   while(tmp != NULL) {
-    	  
+        
     toi = (unsigned long long)atoi(tmp);
     tmp = strtok(NULL, "\n");
 
@@ -565,15 +565,15 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
         insert_miss_object(miss_obj);
       }
       else {
-	next_miss_block = miss_obj->block_list;
+  next_miss_block = miss_obj->block_list;
 
-	while(next_miss_block != NULL) {
-	  miss_block = next_miss_block;
-	  next_miss_block = miss_block->next;
-	  free(miss_block);
-	}
-	
-	miss_obj->block_list = NULL;
+  while(next_miss_block != NULL) {
+    miss_block = next_miss_block;
+    next_miss_block = miss_block->next;
+    free(miss_block);
+  }
+  
+  miss_obj->block_list = NULL;
       }
 
     }
@@ -585,32 +585,32 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
       miss_obj = miss_object_exist(toi);
     
       if(miss_obj == NULL) {
-	
-	miss_obj = create_miss_object();
-	
-	if(miss_obj == NULL) {
-	  return MEM_ERROR;
-	}
-	
-	miss_obj->toi = toi;
-	
-	insert_miss_object(miss_obj);
+  
+  miss_obj = create_miss_object();
+  
+  if(miss_obj == NULL) {
+    return MEM_ERROR;
+  }
+  
+  miss_obj->toi = toi;
+  
+  insert_miss_object(miss_obj);
       }
       
       /* Check if missing block already exist */
       miss_block = miss_block_exist(sbn, miss_obj);
       
       if(miss_block == NULL) {
-	
-	miss_block = create_miss_block();
-	
-	if(miss_block == NULL) {
-	  return MEM_ERROR;
-	}
-	
-	miss_block->sbn = sbn;
-	
-	insert_miss_block(miss_block, miss_obj);
+  
+  miss_block = create_miss_block();
+  
+  if(miss_block == NULL) {
+    return MEM_ERROR;
+  }
+  
+  miss_block->sbn = sbn;
+  
+  insert_miss_block(miss_block, miss_obj);
       }
     }
 
@@ -618,7 +618,7 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
   }
   
   free(repair_file_buf);
-	
+  
   if(stat(a->fdt_file, &file_stats) == -1) {
     printf("Error: %s is not valid file name\n", a->fdt_file);
     fflush(stdout);
@@ -688,72 +688,72 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
       miss_obj = miss_object_exist(file->toi);
     
       if(miss_obj == NULL) {
-	file = file->next;
-	continue;
+  file = file->next;
+  continue;
       }
       
       if(a->alc_a.use_fec_oti_ext_hdr == 0) {
-	
-	if(file->fec_enc_id == -1) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(((file->fec_enc_id > 127) && (file->fec_inst_id == -1))) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(file->max_sb_len == 0) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(file->es_len == 0) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) &&
-		 (file->max_nb_of_es == 0))) {
-	  incomplete_fdt = TRUE;
-	}
-	
-	if(incomplete_fdt) {
+  
+  if(file->fec_enc_id == -1) {
+    incomplete_fdt = TRUE;
+  }
+  else if(((file->fec_enc_id > 127) && (file->fec_inst_id == -1))) {
+    incomplete_fdt = TRUE;
+  }
+  else if(file->max_sb_len == 0) {
+    incomplete_fdt = TRUE;
+  }
+  else if(file->es_len == 0) {
+    incomplete_fdt = TRUE;
+  }
+  else if(((file->fec_enc_id == SB_SYS_FEC_ENC_ID) &&
+     (file->max_nb_of_es == 0))) {
+    incomplete_fdt = TRUE;
+  }
+  
+  if(incomplete_fdt) {
 #ifdef _MSC_VER
-	  printf("FDT does not contain FEC-OTI information, TOI: %I64u\n", file->toi);
+    printf("FDT does not contain FEC-OTI information, TOI: %I64u\n", file->toi);
 #else
-	  printf("FDT does not contain FEC-OTI information, TOI: %llu\n", file->toi);
+    printf("FDT does not contain FEC-OTI information, TOI: %llu\n", file->toi);
 #endif
-	  fflush(stdout);
-	  FreeFDT(fdt);
-	  free_miss_object_list();
-	  return -1;
-	}
-	
-	if(file->toi == 0) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(file->location == NULL) {
-	  incomplete_fdt = TRUE;
-	}
-	
+    fflush(stdout);
+    FreeFDT(fdt);
+    free_miss_object_list();
+    return -1;
+  }
+  
+  if(file->toi == 0) {
+    incomplete_fdt = TRUE;
+  }
+  else if(file->location == NULL) {
+    incomplete_fdt = TRUE;
+  }
+  
 #ifdef USE_ZLIB
-	if(((a->alc_a.encode_content == 2) && (file->transfer_len == 0))) {
-	  incomplete_fdt = TRUE;
-	}
-	else if(((a->alc_a.encode_content != 2) && (file->transfer_len == 0))) {
-	  incomplete_fdt = TRUE;
-	}
-#else	
-	if(file->content_len == 0) {
-	  incomplete_fdt = TRUE;
-	}	
+  if(((a->alc_a.encode_content == 2) && (file->transfer_len == 0))) {
+    incomplete_fdt = TRUE;
+  }
+  else if(((a->alc_a.encode_content != 2) && (file->transfer_len == 0))) {
+    incomplete_fdt = TRUE;
+  }
+#else  
+  if(file->content_len == 0) {
+    incomplete_fdt = TRUE;
+  }  
 #endif
-	
-	if(incomplete_fdt) {
+  
+  if(incomplete_fdt) {
 #ifdef _MSC_VER
-	  printf("FDT does not contain enough File information, TOI: %I64u\n", file->toi);
+    printf("FDT does not contain enough File information, TOI: %I64u\n", file->toi);
 #else
-	  printf("FDT does not contain enough File information, TOI: %llu\n", file->toi);
+    printf("FDT does not contain enough File information, TOI: %llu\n", file->toi);
 #endif
-	  fflush(stdout);
-	  FreeFDT(fdt);
-	  free_miss_object_list();
-	  return -1;
-	}
+    fflush(stdout);
+    FreeFDT(fdt);
+    free_miss_object_list();
+    return -1;
+  }
       }
       
 #ifdef _MSC_VER
@@ -766,54 +766,54 @@ int repair_sender_in_fdt_based_mode(int *s_id, arguments_t *a) {
       memset(path, 0, MAX_PATH_LENGTH);
       
       if(!(strcmp(a->alc_a.base_dir, "") == 0)) {
-	strcpy(path, a->alc_a.base_dir);
-	strcat(path, "/");
+  strcpy(path, a->alc_a.base_dir);
+  strcat(path, "/");
       }
       strcat(path, uri->path);
       
 #ifdef USE_ZLIB
       if(a->alc_a.encode_content == ZLIB_FDT_AND_GZIP_FILES) {
-	strcat(path, GZ_SUFFIX);	
+  strcat(path, GZ_SUFFIX);  
       }
 #endif
       if(file->next == NULL) {
-	set_session_a_flag_usage(*s_id);
+  set_session_a_flag_usage(*s_id);
       }
       
       if(((file->es_len != 0) && (file->max_sb_len != 0))) {
-	
-	tmp_eslen = file->es_len;
-	tmp_max_sblen = file->max_sb_len;
+  
+  tmp_eslen = file->es_len;
+  tmp_max_sblen = file->max_sb_len;
       }
       
       if(file->fec_enc_id != -1) {
-	if(file->fec_enc_id != tmp_fec_enc_id) {
-	  tmp_fec_enc_id = (unsigned char)file->fec_enc_id;
-	  tmp_fec_inst_id = (unsigned short)file->fec_inst_id;
-	}
+  if(file->fec_enc_id != tmp_fec_enc_id) {
+    tmp_fec_enc_id = (unsigned char)file->fec_enc_id;
+    tmp_fec_inst_id = (unsigned short)file->fec_inst_id;
+  }
       }
       
 #ifdef _MSC_VER
       for(j = 0; j < (int)strlen(path); j++) {
-	if(*(path + j) == '/') {
-	  *(path + j) = '\\';
-	}
+  if(*(path + j) == '/') {
+    *(path + j) = '\\';
+  }
       }
 #endif
       
       sent = send_repair_data(path, s_id, NO_TX_THREAD, file->toi, tmp_eslen, tmp_max_sblen, tmp_fec_enc_id,
-			      tmp_fec_inst_id, miss_obj);
+            tmp_fec_inst_id, miss_obj);
       
       free_uri(uri);
       
       if(sent == -1) {
-	FreeFDT(fdt);
-	free_miss_object_list();
-	return -1;
+  FreeFDT(fdt);
+  free_miss_object_list();
+  return -1;
       }
       else if(sent == -2) {
-	FreeFDT(fdt);
-	return -2;
+  FreeFDT(fdt);
+  return -2;
       }
       
       file = file->next;
@@ -847,8 +847,8 @@ int repair_sender(arguments_t *a, int *s_id) {
   struct sockaddr_in ipv4;
   struct sockaddr_in6 ipv6;
  
-  char addrs[MAX_CHANNELS_IN_SESSION][INET6_ADDRSTRLEN];	/* Mcast addresses on which to send */
-  char ports[MAX_CHANNELS_IN_SESSION][MAX_PORT_LENGTH];	/* Local port numbers  */
+  char addrs[MAX_CHANNELS_IN_SESSION][INET6_ADDRSTRLEN];  /* Mcast addresses on which to send */
+  char ports[MAX_CHANNELS_IN_SESSION][MAX_PORT_LENGTH];  /* Local port numbers  */
   
   time_t systime;
   unsigned long long curr_time;
@@ -910,44 +910,44 @@ int repair_sender(arguments_t *a, int *s_id) {
     if(a->alc_a.addr_family == PF_INET) {
 
       for(j = 0; j < a->alc_a.nb_channel; j++) {
-	    memset(addrs[j], 0, INET6_ADDRSTRLEN);
-	    ipv4.sin_addr.s_addr = htonl(ntohl(inet_addr(a->alc_a.addr)) + j);
-	    sprintf(addrs[j], "%s", inet_ntoa(ipv4.sin_addr));
+      memset(addrs[j], 0, INET6_ADDRSTRLEN);
+      ipv4.sin_addr.s_addr = htonl(ntohl(inet_addr(a->alc_a.addr)) + j);
+      sprintf(addrs[j], "%s", inet_ntoa(ipv4.sin_addr));
 
-	    memset(ports[j], 0, MAX_PORT_LENGTH);
-	    sprintf(ports[j], "%i", (atoi(a->alc_a.port) + j));
+      memset(ports[j], 0, MAX_PORT_LENGTH);
+      sprintf(ports[j], "%i", (atoi(a->alc_a.port) + j));
       }
     }
     else if(a->alc_a.addr_family == PF_INET6) {
 
 #ifdef _MSC_VER
-	  addr_size = sizeof(struct sockaddr_in6);
-	  WSAStringToAddress((char*)a->alc_a.addr, AF_INET6, NULL, (struct sockaddr*)&ipv6, &addr_size);
+    addr_size = sizeof(struct sockaddr_in6);
+    WSAStringToAddress((char*)a->alc_a.addr, AF_INET6, NULL, (struct sockaddr*)&ipv6, &addr_size);
 #else 
-	  inet_pton(AF_INET6, a->alc_a.addr, &ipv6.sin6_addr);
+    inet_pton(AF_INET6, a->alc_a.addr, &ipv6.sin6_addr);
 #endif
 
       for(j = 0; j < a->alc_a.nb_channel; j++) {
 
-	    memset(addrs[j], 0, INET6_ADDRSTRLEN);
-	
+      memset(addrs[j], 0, INET6_ADDRSTRLEN);
+  
 #ifdef _MSC_VER
-	    addr_size = sizeof(addrs[j]);
-		WSAAddressToString((struct sockaddr*)&ipv6, sizeof(struct sockaddr_in6),
-			NULL, addrs[j], &addr_size);
+      addr_size = sizeof(addrs[j]);
+    WSAAddressToString((struct sockaddr*)&ipv6, sizeof(struct sockaddr_in6),
+      NULL, addrs[j], &addr_size);
 #else
-	    inet_ntop(AF_INET6, &ipv6.sin6_addr, addrs[j], sizeof(addrs[j]));
+      inet_ntop(AF_INET6, &ipv6.sin6_addr, addrs[j], sizeof(addrs[j]));
 #endif
 
-	  memset(ports[j], 0, MAX_PORT_LENGTH);
+    memset(ports[j], 0, MAX_PORT_LENGTH);
       sprintf(ports[j], "%i", (atoi(a->alc_a.port) + j));
 
-	if(j < (a->alc_a.nb_channel - 1)) {
+  if(j < (a->alc_a.nb_channel - 1)) {
           if(increase_ipv6_address(&ipv6.sin6_addr) == -1) {
             printf("Increasing IPv6 address %s is not possible\n", addrs[j]);
-	    return -1;
-	  }
-	}
+      return -1;
+    }
+  }
       }
     }
   }
@@ -973,7 +973,7 @@ int repair_sender(arguments_t *a, int *s_id) {
       
       close_alc_session(*s_id);
       return -1;
-    }	
+    }  
   }
     
   retval = repair_sender_in_fdt_based_mode(s_id, a);
@@ -1030,7 +1030,7 @@ int parse_repair_sender_conf_file(arguments_t *a) {
        strcpy(a->requested_blocks_file, tmp);
       
        if(a->requested_blocks_file[strlen(a->requested_blocks_file)-1] == '\r') {
-	 a->requested_blocks_file[strlen(a->requested_blocks_file)-1] = '\0';
+   a->requested_blocks_file[strlen(a->requested_blocks_file)-1] = '\0';
        }
      }
      else if(strcmp(tmp, "PTMRepairSDPFile") == 0) {
@@ -1039,7 +1039,7 @@ int parse_repair_sender_conf_file(arguments_t *a) {
        strcpy(a->sdp_file, tmp);
       
        if(a->sdp_file[strlen(a->sdp_file)-1] == '\r') {
-	 a->sdp_file[strlen(a->sdp_file)-1] = '\0';
+   a->sdp_file[strlen(a->sdp_file)-1] = '\0';
        }
      }
      else if(strcmp(tmp, "FluteConfFile") == 0) {
@@ -1048,7 +1048,7 @@ int parse_repair_sender_conf_file(arguments_t *a) {
        strcpy(a->flute_conf_file, tmp);
       
        if(a->flute_conf_file[strlen(a->flute_conf_file)-1] == '\r') {
-	 a->flute_conf_file[strlen(a->flute_conf_file)-1] = '\0';
+   a->flute_conf_file[strlen(a->flute_conf_file)-1] = '\0';
        }
      }
     
@@ -1107,7 +1107,7 @@ int parse_flute_conf_file(arguments_t *a) {
        strcpy(a->alc_a.base_dir, tmp);
       
        if(a->alc_a.base_dir[strlen(a->alc_a.base_dir)-1] == '\r') {
-	 a->alc_a.base_dir[strlen(a->alc_a.base_dir)-1] = '\0';
+   a->alc_a.base_dir[strlen(a->alc_a.base_dir)-1] = '\0';
        }
      }
      else if(strcmp(tmp, "FECRatio") == 0) {
@@ -1121,7 +1121,7 @@ int parse_flute_conf_file(arguments_t *a) {
        strcpy(a->fdt_file, tmp);
       
        if(a->fdt_file[strlen(a->fdt_file)-1] == '\r') {
-	 a->fdt_file[strlen(a->fdt_file)-1] = '\0';
+   a->fdt_file[strlen(a->fdt_file)-1] = '\0';
        }
      }
     

@@ -148,7 +148,7 @@ void usage(void) {
   printf("   -n:int           Number of transmissions, default: %i\n", DEF_TX_NB);
   printf("   -C               Continuous transmission, default: not used\n");
   printf("   -P[:float,float] Simulate packet losses, default: %.1f,%.1f\n", (float)P_LOSS_WHEN_OK,
-	 (float)P_LOSS_WHEN_LOSS);
+   (float)P_LOSS_WHEN_LOSS);
   printf("   -H               Use Half-word (if used TSI field could be 16, 32 or 48\n");
   printf("                    bits long and TOI field could be 16, 32, 48 or 64 bits\n");
   printf("                    long), default: not used\n");
@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
 #endif
   
   if(start_up_flute() != 0) {
-	return -1;
+  return -1;
   }
 
   retval = parse_args(argc, argv, &a);
@@ -188,17 +188,17 @@ int main(int argc, char **argv) {
   }
   
   s_id = -1; 
-		
+    
   retval = repair_sender(&a, &s_id);
   
   if(s_id == -1) {    
-	shut_down_flute(&a);
-    	return retval;
+  shut_down_flute(&a);
+      return retval;
   }
   
   if(retval == -4) { /* bind failed */
-	shut_down_flute(&a);
-	return retval;	
+  shut_down_flute(&a);
+  return retval;  
   }
 
   shut_down_flute(&a);

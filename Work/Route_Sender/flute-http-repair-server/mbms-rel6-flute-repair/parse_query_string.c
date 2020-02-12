@@ -145,7 +145,7 @@ query_str_t* parse_query_string(char *query_str) {
     return NULL;
   }
 
-  qs->fileURI = NULL;	
+  qs->fileURI = NULL;  
   qs->block_list = NULL;
 
   part = strtok(query_str, "&");
@@ -189,135 +189,135 @@ query_str_t* parse_query_string(char *query_str) {
 
       if(chr != NULL) {
 
-	part = strtok(NULL, ";");
+  part = strtok(NULL, ";");
 
         search_pos += strlen(part);
         search_pos++;
 
-       	sbn = atoi(part);
+         sbn = atoi(part);
 
-	ms_blck = missing_block_exist(sbn, qs->block_list);
-	
-	if(ms_blck == NULL) {
+  ms_blck = missing_block_exist(sbn, qs->block_list);
+  
+  if(ms_blck == NULL) {
 
-	  if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
-	    free_query_str(qs);
-	    return NULL;
-	  }
-	  
-	  ms_blck->sbn = sbn;
-	  ms_blck->next = NULL;
-	  ms_blck->es_list = NULL;
+    if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
+      free_query_str(qs);
+      return NULL;
+    }
+    
+    ms_blck->sbn = sbn;
+    ms_blck->next = NULL;
+    ms_blck->es_list = NULL;
 
-	  insert_missing_block(ms_blck, qs);
-	}
+    insert_missing_block(ms_blck, qs);
+  }
 
-	part = strtok(NULL, "=");
+  part = strtok(NULL, "=");
 
-	search_pos += strlen(part);
-	search_pos++;
+  search_pos += strlen(part);
+  search_pos++;
 
-	if(strcmp(part, "ESI") == 0) {
+  if(strcmp(part, "ESI") == 0) {
 
-	  chr = strchr((sbn_list[i] + search_pos), '-');
+    chr = strchr((sbn_list[i] + search_pos), '-');
 
-	  if(chr != NULL) {
-	    
-	    part = strtok(NULL, "-");
-	    
-	    first_symbol = atoi(part);
-	    
-	    part = strtok(NULL, " ");
-	    
-	    last_symbol = atoi(part);
-	    
-	    for(j = first_symbol; j < (last_symbol + 1); j++) {
-	      
-	      if (!(ms_symb = (qs_missing_symbol_t*)calloc(1, sizeof(qs_missing_symbol_t)))) {
-		free_query_str(qs);
-		return NULL;
-	      }
-	      
-	      ms_symb->esi = j;
-	      ms_symb->next = NULL;
-	
-	      insert_missing_symbol(ms_symb, ms_blck);
+    if(chr != NULL) {
+      
+      part = strtok(NULL, "-");
+      
+      first_symbol = atoi(part);
+      
+      part = strtok(NULL, " ");
+      
+      last_symbol = atoi(part);
+      
+      for(j = first_symbol; j < (last_symbol + 1); j++) {
+        
+        if (!(ms_symb = (qs_missing_symbol_t*)calloc(1, sizeof(qs_missing_symbol_t)))) {
+    free_query_str(qs);
+    return NULL;
+        }
+        
+        ms_symb->esi = j;
+        ms_symb->next = NULL;
+  
+        insert_missing_symbol(ms_symb, ms_blck);
             }
-	  }
-	  else {
-	    
-	    part = strtok(NULL, ",");
+    }
+    else {
+      
+      part = strtok(NULL, ",");
 
-	    while(part != NULL) {
-	      
-	      if (!(ms_symb = (qs_missing_symbol_t*)calloc(1, sizeof(qs_missing_symbol_t)))) {
-		free_query_str(qs);
-		return NULL;
-	      }
-	      
-	      ms_symb->esi = atoi(part);
-	      ms_symb->next = NULL;
-	      
-	      insert_missing_symbol(ms_symb, ms_blck);   
+      while(part != NULL) {
+        
+        if (!(ms_symb = (qs_missing_symbol_t*)calloc(1, sizeof(qs_missing_symbol_t)))) {
+    free_query_str(qs);
+    return NULL;
+        }
+        
+        ms_symb->esi = atoi(part);
+        ms_symb->next = NULL;
+        
+        insert_missing_symbol(ms_symb, ms_blck);   
 
-	      part = strtok(NULL, ",");
-	    }
-	  }
-	}
+        part = strtok(NULL, ",");
+      }
+    }
+  }
       }
       else {
 
-	chr = strchr(sbn_list[i] + search_pos, '-');
-	
-	if(chr != NULL) {
+  chr = strchr(sbn_list[i] + search_pos, '-');
+  
+  if(chr != NULL) {
 
-	  part = strtok(NULL, "-");
-	
-	  first_block = atoi(part);
+    part = strtok(NULL, "-");
+  
+    first_block = atoi(part);
 
-	  part = strtok(NULL, " ");
+    part = strtok(NULL, " ");
 
-	  last_block = atoi(part);
+    last_block = atoi(part);
 
-	  for(j = first_block; j < (last_block + 1); j++) {
-	    ms_blck = missing_block_exist(j, qs->block_list);
+    for(j = first_block; j < (last_block + 1); j++) {
+      ms_blck = missing_block_exist(j, qs->block_list);
 
-	    if(ms_blck == NULL) {   
+      if(ms_blck == NULL) {   
 
-	      if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
-		free_query_str(qs);
-		return NULL;
-	      }
+        if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
+    free_query_str(qs);
+    return NULL;
+        }
 
-	      ms_blck->sbn = j;
-	      ms_blck->next = NULL;
-	      ms_blck->es_list = NULL;
-	  
-	      insert_missing_block(ms_blck, qs);
-	    }
-	  }
-	}
-	else {
-	  
-	  part = strtok(NULL, " ");
-	  sbn = atoi(part);
-	  
-	  ms_blck = missing_block_exist(sbn, qs->block_list);
+        ms_blck->sbn = j;
+        ms_blck->next = NULL;
+        ms_blck->es_list = NULL;
+    
+        insert_missing_block(ms_blck, qs);
+      }
+    }
+  }
+  else {
+    
+    part = strtok(NULL, " ");
+    sbn = atoi(part);
+    
+    ms_blck = missing_block_exist(sbn, qs->block_list);
 
-	  if(ms_blck == NULL) {
+    if(ms_blck == NULL) {
 
-	    if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
-	      free_query_str(qs);
-	      return NULL;
-	    }
-	    	    
-	    ms_blck->sbn = sbn;
-	    ms_blck->next = NULL;
-	    ms_blck->es_list = NULL;
+      if(!(ms_blck = (qs_missing_block_t*)calloc(1, sizeof(qs_missing_block_t)))) {
+        free_query_str(qs);
+        return NULL;
+      }
+            
+      ms_blck->sbn = sbn;
+      ms_blck->next = NULL;
+      ms_blck->es_list = NULL;
 
             insert_missing_block(ms_blck, qs); 
-	  }
-	}
+    }
+  }
       }
     }
   }
@@ -346,9 +346,9 @@ void free_query_str(query_str_t *qs) {
       next_ms = mb->es_list;
       
       while(next_ms != NULL) {
-	ms = next_ms;
-	next_ms = ms->next;
-	free(ms);
+  ms = next_ms;
+  next_ms = ms->next;
+  free(ms);
       }
       
       next_mb = mb->next;
